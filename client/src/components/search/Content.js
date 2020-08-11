@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // Material-UI Components
-import { Zoom, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Zoom, Grid, makeStyles } from '@material-ui/core';
 
 // Components
 import RecipeCard from '../recipe/RecipeCard';

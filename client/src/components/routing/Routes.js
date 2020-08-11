@@ -1,22 +1,17 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { Toolbar, LinearProgress } from '@material-ui/core';
-
 // import Alert from '../layout/Alert';
+import PrivateRoute from '../routing/PrivateRoute';
+
 import Register from '../auth/Register';
 import Login from '../auth/Login';
-import PrivateRoute from '../routing/PrivateRoute';
-import NotFound from '../layout/NotFound';
 import Dashboard from '../dashboard/Dashboard';
 import Search from '../search/Search';
-// const Dashboard = lazy(() => import('../dashboard/Dashboard'));
-// const Search = lazy(() => import('../search/Search'));
+import NotFound from '../layout/NotFound';
 
 const Routes = (props) => {
   return (
-    // <Suspense fallback={<LinearProgress />}>
-
     <Switch>
       {/* Public Routes */}
       <Route exact path="/register" component={Register} />
@@ -39,7 +34,6 @@ const Routes = (props) => {
 
       <Route component={NotFound} />
     </Switch>
-    // </Suspense>
   );
 };
 

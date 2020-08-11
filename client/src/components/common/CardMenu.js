@@ -21,7 +21,6 @@ import { CameraAlt } from '@material-ui/icons';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    zIndex: theme.zIndex.appBar + 10,
   },
   paper: {
     marginTop: theme.spacing(1),
@@ -39,6 +38,14 @@ const useStyles = makeStyles((theme) => ({
   manageButton: {
     borderRadius: 50,
     textTransform: 'none',
+  },
+  actionIcon: {
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  popperIndex: {
+    zIndex: theme.zIndex.tooltip,
   },
 }));
 
@@ -111,7 +118,11 @@ const CardMenu = ({ user, logout }) => {
 
   return (
     <div className={classes.root}>
-      <IconButton ref={anchorRef} onClick={handleToggle}>
+      <IconButton
+        ref={anchorRef}
+        onClick={handleToggle}
+        className={classes.actionIcon}
+      >
         <StyledBadge
           overlap="circle"
           anchorOrigin={{
@@ -122,7 +133,13 @@ const CardMenu = ({ user, logout }) => {
           <Avatar alt="gravatar" src={user.gravatarUrl} />
         </StyledBadge>
       </IconButton>
-      <Popper open={open} anchorEl={anchorRef.current} transition>
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        transition
+        disablePortal
+        className={classes.popperIndex}
+      >
         {({ TransitionProps }) => (
           <Grow
             {...TransitionProps}

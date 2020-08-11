@@ -1,6 +1,7 @@
-import React from 'react';
-import { updateQuery } from '../../actions/search/query';
+import React, { useEffect } from 'react';
+
 import { connect } from 'react-redux';
+import { updateQuery } from '../../actions/search/query';
 import { sendQueryFilters } from '../../actions/search/recipes';
 
 import PropTypes from 'prop-types';
@@ -21,8 +22,6 @@ import { Toolbar, TextField, Button, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 
 import ListboxComponent from '../../shared/components/VirtualizedListBox';
-
-import { useEffect } from 'react';
 
 // CSS Styles
 const useStyles = makeStyles((theme) => ({
@@ -55,12 +54,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidebar = ({ query, filters, updateQuery, sendQueryFilters }) => {
+const Filterbar = ({ query, filters, updateQuery, sendQueryFilters }) => {
   const classes = useStyles();
 
   useEffect(() => {
     sendQueryFilters(query);
   }, [query, sendQueryFilters]);
+
+  useEffect(() => {
+    return () => {
+      handleOnChange(RESET_QUERY);
+    };
+  }, []);
 
   const handleOnChange = (type, value) => {
     updateQuery(type, value);
@@ -238,7 +243,7 @@ const Sidebar = ({ query, filters, updateQuery, sendQueryFilters }) => {
   );
 };
 
-Sidebar.propTypes = {
+Filterbar.propTypes = {
   query: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
   updateQuery: PropTypes.func.isRequired,
@@ -253,4 +258,4 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   updateQuery,
   sendQueryFilters,
-})(Sidebar);
+})(Filterbar);

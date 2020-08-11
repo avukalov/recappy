@@ -104,6 +104,8 @@ const RecipeSchema = new mongoose.Schema(
         ],
       },
     ],
+    ingredients: [String],
+    ingredientsOriginalName: [String],
   },
   {
     collection: 'recipes',
@@ -113,8 +115,8 @@ const RecipeSchema = new mongoose.Schema(
 RecipeSchema.index(
   {
     title: 'text',
-    // "extendedIngredients.name": "text",
-    // "extendedIngredients.original": "text",
+    ingredients: 'text',
+    ingredientsOriginalName: 'text',
     cuisines: 'text',
     dishTypes: 'text',
     diets: 'text',

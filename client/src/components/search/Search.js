@@ -5,17 +5,13 @@ import { sendQueryRecipes } from '../../actions/search/recipes';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Drawer,
-  IconButton,
-  Button,
-  Divider,
-  Typography,
-} from '@material-ui/core';
-import { ChevronRight, ChevronLeft } from '@material-ui/icons';
+import { Drawer, Button, Typography, Fab } from '@material-ui/core';
+import { Close, Tune, KeyboardArrowUp } from '@material-ui/icons';
 
-import Sidebar from './Sidebar';
+import Filterbar from './Filterbar';
 import Content from './Content';
+import ScrollHandler from '../common/ScrollHandler';
+import OptionsToolbar from './OptionsToolbar';
 
 import clsx from 'clsx';
 
@@ -29,14 +25,6 @@ const useStyles = makeStyles((theme) => ({
   },
   hide: {
     display: 'none',
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
   },
   drawer: {
     width: drawerWidth,
@@ -54,13 +42,13 @@ const useStyles = makeStyles((theme) => ({
     width: 0,
   },
   drawerHeader: {
+    marginTop: 66,
     display: 'flex',
     alignItems: 'center',
-    marginTop: 66,
+    justifyContent: 'flex-start',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
   },
   content: {
     flexGrow: 1,
@@ -72,10 +60,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = ({ pager, query, sendQueryRecipes }) => {
+const Search = ({ pager, query, sendQueryRecipes }, props) => {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+
   const prevPager = usePrev(pager);
   const prevQuery = usePrev(query);
 
@@ -101,29 +90,16 @@ const Search = ({ pager, query, sendQueryRecipes }) => {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.toolbar}>
-          <Typography>Sort by: </Typography>
-          <Button
-            onClick={handleDrawerToggle}
-            className={clsx({
-              [classes.hide]: open,
-            })}
-          >
-            <ChevronLeft />
-            <Typography variant="button">Advanced Search</Typography>
-          </Button>
-        </div>
+        <div id="back-to-top-anchor" />
+        <OptionsToolbar open={open} handleDrawerToggle={handleDrawerToggle} />
         <Content />
       </main>
+
       <Drawer
         open={open}
         anchor="right"
         variant="persistent"
         transitionDuration={{ enter: 0, exit: 0 }}
-        // className={clsx({
-        //   [classes.drawer]: open,
-        //   [classes.drawerPaper]: open,
-        // })}
         className={clsx({
           [classes.drawer]: open,
           [classes.drawerShift]: !open,
@@ -136,13 +112,41 @@ const Search = ({ pager, query, sendQueryRecipes }) => {
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerToggle}>
-            <ChevronRight />
-          </IconButton>
+          <Button
+            disableRipple
+            startIcon={<Close />}
+            onClick={handleDrawerToggle}
+          >
+            <Typography variant="button">Close</Typography>
+          </Button>
         </div>
-        <Divider />
-        <Sidebar />
+
+        <Filterbar />
       </Drawer>
+
+      <ScrollHandler {...props} scrollTop={true}>
+        <Fab color="secondary" aria-label="scroll back to top">
+          <KeyboardArrowUp />
+        </Fab>
+      </ScrollHandler>
+
+      {!open && (
+        <ScrollHandler
+          {...props}
+          search={true}
+          handleDrawerToggle={handleDrawerToggle}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<Tune />}
+            style={{ paddingRight: 20 }}
+            onClick={handleDrawerToggle}
+          >
+            <Typography variant="button">Filters</Typography>
+          </Button>
+        </ScrollHandler>
+      )}
     </div>
   );
 };
