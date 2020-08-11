@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Kaushan+Script&display=swap');
+
+::-webkit-scrollbar {
+  position: fixed;
+  right: 0;
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
