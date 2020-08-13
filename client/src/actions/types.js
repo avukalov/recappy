@@ -14,7 +14,7 @@ export const LOGOUT = 'LOGOUT';
 // Account types
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
 
-// Search types
+// Recipe types
 export const FETCH_RECIPES = 'FETCH_RECIPES';
 export const FETCH_MORE_RECIPES = 'FETCH_MORE_RECIPES';
 export const SET_RECIPES = 'SET_RECIPES';

@@ -16,7 +16,7 @@ import {
 import { Rating } from '@material-ui/lab';
 import { Favorite, Share, AccessAlarm, People } from '@material-ui/icons';
 
-import ChipsList from '../../shared/components/ChipsList';
+import ChipsList from '../common/ChipsList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
