@@ -16,6 +16,7 @@ export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
 
 // Search types
 export const FETCH_RECIPES = 'FETCH_RECIPES';
+export const FETCH_MORE_RECIPES = 'FETCH_MORE_RECIPES';
 export const SET_RECIPES = 'SET_RECIPES';
 export const APPEND_RECIPES = 'APPEND_RECIPES';
 export const NO_RESULTS = 'NO_RESULTS';
@@ -39,7 +40,11 @@ export const RESET_QUERY = 'RESET_QUERY';
 
 // Pager types
 export const SET_PAGER = 'SET_PAGER';
-export const CURRENT_PAGE = 'CURRENT_PAGE';
+export const SET_PAGE = 'SET_PAGE';
+export const CURRENT_PAGE_INCR = 'CURRENT_PAGE_INCR';
+export const CURRENT_PAGE_DECR = 'CURRENT_PAGE_DECR';
+export const FIRST_PAGE = 'FIRST_PAGE';
+export const LAST_PAGE = 'LAST_PAGE';
 export const ITEMS_PER_PAGE = 'ITEMS_PER_PAGE';
 export const RESET_PAGER = 'RESET_PAGER';
 

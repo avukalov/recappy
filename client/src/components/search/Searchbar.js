@@ -1,29 +1,30 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router';
 
-import debounce from 'lodash.debounce';
+import { connect } from 'react-redux';
+import { TEXT } from '../../actions/types';
+import { updateQuery } from '../../actions/search/query';
+
+import PropTypes from 'prop-types';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { InputBase, Button } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
+import { useState } from 'react';
 
-const styles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.25),
+    backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.35),
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      margin: theme.spacing(0, 5),
-      width: '100%',
-    },
-    [theme.breakpoints.up('xl')]: {
-      margin: theme.spacing(0, 30),
-      width: '100%',
+      marginLeft: theme.spacing(1),
+      width: 'auto',
     },
   },
   searchIcon: {
@@ -39,98 +40,106 @@ const styles = makeStyles((theme) => ({
     color: 'inherit',
   },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
+    padding: theme.spacing(1),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      fontSize: 18,
-      width: '100%',
+      width: '45ch',
       '&:focus': {
-        width: '100%',
+        width: '60ch',
       },
-      // width: "12ch",
-      // "&:focus": {
-      //   width: "20ch",
-      // },
     },
   },
-  button: {
-    margin: theme.spacing(1),
-    padding: theme.spacing(1, 4),
+  searchButton: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: theme.spacing(0, 0.5, 0.5, 0),
+    // backgroundColor: fade(theme.palette.primary.main, 0.35),
+    // '&:hover': {
+    //   backgroundColor: fade(theme.palette.primary.main, 0.55),
+    // },
   },
 }));
 
-function Searchbar({ textSearch, searchParamsDispatch, handleDrawerOpen }) {
-  const classes = styles();
+const Searchbar = (props) => {
+  const classes = useStyles();
+
+  const {
+    query: { text },
+    updateQuery,
+  } = props;
 
   const history = useHistory();
-  const location = useLocation();
-  const [textSearchVal, setTextSearchVal] = useState(textSearch);
+  const [formData, setFormData] = useState('');
 
   useEffect(() => {
-    setTextSearchVal(textSearch);
-  }, [textSearch]);
+    setFormData(text);
+  }, [text]);
 
-  const sendQuery = (query) => {
-    searchParamsDispatch({ type: 'TEXT', payload: query });
-    if (location.pathname !== '/search') {
-      history.push('/search');
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (formData !== '') {
+      updateQuery(TEXT, formData.trim());
     }
-  };
 
-  const delayedQuery = useCallback(
-    debounce((q) => sendQuery(q), 1000),
-    []
-  );
+    history.push('/search');
+  };
 
   const onChange = (e) => {
-    setTextSearchVal(e.target.value);
-    delayedQuery(e.target.value);
-  };
+    let value = e.target.value;
 
-  const onClick = () => {
-    console.log(location.pathname);
-    if (location.pathname === '/search') {
-      handleDrawerOpen();
-    }
-    if (location.pathname !== '/search') {
-      handleDrawerOpen();
-      history.push('/search');
-    }
+    value = value.replace(/[^A-Za-z' ]/gi, '');
+
+    setFormData(value);
   };
 
   return (
     <div className={classes.search}>
-      <div className={classes.searchIcon}>
+      {/* <div className={classes.searchIcon}>
         <Search />
-      </div>
-      <InputBase
-        autoFocus
-        placeholder="Search for recipes . . ."
-        fullWidth={true}
-        value={textSearchVal}
-        onChange={onChange}
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput,
-        }}
-        inputProps={{ 'aria-label': 'search' }}
-        endAdornment={
-          <Button
-            className={classes.button}
-            variant="outlined"
-            size="small"
-            color="inherit"
-            onClick={onClick}
-          >
-            Advanced
-          </Button>
-        }
-      />
+      </div> */}
+      <form onSubmit={onSubmit}>
+        <InputBase
+          placeholder="Chicken in American way"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          value={formData}
+          inputProps={{ 'aria-label': 'search' }}
+          onChange={onChange}
+        />
+      </form>
+      <Button
+        color="primary"
+        variant="contained"
+        startIcon={<Search />}
+        disableElevation
+        className={classes.searchButton}
+        onClick={onSubmit}
+      >
+        Search
+      </Button>
     </div>
   );
-}
+};
 
-export default Searchbar;
+Searchbar.propTypes = {
+  query: PropTypes.object.isRequired,
+  updateQuery: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  query: state.query,
+});
+
+export default connect(mapStateToProps, { updateQuery })(Searchbar);

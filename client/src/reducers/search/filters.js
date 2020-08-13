@@ -16,8 +16,8 @@ export default function (state = initialState, action) {
     case SET_FILTERS:
       return {
         ...state,
-        includedIngredients: payload.ingredients,
-        excludedIngredients: payload.ingredients,
+        // includedIngredients: payload.ingredients,
+        // excludedIngredients: payload.ingredients,
         cuisines: payload.cuisines,
         dishTypes: payload.dishTypes,
         diets: payload.diets,

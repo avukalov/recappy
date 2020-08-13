@@ -1,5 +1,6 @@
 import {
   FETCH_RECIPES,
+  FETCH_MORE_RECIPES,
   SET_RECIPES,
   APPEND_RECIPES,
   NO_RESULTS,
@@ -8,6 +9,7 @@ import {
 const initialState = {
   recipes: [],
   loading: false,
+  loadingMore: false,
 };
 
 export default function (state = initialState, action) {
@@ -20,6 +22,11 @@ export default function (state = initialState, action) {
         ...state,
         loading: true,
       };
+    case FETCH_MORE_RECIPES:
+      return {
+        ...state,
+        loadingMore: true,
+      };
     case SET_RECIPES:
       return {
         ...state,
@@ -29,8 +36,8 @@ export default function (state = initialState, action) {
     case APPEND_RECIPES:
       return {
         ...state,
-        recipes: [...recipes, payload],
-        loading: false,
+        recipes: [...recipes, ...payload],
+        loadingMore: false,
       };
     case NO_RESULTS:
       return (state = initialState);

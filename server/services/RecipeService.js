@@ -9,14 +9,14 @@ class RecipeService {
     const matchQuery = AggregationService.createAggregateMatchString(query);
 
     return await Recipe.aggregate([
-      query.text !== undefined
+      query.text !== ''
         ? {
             $match: {
               $and: [{ $text: { $search: query.text } }, matchQuery],
             },
           }
         : { $match: matchQuery },
-      query.text !== undefined
+      query.text !== ''
         ? { $sort: { score: { $meta: 'textScore' } } }
         : { $sort: { spoonacularScore: -1 } },
       {
@@ -66,7 +66,7 @@ class RecipeService {
     const matchQuery = AggregationService.createAggregateMatchString(query);
 
     return await Recipe.aggregate([
-      query.text !== undefined
+      query.text !== ''
         ? {
             $match: {
               $and: [{ $text: { $search: query.text } }, matchQuery],
@@ -76,7 +76,7 @@ class RecipeService {
       {
         $group: {
           _id: null,
-          ingredients: { $addToSet: '$extendedIngredients.name' },
+          // ingredients: { $addToSet: '$extendedIngredients.name' },
           dishTypes: { $addToSet: '$dishTypes' },
           diets: { $addToSet: '$diets' },
           occasions: { $addToSet: '$occasions' },
@@ -87,13 +87,13 @@ class RecipeService {
         $project: {
           _id: 0,
           filters: {
-            ingredients: {
-              $reduce: {
-                input: '$ingredients',
-                initialValue: [],
-                in: { $setUnion: ['$$value', '$$this'] },
-              },
-            },
+            // ingredients: {
+            //   $reduce: {
+            //     input: '$ingredients',
+            //     initialValue: [],
+            //     in: { $setUnion: ['$$value', '$$this'] },
+            //   },
+            // },
             dishTypes: {
               $reduce: {
                 input: '$dishTypes',

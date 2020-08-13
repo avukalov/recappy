@@ -1,10 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, cloneElement } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
+
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { useScrollTrigger } from '@material-ui/core';
 import {
   AppBar,
   Toolbar,
@@ -13,11 +15,9 @@ import {
   Box,
   IconButton,
 } from '@material-ui/core';
-
-import { useScrollTrigger } from '@material-ui/core';
-
 import { Dashboard } from '@material-ui/icons';
 
+import Searchbar from '../search/Searchbar';
 import CardMenu from '../common/CardMenu';
 
 const styles = makeStyles((theme) => ({
@@ -49,27 +49,19 @@ const styles = makeStyles((theme) => ({
 
 const ElevationScroll = (props) => {
   const { children } = props;
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
+
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
-    // target: window ? window() : undefined,
   });
 
-  return React.cloneElement(children, {
+  return cloneElement(children, {
     elevation: trigger ? 4 : 0,
   });
 };
 
 ElevationScroll.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  // window: PropTypes.func,
 };
 
 const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
@@ -120,9 +112,10 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
               Reccapy
             </Typography>
           </Link>
-          <Link to="/search" className={classes.link}>
+          {/* <Link to="/search" className={classes.link}>
             <Typography variant="subtitle2">Advanced Search</Typography>
-          </Link>
+          </Link> */}
+          <Searchbar />
           {!loading && (
             <div className={classes.pushLeft}>
               <Fragment>

@@ -12,7 +12,7 @@ import {
 } from '../../actions/types';
 
 const initialState = {
-  text: null,
+  text: '',
   includedIngredients: [],
   excludedIngredients: [],
   cuisines: [],

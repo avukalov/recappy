@@ -1,147 +1,90 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { sendQueryRecipes } from '../../actions/search/recipes';
 
-import PropTypes from 'prop-types';
+import { fade, makeStyles } from '@material-ui/core/styles';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, Button, Typography, Fab } from '@material-ui/core';
-import { Close, Tune, KeyboardArrowUp } from '@material-ui/icons';
+import { Button, Typography, Fab } from '@material-ui/core';
+import { Tune, KeyboardArrowUp } from '@material-ui/icons';
 
-import Filterbar from './Filterbar';
 import Content from './Content';
+import Filterbar from '../filter/Filterbar';
 import ScrollHandler from '../common/ScrollHandler';
-import OptionsToolbar from './OptionsToolbar';
+import OptionsToolbar from '../common/OptionsToolbar';
 
 import clsx from 'clsx';
-
-import usePrev from '../../hooks/usePrev';
-
-const drawerWidth = 275;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
-  hide: {
+  filter: {
+    backgroundColor: fade(theme.palette.grey[100], 0.5),
+  },
+  filterOpen: {
+    height: 'auto',
+    padding: theme.spacing(2, 0),
+  },
+  filterClosed: {
     display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    zIndex: theme.zIndex.appBar - 10,
-  },
-  drawerShift: {
-    width: 0,
-    marginLeft: drawerWidth,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerPaperShift: {
-    width: 0,
-  },
-  drawerHeader: {
-    marginTop: 66,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(0, 3, 3),
-    marginRight: -drawerWidth,
+    padding: theme.spacing(0, 3),
   },
-  contentShift: {
-    marginRight: 0,
+  floatingFilterButton: {
+    paddingRight: 30,
+    borderRadius: theme.spacing(1, 0, 0, 1),
   },
 }));
 
-const Search = ({ pager, query, sendQueryRecipes }, props) => {
+const Search = (props) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const prevPager = usePrev(pager);
-  const prevQuery = usePrev(query);
-
-  const handleDrawerToggle = () => {
+  const handleFilterToggle = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    if (
-      prevPager &&
-      pager.currentPage === prevPager.currentPage &&
-      query === prevQuery
-    ) {
-      return;
-    }
-    sendQueryRecipes(query, pager);
-  }, [query, pager, prevPager, prevQuery, sendQueryRecipes]);
+    setLoading(false);
+  }, []);
 
   return (
     <div className={classes.root}>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
+      <main className={classes.content}>
         <div id="back-to-top-anchor" />
-        <OptionsToolbar open={open} handleDrawerToggle={handleDrawerToggle} />
-        <Content />
+        <OptionsToolbar
+          sort
+          filter
+          open={open}
+          handleFilterToggle={handleFilterToggle}
+        />
+        <div
+          className={clsx(classes.filter, {
+            [classes.filterOpen]: open,
+            [classes.filterClosed]: !open,
+          })}
+        >
+          {!loading && <Filterbar />}
+        </div>
+        {!loading && <Content />}
       </main>
 
-      <Drawer
-        open={open}
-        anchor="right"
-        variant="persistent"
-        transitionDuration={{ enter: 0, exit: 0 }}
-        className={clsx({
-          [classes.drawer]: open,
-          [classes.drawerShift]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerPaper]: open,
-            [classes.drawerPaperShift]: !open,
-          }),
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <Button
-            disableRipple
-            startIcon={<Close />}
-            onClick={handleDrawerToggle}
-          >
-            <Typography variant="button">Close</Typography>
-          </Button>
-        </div>
-
-        <Filterbar />
-      </Drawer>
-
-      <ScrollHandler {...props} scrollTop={true}>
+      <ScrollHandler {...props} scrollTop={true} open={open}>
         <Fab color="secondary" aria-label="scroll back to top">
           <KeyboardArrowUp />
         </Fab>
       </ScrollHandler>
 
       {!open && (
-        <ScrollHandler
-          {...props}
-          search={true}
-          handleDrawerToggle={handleDrawerToggle}
-        >
+        <ScrollHandler {...props} search={true}>
           <Button
             color="primary"
             variant="contained"
             startIcon={<Tune />}
-            style={{ paddingRight: 20 }}
-            onClick={handleDrawerToggle}
+            onClick={handleFilterToggle}
+            className={classes.floatingFilterButton}
           >
             <Typography variant="button">Filters</Typography>
           </Button>
@@ -151,17 +94,4 @@ const Search = ({ pager, query, sendQueryRecipes }, props) => {
   );
 };
 
-Search.propTypes = {
-  pager: PropTypes.object.isRequired,
-  query: PropTypes.object.isRequired,
-  sendQueryRecipes: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  pager: state.pager,
-  query: state.query,
-});
-
-export default connect(mapStateToProps, {
-  sendQueryRecipes,
-})(Search);
+export default Search;

@@ -27,15 +27,13 @@ const ScrollHandler = (props) => {
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 100,
+    threshold: 200,
   });
 
   const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
       '#back-to-top-anchor'
     );
-
-    console.log(anchor);
 
     if (anchor) {
       anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -46,8 +44,8 @@ const ScrollHandler = (props) => {
     return (
       <Zoom in={trigger}>
         <div
-          onClick={handleClick}
           role="presentation"
+          onClick={handleClick}
           className={classes.scrollTop}
         >
           {children}
@@ -59,7 +57,11 @@ const ScrollHandler = (props) => {
   if (search) {
     return (
       <Slide in={trigger} direction="left">
-        <div role="presentation" className={classes.search}>
+        <div
+          role="presentation"
+          onClick={handleClick}
+          className={classes.search}
+        >
           {children}
         </div>
       </Slide>

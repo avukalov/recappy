@@ -1,9 +1,7 @@
-import { RESET_QUERY } from '../types';
-
 export const updateQuery = (type, value) => (dispatch) => {
-  if (type === RESET_QUERY) {
-    dispatch({ type });
-  } else {
-    dispatch({ type, payload: value });
-  }
+  dispatch({ type, payload: value });
+};
+
+export const updatePager = (type, value) => (dispatch) => {
+  dispatch({ type, payload: value });
 };
