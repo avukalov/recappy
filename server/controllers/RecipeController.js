@@ -1,4 +1,5 @@
 const RecipeService = require('../services/RecipeService');
+const RedisService = require('../services/RedisService');
 
 class RecipeController {
   static async getRecipesFromQuery(req, res) {
@@ -26,15 +27,38 @@ class RecipeController {
     }
   }
 
-  static async getRecipeById(req, res) {
-    const { id } = req.query;
+  static async getRecipeFromDb(req, res, next) {
+    const token = req.header('x-auth-token');
+    const { id } = req.params;
 
     try {
-      const results = await RecipeService.getRecipeById(id);
-      return res.status(200).json(results);
+      const result = await RecipeService.getRecipeById(id);
+
+      if (!result) {
+        return res.status(404).json({ msg: 'No results' });
+      }
+
+      const recipe = await RedisService.setRecipeToCache(
+        id,
+        JSON.stringify(result)
+      );
+
+      console.log('recipe', recipe);
+
+      if (token) {
+        const history = await RedisService.setRecipeToHistory(
+          token,
+          JSON.stringify(result)
+        );
+
+        console.log('historysaddAsync', history);
+      }
+
+      return res.status(200).json(result);
+      // return next();
     } catch (error) {
       console.log(error);
-      return res.status(500).json(error);
+      return res.status(500).json({ msg: 'Server error' });
     }
   }
 

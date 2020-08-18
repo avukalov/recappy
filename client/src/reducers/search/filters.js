@@ -1,27 +1,35 @@
-import { SET_FILTERS, RESET_FILTERS } from '../../actions/types';
+import {
+  FETCH_FILTERS,
+  UPDATE_FILTERS,
+  RESET_FILTERS,
+} from '../../actions/types';
 
 const initialState = {
-  includedIngredients: [],
-  excludedIngredients: [],
-  cuisines: [],
-  dishTypes: [],
-  diets: [],
-  occasions: [],
+  filters: {
+    includedIngredients: [],
+    excludedIngredients: [],
+    cuisines: [],
+    dishTypes: [],
+    diets: [],
+    occasions: [],
+  },
+  loading: false,
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case SET_FILTERS:
+    case FETCH_FILTERS:
       return {
         ...state,
-        // includedIngredients: payload.ingredients,
-        // excludedIngredients: payload.ingredients,
-        cuisines: payload.cuisines,
-        dishTypes: payload.dishTypes,
-        diets: payload.diets,
-        occasions: payload.occasions,
+        loading: true,
+      };
+    case UPDATE_FILTERS:
+      return {
+        ...state,
+        filters: payload,
+        loading: false,
       };
     case RESET_FILTERS:
       return (state = initialState);

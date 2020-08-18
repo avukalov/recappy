@@ -1,34 +1,33 @@
 import {
-  SET_PAGER,
-  SET_PAGE,
-  CURRENT_PAGE_INCR,
-  CURRENT_PAGE_DECR,
-  FIRST_PAGE,
-  LAST_PAGE,
-  ITEMS_PER_PAGE,
+  UPDATE_PAGER,
+  UPDATE_CURRENT_PAGE,
+  UPDATE_SORT_BY,
+  UPDATE_ORDER_BY,
   RESET_PAGER,
 } from '../../actions/types';
 
 const initialState = {
   totalItems: null,
   currentPage: 1,
-  itemsPerPage: 20,
+  itemsPerPage: 24,
   skipItems: 0,
   pages: null,
+  sortBy: 'relevance',
+  orderBy: -1,
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
-  const { currentPage, itemsPerPage, pages } = state;
+  const { currentPage, itemsPerPage } = state;
 
   switch (type) {
-    case SET_PAGER:
+    case UPDATE_PAGER:
       return {
         ...state,
         totalItems: payload.totalItems,
         pages: payload.pages,
       };
-    case SET_PAGE:
+    case UPDATE_CURRENT_PAGE:
       return {
         ...state,
         currentPage: payload,
@@ -39,34 +38,15 @@ export default function (state = initialState, action) {
             ? 0
             : (payload - 2) * itemsPerPage,
       };
-    case CURRENT_PAGE_INCR:
+    case UPDATE_SORT_BY:
       return {
         ...state,
-        currentPage: currentPage + 1,
-        skipItems: currentPage * itemsPerPage,
+        sortBy: payload,
       };
-    case CURRENT_PAGE_DECR:
+    case UPDATE_ORDER_BY:
       return {
         ...state,
-        currentPage: currentPage - 1,
-        skipItems: currentPage - 2 < 0 ? 0 : (currentPage - 2) * itemsPerPage,
-      };
-    case FIRST_PAGE:
-      return {
-        ...state,
-        currentPage: 1,
-        skipItems: 0,
-      };
-    case LAST_PAGE:
-      return {
-        ...state,
-        currentPage: pages,
-        skipItems: (pages - 1) * itemsPerPage,
-      };
-    case ITEMS_PER_PAGE:
-      return {
-        ...state,
-        itemsPerPage: payload,
+        orderBy: payload,
       };
     case RESET_PAGER:
       return (state = initialState);

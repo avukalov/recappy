@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import { connect } from 'react-redux';
-import { TEXT } from '../../actions/types';
-import { updateQuery } from '../../actions/search/query';
+import { TEXT, SUBMIT } from '../../actions/types';
+import { setQuery } from '../../actions/search/query';
 
 import PropTypes from 'prop-types';
 
@@ -20,9 +20,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginLeft: 0,
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    margin: theme.spacing(0, 2),
+    [theme.breakpoints.up('md')]: {
       marginLeft: theme.spacing(1),
       width: 'auto',
     },
@@ -42,10 +42,9 @@ const useStyles = makeStyles((theme) => ({
   inputInput: {
     padding: theme.spacing(1),
     // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: '45ch',
       '&:focus': {
         width: '60ch',
@@ -62,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: theme.spacing(0, 0.5, 0.5, 0),
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
     // backgroundColor: fade(theme.palette.primary.main, 0.35),
     // '&:hover': {
     //   backgroundColor: fade(theme.palette.primary.main, 0.55),
@@ -74,13 +76,14 @@ const Searchbar = (props) => {
 
   const {
     query: { text },
-    updateQuery,
+    setQuery,
   } = props;
 
   const history = useHistory();
   const [formData, setFormData] = useState('');
 
   useEffect(() => {
+    if (text === formData) return;
     setFormData(text);
   }, [text]);
 
@@ -88,7 +91,8 @@ const Searchbar = (props) => {
     e.preventDefault();
 
     if (formData !== '') {
-      updateQuery(TEXT, formData.trim());
+      setQuery(TEXT, formData.trim());
+      setQuery(SUBMIT);
     }
 
     history.push('/search');
@@ -104,9 +108,6 @@ const Searchbar = (props) => {
 
   return (
     <div className={classes.search}>
-      {/* <div className={classes.searchIcon}>
-        <Search />
-      </div> */}
       <form onSubmit={onSubmit}>
         <InputBase
           placeholder="Chicken in American way"
@@ -135,11 +136,11 @@ const Searchbar = (props) => {
 
 Searchbar.propTypes = {
   query: PropTypes.object.isRequired,
-  updateQuery: PropTypes.func.isRequired,
+  setQuery: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   query: state.query,
 });
 
-export default connect(mapStateToProps, { updateQuery })(Searchbar);
+export default connect(mapStateToProps, { setQuery })(Searchbar);

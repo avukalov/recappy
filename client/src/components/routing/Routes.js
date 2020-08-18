@@ -8,6 +8,8 @@ import Register from '../auth/Register';
 import Login from '../auth/Login';
 import Dashboard from '../dashboard/Dashboard';
 import Search from '../search/Search';
+import Recipe from '../recipe/Recipe';
+
 import NotFound from '../layout/NotFound';
 
 const Routes = (props) => {
@@ -17,6 +19,7 @@ const Routes = (props) => {
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/search" component={Search} />
+      <Route exact path="/recipe/:id" component={Recipe} />
 
       {/* Private Routes */}
       <PrivateRoute exact path="/dashboard" component={Dashboard} />

@@ -1,5 +1,6 @@
 import React, { Fragment, cloneElement } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 
@@ -14,28 +15,43 @@ import {
   Button,
   Box,
   IconButton,
+  Slide,
 } from '@material-ui/core';
 import { Dashboard } from '@material-ui/icons';
 
 import Searchbar from '../search/Searchbar';
+import SearchNav from '../search/SearchNav';
 import CardMenu from '../common/CardMenu';
 
 const styles = makeStyles((theme) => ({
   appBar: {
     height: 64,
-    zIndex: theme.zIndex.appBar,
+    zIndex: theme.zIndex.appBar + 1000,
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  },
+  searchBar: {
+    background: 'transparent',
+    zIndex: theme.zIndex.appBar + 1000,
   },
   title: {
     fontFamily: 'Kaushan Script',
   },
+  flexRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   pushLeft: {
-    marginLeft: 'auto',
+    minWidth: 200,
+    marginLeft: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      width: 'auto',
+      marginLeft: 'auto',
+    },
   },
   link: {
     color: 'black',
     textDecoration: 'none',
-    margin: theme.spacing(1, 1.5),
+    margin: theme.spacing(0, 1),
   },
   menuButton: {
     '&:hover': {
@@ -47,20 +63,46 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const ElevationScroll = (props) => {
+const HideOnScroll = (props) => {
   const { children } = props;
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 0,
+    threshold: 50,
   });
 
-  return cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  });
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
 };
 
-ElevationScroll.propTypes = {
+HideOnScroll.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
+const ShowOnScroll = (props) => {
+  const { children } = props;
+
+  const location = useLocation();
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 50,
+  });
+
+  return (
+    <Slide
+      appear={false}
+      direction="down"
+      in={trigger && location.pathname === '/search'}
+    >
+      {children}
+    </Slide>
+  );
+};
+
+ShowOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
 };
 
@@ -84,7 +126,7 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
   );
 
   const guestLinks = (
-    <Fragment>
+    <div className={classes.flexRow}>
       <Link to="/login" className={classes.link}>
         <Button color="primary" variant="contained">
           Login
@@ -95,37 +137,45 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
           Register
         </Button>
       </Link>
-    </Fragment>
+    </div>
   );
 
   return (
-    <ElevationScroll>
-      <AppBar className={classes.appBar}>
-        <Toolbar>
-          <Link to="/" className={classes.link}>
-            <Typography
-              variant="h4"
-              color="inherit"
-              gutterBottom
-              className={classes.title}
-            >
-              Reccapy
-            </Typography>
-          </Link>
-          {/* <Link to="/search" className={classes.link}>
-            <Typography variant="subtitle2">Advanced Search</Typography>
-          </Link> */}
-          <Searchbar />
-          {!loading && (
-            <div className={classes.pushLeft}>
-              <Fragment>
-                {isAuthenticated ? user && authLinks : guestLinks}
-              </Fragment>
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-    </ElevationScroll>
+    <>
+      <HideOnScroll>
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <Link to="/" className={classes.link}>
+              <Typography
+                variant="h4"
+                color="inherit"
+                gutterBottom
+                className={classes.title}
+              >
+                Reccapy
+              </Typography>
+            </Link>
+
+            <Searchbar />
+
+            {!loading && (
+              <div className={classes.pushLeft}>
+                <Fragment>
+                  {isAuthenticated ? user && authLinks : guestLinks}
+                </Fragment>
+              </div>
+            )}
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
+      <ShowOnScroll>
+        <AppBar elevation={0} className={classes.searchBar}>
+          <Toolbar>
+            <SearchNav />
+          </Toolbar>
+        </AppBar>
+      </ShowOnScroll>
+    </>
   );
 };
 

@@ -6,19 +6,22 @@ const AggregationService = require('./helpers/AggregationService');
 class RecipeService {
   // Get recipes from database by search query
   static async getRecipesFromSearchQuery(query) {
-    const matchQuery = AggregationService.createAggregateMatchString(query);
+    const { text, skipItems, itemsPerPage } = query;
+
+    const match = AggregationService.createAggregateMatch(query);
+    const sortBy = AggregationService.createAggregateSort(query);
 
     return await Recipe.aggregate([
-      query.text !== ''
+      text !== ''
         ? {
             $match: {
-              $and: [{ $text: { $search: query.text } }, matchQuery],
+              $and: [{ $text: { $search: query.text } }, match],
             },
           }
-        : { $match: matchQuery },
-      query.text !== ''
+        : { $match: match },
+      text !== '' && query.sortBy === 'relevance'
         ? { $sort: { score: { $meta: 'textScore' } } }
-        : { $sort: { spoonacularScore: -1 } },
+        : { $sort: sortBy },
       {
         $group: {
           _id: null,
@@ -30,7 +33,6 @@ class RecipeService {
               readyInMinutes: '$readyInMinutes',
               pricePerServing: '$pricePerServing',
               servings: '$servings',
-              cheap: '$cheap',
               veryHealthy: '$veryHealthy',
             },
           },
@@ -41,15 +43,11 @@ class RecipeService {
         $project: {
           _id: 0,
           recipes: {
-            $slice: [
-              '$recipes',
-              parseInt(query.skipItems),
-              parseInt(query.itemsPerPage),
-            ],
+            $slice: ['$recipes', parseInt(skipItems), parseInt(itemsPerPage)],
           },
           totalItems: 1,
           pages: {
-            $ceil: { $divide: ['$totalItems', parseInt(query.itemsPerPage)] },
+            $ceil: { $divide: ['$totalItems', parseInt(itemsPerPage)] },
           },
         },
       },
@@ -58,12 +56,12 @@ class RecipeService {
 
   // Get single recipe by id
   static async getRecipeById(id) {
-    return await Recipe.findOne({ _id: id }).exec();
+    return await Recipe.findById(id).select('-nutrition').exec();
   }
 
   // Get filter options depending by query results
   static async getFiltersFromSearchQuery(query) {
-    const matchQuery = AggregationService.createAggregateMatchString(query);
+    const matchQuery = AggregationService.createAggregateMatch(query);
 
     return await Recipe.aggregate([
       query.text !== ''

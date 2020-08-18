@@ -1,45 +1,47 @@
 import {
-  FETCH_RECIPES,
-  FETCH_MORE_RECIPES,
-  SET_RECIPES,
-  APPEND_RECIPES,
-  NO_RESULTS,
+  SUBMIT,
+  FETCH_SEARCH_QUERY,
+  UPDATE_SEARCH_RESULTS,
+  UPDATE_CURRENT_RECIPE,
+  NO_SEARCH_RESULTS,
 } from '../../actions/types';
 
 const initialState = {
   recipes: [],
+  currentRecipe: null,
   loading: false,
-  loadingMore: false,
+  submit: false,
+  init: true,
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
-  const { recipes } = state;
 
   switch (type) {
-    case FETCH_RECIPES:
+    case SUBMIT:
+      return {
+        ...state,
+        submit: true,
+      };
+    case FETCH_SEARCH_QUERY:
       return {
         ...state,
         loading: true,
       };
-    case FETCH_MORE_RECIPES:
-      return {
-        ...state,
-        loadingMore: true,
-      };
-    case SET_RECIPES:
+    case UPDATE_SEARCH_RESULTS:
       return {
         ...state,
         recipes: payload,
         loading: false,
+        init: false,
+        submit: false,
       };
-    case APPEND_RECIPES:
+    case UPDATE_CURRENT_RECIPE:
       return {
         ...state,
-        recipes: [...recipes, ...payload],
-        loadingMore: false,
+        currentRecipe: payload,
       };
-    case NO_RESULTS:
+    case NO_SEARCH_RESULTS:
       return (state = initialState);
     default:
       return state;

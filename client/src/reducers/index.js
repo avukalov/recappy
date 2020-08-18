@@ -4,7 +4,7 @@ import alert from './alert';
 import auth from './auth';
 import query from './search/query';
 import pager from './search/pager';
-import recipes from './search/recipes';
+import search from './search/search';
 import filters from './search/filters';
 
 export default combineReducers({
@@ -12,6 +12,6 @@ export default combineReducers({
   auth,
   query,
   pager,
-  recipes,
+  search,
   filters,
 });

@@ -11,13 +11,15 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.27",
-    "normalize-url": "^5.1.0"
+    "normalize-url": "^5.1.0",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

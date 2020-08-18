@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { updatePager } from '../../actions/search/query';
-import { SET_PAGE } from '../../actions/types';
+import { setPager } from '../../actions/search/query';
+import { UPDATE_CURRENT_PAGE } from '../../actions/types';
 
 import PropTypes from 'prop-types';
 
@@ -21,7 +21,7 @@ const PaginationComponent = (props) => {
 
   const {
     pager: { currentPage, pages },
-    updatePager,
+    setPager,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -31,9 +31,8 @@ const PaginationComponent = (props) => {
   }, [currentPage]);
 
   const handleChange = (event, value) => {
-    // console.log(event.target);
     if (currentPage === value) return;
-    updatePager(SET_PAGE, value);
+    setPager(UPDATE_CURRENT_PAGE, value);
   };
 
   return (
@@ -53,11 +52,11 @@ const PaginationComponent = (props) => {
 
 PaginationComponent.propTypes = {
   pager: PropTypes.object.isRequired,
-  updatePager: PropTypes.func.isRequired,
+  setPager: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   pager: state.pager,
 });
 
-export default connect(mapStateToProps, { updatePager })(PaginationComponent);
+export default connect(mapStateToProps, { setPager })(PaginationComponent);

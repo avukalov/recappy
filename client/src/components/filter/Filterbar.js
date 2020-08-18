@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+
+import _ from 'lodash';
 
 import { connect } from 'react-redux';
-import { updateQuery, updatePager } from '../../actions/search/query';
-import { sendQueryFilters } from '../../actions/search/recipes';
+import { setQuery } from '../../actions/search/query';
+import { getFiltersFromResults } from '../../actions/search/search';
 
 import PropTypes from 'prop-types';
 
 import {
+  SUBMIT,
   INCLUDED_INGREDIENTS,
   EXCLUDED_INGREDIENTS,
   CUISINES,
   DISH_TYPES,
   DIETS,
   OCCASIONS,
-  RESET_QUERY,
-  FIRST_PAGE,
+  HEALTHY,
+  RESET_SEARCH_QUERY,
 } from '../../actions/types';
 
 // Material UI Components
@@ -25,22 +28,34 @@ import {
   Typography,
   TextField,
   Button,
+  InputAdornment,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import { Add, Remove } from '@material-ui/icons';
 
 import ListboxComponent from '../common/VirtualizedListBox';
-import FiltersList from './FiltersList';
+// import FilterList from './FilterList';
 import usePrev from '../../hooks/usePrev';
+
+const initialState = {
+  text: '',
+  includedIngredients: [],
+  excludedIngredients: [],
+  cuisines: [],
+  dishTypes: [],
+  diets: [],
+  occasions: [],
+  veryHealthy: false,
+  // pricePerServing: { min: 0, max: 1000 },
+  // readyInMinutes: { min: 0, max: 1000 },
+};
 
 // CSS Styles
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-  },
-  categoryColumn: {
-    width: 205,
-  },
-  category: {
     padding: theme.spacing(2),
   },
   chip: {
@@ -63,24 +78,49 @@ const useStyles = makeStyles((theme) => ({
 const Filterbar = (props) => {
   const classes = useStyles();
 
-  const { query, filters, updateQuery, updatePager, sendQueryFilters } = props;
+  const {
+    query,
+    filters: { filters },
+    setQuery,
+    getFiltersFromResults,
+  } = props;
+
+  const [checkbox, setCheckbox] = useState({});
 
   const prevQuery = usePrev(query);
 
+  const healthy = useRef();
+
   useEffect(() => {
-    if (prevQuery && query === prevQuery) return;
-    sendQueryFilters(query);
-  }, [query, sendQueryFilters, updateQuery]);
+    if (!_.isUndefined(prevQuery) && _.isEqual(query, prevQuery)) return;
+    getFiltersFromResults(query);
+  }, [query, prevQuery, getFiltersFromResults]);
 
   useEffect(() => {
     return () => {
-      handleOnChange(RESET_QUERY);
+      handleOnChange(RESET_SEARCH_QUERY);
     };
   }, []);
 
   const handleOnChange = (type, value) => {
-    updatePager(FIRST_PAGE);
-    updateQuery(type, value);
+    setQuery(type, value);
+  };
+
+  const handleReset = () => {
+    console.log(healthy.current.checked);
+    if (healthy.current.checked === true) {
+      healthy.current.click();
+    }
+    setQuery(RESET_SEARCH_QUERY);
+  };
+
+  const onSubmit = () => {
+    setQuery(SUBMIT);
+  };
+
+  const handleCheckbox = (event) => {
+    setCheckbox({ ...checkbox, [event.target.name]: event.target.checked });
+    handleOnChange(event.target.name, event.target.checked);
   };
 
   return (
@@ -103,7 +143,7 @@ const Filterbar = (props) => {
                 getOptionSelected={(option) =>
                   query.includedIngredients.includes(option)
                 }
-                options={filters.includedIngredients}
+                options={[]}
                 ListboxComponent={ListboxComponent}
                 ListboxProps={{ className: classes.listbox }}
                 ChipProps={{ size: 'small', className: classes.chip }}
@@ -119,7 +159,14 @@ const Filterbar = (props) => {
                     color="secondary"
                     variant="outlined"
                     label="Included Ingredients"
-                    InputProps={{ ...params.InputProps }}
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Add />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 )}
               />
@@ -133,7 +180,7 @@ const Filterbar = (props) => {
                 getOptionSelected={(option) =>
                   query.excludedIngredients.includes(option)
                 }
-                options={filters.excludedIngredients}
+                options={[]}
                 ListboxComponent={ListboxComponent}
                 ListboxProps={{ className: classes.listbox }}
                 ChipProps={{ size: 'small', className: classes.chip }}
@@ -149,6 +196,132 @@ const Filterbar = (props) => {
                     color="secondary"
                     variant="outlined"
                     label="Excluded Ingredients"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Remove />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container item direction="row" spacing={2}>
+            <Grid item xs>
+              <Autocomplete
+                multiple
+                fullWidth
+                value={query.cuisines}
+                getOptionLabel={(option) => option}
+                getOptionSelected={(option) => query.cuisines.includes(option)}
+                options={filters.cuisines}
+                ListboxComponent={ListboxComponent}
+                ListboxProps={{ className: classes.listbox }}
+                ChipProps={{ size: 'small', className: classes.chip }}
+                onChange={(e, value) => {
+                  handleOnChange(CUISINES, value);
+                }}
+                renderOption={(option) => (
+                  <Typography variant="body1" noWrap>
+                    {option}
+                  </Typography>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    color="primary"
+                    variant="outlined"
+                    label="Cuisines"
+                    InputProps={{
+                      ...params.InputProps,
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs>
+              <Autocomplete
+                multiple
+                fullWidth
+                value={query.dishTypes}
+                getOptionLabel={(option) => option}
+                getOptionSelected={(option) => query.dishTypes.includes(option)}
+                options={filters.dishTypes}
+                ListboxComponent={ListboxComponent}
+                ListboxProps={{ className: classes.listbox }}
+                ChipProps={{ size: 'small', className: classes.chip }}
+                onChange={(e, value) => {
+                  handleOnChange(DISH_TYPES, value);
+                }}
+                renderOption={(option) => (
+                  <Typography noWrap>{option}</Typography>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    color="secondary"
+                    variant="outlined"
+                    label="Dish Types"
+                    InputProps={{ ...params.InputProps }}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs>
+              <Autocomplete
+                multiple
+                fullWidth
+                value={query.diets}
+                getOptionLabel={(option) => option}
+                getOptionSelected={(option) => query.diets.includes(option)}
+                options={filters.diets}
+                ListboxComponent={ListboxComponent}
+                ListboxProps={{ className: classes.listbox }}
+                ChipProps={{ size: 'small', className: classes.chip }}
+                onChange={(e, value) => {
+                  handleOnChange(DIETS, value);
+                }}
+                renderOption={(option) => (
+                  <Typography noWrap>{option}</Typography>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    color="secondary"
+                    variant="outlined"
+                    label="Diets"
+                    InputProps={{ ...params.InputProps }}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs>
+              <Autocomplete
+                multiple
+                fullWidth
+                value={query.occasions}
+                getOptionLabel={(option) => option}
+                getOptionSelected={(option) => query.occasions.includes(option)}
+                options={filters.occasions}
+                ListboxComponent={ListboxComponent}
+                ListboxProps={{ className: classes.listbox }}
+                ChipProps={{ size: 'small', className: classes.chip }}
+                onChange={(e, value) => {
+                  handleOnChange(OCCASIONS, value);
+                }}
+                renderOption={(option) => (
+                  <Typography noWrap>{option}</Typography>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    color="secondary"
+                    variant="outlined"
+                    label="Occasions"
                     InputProps={{ ...params.InputProps }}
                   />
                 )}
@@ -156,44 +329,42 @@ const Filterbar = (props) => {
             </Grid>
           </Grid>
 
-          <Grid container item direction="row" justify="space-evenly">
-            <Grid item sm={2}>
-              <Typography variant="button" className={classes.category}>
-                Cuisines
-              </Typography>
-              <FiltersList filter={filters.cuisines} type={CUISINES} />
+          <Grid container item direction="row" justify="space-between">
+            <Grid item>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      ref={healthy}
+                      checked={checkbox[HEALTHY]}
+                      onChange={handleCheckbox}
+                      name={HEALTHY}
+                    />
+                  }
+                  label="Healthy"
+                />
+              </FormGroup>
             </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onSubmit}
+                disabled={_.isEqual(query, initialState)}
+                style={{ marginRight: 10 }}
+              >
+                GO!
+              </Button>
 
-            <Grid item sm={2}>
-              <Typography variant="button" className={classes.category}>
-                Dish Types
-              </Typography>
-              <FiltersList filter={filters.dishTypes} type={DISH_TYPES} />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleReset}
+                disabled={_.isEqual(query, initialState)}
+              >
+                Clear
+              </Button>
             </Grid>
-            <Grid item sm={2}>
-              <Typography variant="button" className={classes.category}>
-                Diets
-              </Typography>
-              <FiltersList filter={filters.diets} type={DIETS} />
-            </Grid>
-            <Grid item sm={2}>
-              <Typography variant="button" className={classes.category}>
-                Occasions
-              </Typography>
-              <FiltersList filter={filters.occasions} type={OCCASIONS} />
-            </Grid>
-          </Grid>
-
-          <Grid container item direction="row" justify="flex-end">
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={(e) => {
-                handleOnChange(RESET_QUERY);
-              }}
-            >
-              Clear
-            </Button>
           </Grid>
         </Grid>
       </Container>
@@ -204,9 +375,8 @@ const Filterbar = (props) => {
 Filterbar.propTypes = {
   query: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
-  updateQuery: PropTypes.func.isRequired,
-  updatePager: PropTypes.func.isRequired,
-  sendQueryFilters: PropTypes.func.isRequired,
+  setQuery: PropTypes.func.isRequired,
+  getFiltersFromResults: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -215,7 +385,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  updateQuery,
-  updatePager,
-  sendQueryFilters,
+  setQuery,
+  getFiltersFromResults,
 })(Filterbar);

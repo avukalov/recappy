@@ -1,6 +1,19 @@
-version: "3"
+version: '3'
 
 services:
+  redis:
+    hostname: redis
+    container_name: localredis
+    image: redis
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+    restart: always
+    volumes:
+      - ~/workspace/volumes/redis/data:/data
+      - ~/workspace/volumes/redis/redis.conf:/usr/local/etc/redis/redis.conf
+
   mongo-setup:
     container_name: mongo-setup
     image: mongo
@@ -9,12 +22,12 @@ services:
       default:
     volumes:
       - ./scripts:/scripts
-    entrypoint: [ "/scripts/setup.sh" ]
+    entrypoint: ['/scripts/setup.sh']
     depends_on:
       - mongo1
       - mongo2
       - mongo3
-      
+
   mongo1:
     hostname: mongo1
     container_name: localmongo1
@@ -24,7 +37,18 @@ services:
     ports:
       - 27017:27017
     restart: always
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--bind_ip_all',
+        '--replSet',
+        'rs0',
+        '--journal',
+        '--dbpath',
+        '/data/db',
+        '--enableMajorityReadConcern',
+        'false',
+      ]
     volumes:
       - ~/workspace/volumes/mongo1/db:/data/db
       - ~/workspace/volumes/mongo1/configdb:/data/configdb
@@ -38,11 +62,22 @@ services:
     ports:
       - 27018:27017
     restart: always
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--bind_ip_all',
+        '--replSet',
+        'rs0',
+        '--journal',
+        '--dbpath',
+        '/data/db',
+        '--enableMajorityReadConcern',
+        'false',
+      ]
     volumes:
       - ~/workspace/volumes/mongo2/db:/data/db
       - ~/workspace/volumes/mongo2/configdb:/data/configdb
-  
+
   mongo3:
     hostname: mongo3
     container_name: localmongo3
@@ -52,7 +87,18 @@ services:
     ports:
       - 27019:27017
     restart: always
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--bind_ip_all',
+        '--replSet',
+        'rs0',
+        '--journal',
+        '--dbpath',
+        '/data/db',
+        '--enableMajorityReadConcern',
+        'false',
+      ]
     volumes:
       - ~/workspace/volumes/mongo3/db:/data/db
       - ~/workspace/volumes/mongo3/configdb:/data/configdb

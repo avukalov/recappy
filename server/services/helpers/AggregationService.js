@@ -1,55 +1,86 @@
 class AggregationService {
-  static createAggregateMatchString(query) {
+  static createAggregateMatch(query) {
+    const {
+      includedIngredients,
+      excludedIngredients,
+      cuisines,
+      dishTypes,
+      diets,
+      occasions,
+      veryHealthy,
+    } = query;
+
     let andAggregate = { $and: [] };
 
     if (
-      !query.includedIngredients &&
-      !query.excludedIngredients &&
-      !query.cuisines &&
-      !query.dishTypes &&
-      !query.diets &&
-      !query.occasions
+      !includedIngredients &&
+      !excludedIngredients &&
+      !cuisines &&
+      !dishTypes &&
+      !diets &&
+      !occasions &&
+      veryHealthy === 'false'
     ) {
       return {};
     }
-    if (query.occasions) {
+    if (veryHealthy === 'true') {
       andAggregate.$and.push({
-        occasions: { $all: query.occasions.map((occasion) => occasion) },
+        veryHealthy: true,
       });
     }
-    if (query.cuisines) {
+    if (occasions) {
       andAggregate.$and.push({
-        cuisines: { $all: query.cuisines.map((cuisine) => cuisine) },
+        occasions: { $all: occasions.map((occasion) => occasion) },
       });
     }
-    if (query.diets) {
+    if (cuisines) {
       andAggregate.$and.push({
-        diets: { $all: query.diets.map((diet) => diet) },
+        cuisines: { $all: cuisines.map((cuisine) => cuisine) },
       });
     }
-    if (query.dishTypes) {
+    if (diets) {
       andAggregate.$and.push({
-        dishTypes: { $all: query.dishTypes.map((dish) => dish) },
+        diets: { $all: diets.map((diet) => diet) },
       });
     }
-    if (query.excludedIngredients) {
+    if (dishTypes) {
+      andAggregate.$and.push({
+        dishTypes: { $all: dishTypes.map((dish) => dish) },
+      });
+    }
+    if (excludedIngredients) {
       andAggregate.$and.push({
         'extendedIngredients.name': {
           $not: {
-            $all: query.excludedIngredients.map((ing) => new RegExp(ing)),
+            $all: excludedIngredients.map((ing) => new RegExp(ing)),
           },
         },
       });
     }
-    if (query.includedIngredients) {
+    if (includedIngredients) {
       andAggregate.$and.push({
         'extendedIngredients.name': {
-          $all: query.includedIngredients.map((ing) => new RegExp(ing)),
+          $all: includedIngredients.map((ing) => new RegExp(ing)),
         },
       });
     }
 
     return andAggregate;
+  }
+
+  static createAggregateSort(query) {
+    const { sortBy, orderBy } = query;
+
+    switch (sortBy) {
+      case 'relevance':
+        return { spoonacularScore: parseInt(orderBy) };
+      case 'pricePerServing':
+        return { pricePerServing: parseInt(orderBy) };
+      case 'readyInMinutes':
+        return { readyInMinutes: parseInt(orderBy) };
+      default:
+        return {};
+    }
   }
 }
 

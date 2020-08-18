@@ -6,9 +6,10 @@ import {
   DISH_TYPES,
   DIETS,
   OCCASIONS,
+  HEALTHY,
   // PRICE_PER_SERVING,
   // READY_IN_MINUTES,
-  RESET_QUERY,
+  RESET_SEARCH_QUERY,
 } from '../../actions/types';
 
 const initialState = {
@@ -19,6 +20,7 @@ const initialState = {
   dishTypes: [],
   diets: [],
   occasions: [],
+  veryHealthy: false,
   // pricePerServing: { min: 0, max: 1000 },
   // readyInMinutes: { min: 0, max: 1000 },
 };
@@ -62,7 +64,12 @@ export default function (state = initialState, action) {
         ...state,
         occasions: payload,
       };
-    case RESET_QUERY:
+    case HEALTHY:
+      return {
+        ...state,
+        veryHealthy: payload,
+      };
+    case RESET_SEARCH_QUERY:
       return (state = initialState);
     default:
       return state;

@@ -1,38 +1,60 @@
 import React, { useState, useEffect } from 'react';
 
-import { fade, makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import _ from 'lodash';
 
-import { Button, Typography, Fab } from '@material-ui/core';
-import { Tune, KeyboardArrowUp } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Fab,
+  Button,
+  Drawer,
+  Typography,
+  IconButton,
+  duration,
+} from '@material-ui/core';
+import { Tune, KeyboardArrowUp, Close } from '@material-ui/icons';
 
 import Content from './Content';
 import Filterbar from '../filter/Filterbar';
 import ScrollHandler from '../common/ScrollHandler';
-import OptionsToolbar from '../common/OptionsToolbar';
-
-import clsx from 'clsx';
+import OptionsToolbar from '../filter/OptionsToolbar';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  filter: {
-    backgroundColor: fade(theme.palette.grey[100], 0.5),
-  },
-  filterOpen: {
+  // root: {
+  //   display: 'flex',
+  // },
+  drawer: {
     height: 'auto',
-    padding: theme.spacing(2, 0),
+    marginTop: 125,
+    zIndex: theme.zIndex.appBar - 100,
   },
-  filterClosed: {
-    display: 'none',
-  },
-  content: {
+  contentMain: {
     flexGrow: 1,
     padding: theme.spacing(0, 3),
+  },
+  content: {
+    // position: 'relative',
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginTop: 70,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginTop: 330,
   },
   floatingFilterButton: {
     paddingRight: 30,
     borderRadius: theme.spacing(1, 0, 0, 1),
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 70,
+    right: 5,
   },
 }));
 
@@ -50,35 +72,50 @@ const Search = (props) => {
     setLoading(false);
   }, []);
 
+  const filterBar = (
+    <div className={classes.drawer}>
+      <div className={classes.closeButton}>
+        <IconButton onClick={handleFilterToggle}>
+          <Close />
+        </IconButton>
+      </div>
+      <Filterbar />
+    </div>
+  );
+
   return (
     <div className={classes.root}>
-      <main className={classes.content}>
+      <main className={classes.contentMain}>
         <div id="back-to-top-anchor" />
-        <OptionsToolbar
-          sort
-          filter
-          open={open}
-          handleFilterToggle={handleFilterToggle}
-        />
+
+        <Drawer variant="persistent" anchor="top" open={open}>
+          {filterBar}
+        </Drawer>
+
+        <OptionsToolbar filtering handleFilterToggle={handleFilterToggle} />
+
         <div
-          className={clsx(classes.filter, {
-            [classes.filterOpen]: open,
-            [classes.filterClosed]: !open,
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
           })}
         >
-          {!loading && <Filterbar />}
+          {!loading && <Content />}
         </div>
-        {!loading && <Content />}
       </main>
 
-      <ScrollHandler {...props} scrollTop={true} open={open}>
-        <Fab color="secondary" aria-label="scroll back to top">
+      <ScrollHandler {...props} scrollTop open={open}>
+        <Fab color="secondary">
           <KeyboardArrowUp />
         </Fab>
       </ScrollHandler>
 
       {!open && (
-        <ScrollHandler {...props} search={true}>
+        <ScrollHandler
+          {...props}
+          search
+          open={open}
+          handleFilterToggle={handleFilterToggle}
+        >
           <Button
             color="primary"
             variant="contained"

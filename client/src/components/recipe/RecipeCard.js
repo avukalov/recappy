@@ -1,4 +1,10 @@
 import React, { memo } from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { getRecipeById } from '../../actions/search/search';
+
+import PropTypes from 'prop-types';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
@@ -60,16 +66,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = (props) => {
   const classes = useStyles();
 
-  const { title, image, readyInMinutes, servings, veryHealthy } = recipe;
+  const {
+    recipe: { _id, title, image, readyInMinutes, servings, veryHealthy },
+    getRecipeById,
+  } = props;
 
+  const history = useHistory();
   const [value, setValue] = React.useState(2);
+
+  const handleOnClick = () => {
+    getRecipeById(_id);
+    history.push(`/recipe/${_id}`);
+  };
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea onClick={handleOnClick}>
         <CardMedia
           className={classes.media}
           image={
@@ -77,16 +92,15 @@ const RecipeCard = ({ recipe }) => {
           }
           title={title}
         />
-
-        <CardContent className={classes.cardContentTitle}>
-          <Box width="100%">
-            <Typography display="block" noWrap>
-              {title}
-            </Typography>
-          </Box>
-        </CardContent>
       </CardActionArea>
 
+      <CardContent className={classes.cardContentTitle}>
+        <Box width="100%">
+          <Typography display="block" noWrap>
+            {title}
+          </Typography>
+        </Box>
+      </CardContent>
       <CardContent className={classes.cardContent}>
         <Box className={classes.rowSpaceBetween}>
           <Box className={classes.rowFlexStart}>
@@ -130,4 +144,10 @@ const RecipeCard = ({ recipe }) => {
   );
 };
 
-export default memo(RecipeCard);
+RecipeCard.propTypes = {
+  recipe: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({});
+
+export default connect(mapStateToProps, { getRecipeById })(memo(RecipeCard));

@@ -59,7 +59,7 @@ const ScrollHandler = (props) => {
       <Slide in={trigger} direction="left">
         <div
           role="presentation"
-          onClick={handleClick}
+          // onClick={handleClick}
           className={classes.search}
         >
           {children}

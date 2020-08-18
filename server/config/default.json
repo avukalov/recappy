@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
     "mongoURI": "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/recappy",
-    "redisURI": "redis://localhost:6379?db=0"
+    "redisURI": "redis://redis:6379?db=0"
   },
   "jwtSecret": "jwtSecret"
 }
