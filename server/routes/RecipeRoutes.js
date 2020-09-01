@@ -17,4 +17,7 @@ router.route('/filters').get(RecipeController.getFiltersByQuery);
 
 // router.route('/filters/ingredients').get(RecipeController.getIngredients);
 
+// @route  api/recipe/create
+router.route('/create').post(RecipeController.createRecipe);
+
 module.exports = router;
