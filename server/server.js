@@ -3,6 +3,7 @@ const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
+const busboyBodyParser = require('busboy-body-parser');
 
 const app = express();
 
@@ -18,6 +19,8 @@ const routes = require('./routes');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(busboyBodyParser());
 
 // Define Routes
 app.use('/api', routes);

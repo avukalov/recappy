@@ -25,33 +25,11 @@ const RecipeSchema = new mongoose.Schema(
     pricePerServing: Number,
     extendedIngredients: [
       {
-        id: Number,
-        aisle: String,
-        image: String,
-        consitency: String,
         name: String,
-        original: String,
-        originalString: String,
-        originalName: String,
         amount: Number,
         unit: String,
-        meta: [],
-        metaInformation: [],
-        measures: {
-          us: {
-            amount: Number,
-            unitShort: String,
-            unitLong: String,
-          },
-          metric: {
-            amount: Number,
-            unitShort: String,
-            unitLong: String,
-          },
-        },
       },
     ],
-    id: { type: Number, unique: true },
     title: String,
     readyInMinutes: Number,
     servings: Number,
@@ -78,7 +56,7 @@ const RecipeSchema = new mongoose.Schema(
         },
       ],
     },
-    instructions: String,
+    instructions: [String],
     analyzedInstructions: [
       {
         name: String,
@@ -106,6 +84,8 @@ const RecipeSchema = new mongoose.Schema(
     ],
     ingredients: [String],
     ingredientsOriginalName: [String],
+    
+    userID: { type: String, default: '' }
   },
   {
     collection: 'recipes',
