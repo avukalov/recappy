@@ -1,4 +1,4 @@
-import React, { Fragment, cloneElement } from 'react';
+import React, { Fragment } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { connect } from 'react-redux';

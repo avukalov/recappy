@@ -83,7 +83,6 @@ const Searchbar = (props) => {
   const [formData, setFormData] = useState('');
 
   useEffect(() => {
-    if (text === formData) return;
     setFormData(text);
   }, [text]);
 
@@ -110,7 +109,7 @@ const Searchbar = (props) => {
     <div className={classes.search}>
       <form onSubmit={onSubmit}>
         <InputBase
-          placeholder="Chicken in American way"
+          placeholder='Chicken in American way'
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
@@ -121,8 +120,8 @@ const Searchbar = (props) => {
         />
       </form>
       <Button
-        color="primary"
-        variant="contained"
+        color='primary'
+        variant='contained'
         startIcon={<Search />}
         disableElevation
         className={classes.searchButton}

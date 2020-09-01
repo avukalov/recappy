@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 import _ from 'lodash';
 
@@ -80,11 +80,7 @@ const Filterbar = (props) => {
     getFiltersFromResults,
   } = props;
 
-  const [checkbox, setCheckbox] = useState({});
-
   const prevQuery = usePrev(query);
-
-  const healthy = useRef();
 
   useEffect(() => {
     if (!_.isUndefined(prevQuery) && _.isEqual(query, prevQuery)) return;
@@ -102,10 +98,6 @@ const Filterbar = (props) => {
   };
 
   const handleReset = () => {
-    console.log(healthy.current.checked);
-    if (healthy.current.checked === true) {
-      healthy.current.click();
-    }
     setQuery(RESET_SEARCH_QUERY);
   };
 

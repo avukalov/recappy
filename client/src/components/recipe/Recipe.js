@@ -21,8 +21,15 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     textAlign: 'center',
   },
+  image: {
+    height: '370px',
+    width: '556px',
+  },
   dividerVertival: {
     margin: theme.spacing(2),
+  },
+  dividerHorizontal: {
+    margin: theme.spacing(2, 0),
   },
   icon: {
     marginRight: theme.spacing(2),
@@ -41,6 +48,12 @@ const useStyles = makeStyles((theme) => ({
   boxTags: {
     margin: theme.spacing(0, 2),
   },
+  summary: {
+    fontSize: 20,
+  },
+  step: {
+    margin: theme.spacing(4, 0),
+  },
 }));
 
 const Recipe = (props) => {
@@ -52,13 +65,14 @@ const Recipe = (props) => {
 
   useEffect(() => {
     getRecipeById(location.state._id);
+    window.scrollTo(0, 0);
   }, []);
 
   return (
     <div className='root'>
       <Container className={classes.container}>
         {recipe ? (
-          <Grid container direction='column' alignItems='center' spacing={4}>
+          <Grid container direction='column' alignItems='center' spacing={6}>
             <Grid item className={classes.title}>
               <Typography variant='h3'>{recipe.title}</Typography>
               <Divider />
@@ -66,6 +80,7 @@ const Recipe = (props) => {
 
             <Grid item container justify='center'>
               <img
+                className={classes.image}
                 src={
                   recipe.image
                     ? recipe.image
@@ -122,39 +137,96 @@ const Recipe = (props) => {
               />
             </Grid>
 
-            <Grid item container justify='flex-start'>
-              <Grid item container sm={2} justify='flex-end'>
-                <ul>
-                  {recipe.extendedIngredients.map((ingredient, index) => (
-                    <li key={index} className={classes.listLeft}>
-                      <Typography
-                        variant='body1'
-                        style={{ textTransform: 'capitalize' }}
-                      >
-                        {ingredient.name}
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
+            <Grid item container justify='center'>
+              <Grid item sm={10}>
+                <Grid item sm={12}>
+                  <Typography variant='h4' align='center'>
+                    Summary
+                  </Typography>
+                  <Divider className={classes.dividerHorizontal} />
+                </Grid>
+                <Typography align='center'>
+                  <div
+                    className={classes.summary}
+                    dangerouslySetInnerHTML={{ __html: recipe.summary }}
+                  />
+                </Typography>
               </Grid>
-              <Divider
-                flexItem
-                orientation='vertical'
-                className={classes.dividerVertival}
-              />
-              <Grid item container sm={2} justify='flex-start'>
-                <ul>
-                  {recipe.extendedIngredients.map((ingredient, index) => (
-                    <li key={index} className={classes.listRight}>
-                      <Typography
-                        variant='body1'
-                        // style={{ textTransform: 'capitalize' }}
-                      >
-                        {ingredient.amount} {ingredient.unit}
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
+            </Grid>
+
+            <Grid item container sm={6} justify='center'>
+              <Grid item sm={12}>
+                <Typography variant='h4' align='center'>
+                  Ingredients
+                </Typography>
+                <Divider className={classes.dividerHorizontal} />
+              </Grid>
+
+              <Grid
+                item
+                container
+                justify='center'
+                style={{ paddingRight: 150 }}
+              >
+                <Grid item>
+                  <ul>
+                    {recipe.extendedIngredients.map((ingredient, index) => (
+                      <li key={index} className={classes.listLeft}>
+                        <Typography
+                          variant='h6'
+                          style={{ textTransform: 'capitalize' }}
+                        >
+                          {ingredient.name}
+                        </Typography>
+                      </li>
+                    ))}
+                  </ul>
+                </Grid>
+                <Divider
+                  flexItem
+                  orientation='vertical'
+                  className={classes.dividerVertival}
+                />
+                <Grid item>
+                  <ul>
+                    {recipe.extendedIngredients.map((ingredient, index) => (
+                      <li key={index} className={classes.listRight}>
+                        <Typography variant='h6'>
+                          {Math.round(
+                            (ingredient.amount + Number.EPSILON) * 100
+                          ) / 100}{' '}
+                          {ingredient.unit}
+                        </Typography>
+                      </li>
+                    ))}
+                  </ul>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item container justify='center'>
+              <Grid item sm={6}>
+                <Typography variant='h4' align='center'>
+                  Instructions
+                </Typography>
+                <Divider className={classes.dividerHorizontal} />
+              </Grid>
+              <Grid item sm={10}>
+                {recipe.analyzedInstructions[0].steps.map((step, index) => (
+                  <Grid item key={index} className={classes.step}>
+                    <Typography
+                      variant='h6'
+                      align='center'
+                      color='primary'
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {index + 1}. Step
+                    </Typography>
+                    <Typography variant='h6' align='center'>
+                      {step.step}
+                    </Typography>
+                  </Grid>
+                ))}
               </Grid>
             </Grid>
           </Grid>

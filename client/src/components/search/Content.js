@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -12,7 +11,7 @@ import { Grid, Zoom } from '@material-ui/core';
 import RecipeCard from '../recipe/RecipeCard';
 import OptionsToolbar from '../filter/OptionsToolbar';
 
-import usePrev from '../../hooks/usePrev';
+// import usePrev from '../../hooks/usePrev';
 
 const useStyles = makeStyles((theme) => ({
   loading: {
@@ -53,9 +52,9 @@ const Content = (props) => {
       <Grid
         container
         spacing={2}
-        direction="row"
-        justify="flex-start"
-        alignItems="flex-start"
+        direction='row'
+        justify='flex-start'
+        alignItems='flex-start'
         className={classes.root}
       >
         {!loading ? (

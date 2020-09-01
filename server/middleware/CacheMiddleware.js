@@ -5,12 +5,8 @@ class CacheMiddleware {
     const token = req.header('x-auth-token');
     const { id } = req.params;
 
-    console.log(token);
-
     try {
       const data = await RedisService.getRecipeByKey(id);
-
-      console.log('cache-data', data);
 
       // no data
       if (!data) {
@@ -24,7 +20,6 @@ class CacheMiddleware {
 
       // data and token
       const history = await RedisService.setRecipeToHistory(token, data);
-
       console.log('history', history);
 
       return res.status(200).json(JSON.parse(data));

@@ -27,7 +27,7 @@ class RecipeController {
     }
   }
 
-  static async getRecipeFromDb(req, res, next) {
+  static async getRecipeFromDb(req, res) {
     const token = req.header('x-auth-token');
     const { id } = req.params;
 
@@ -43,7 +43,7 @@ class RecipeController {
         JSON.stringify(result)
       );
 
-      console.log('recipe', recipe);
+      console.log('set: recipe', recipe);
 
       if (token) {
         const history = await RedisService.setRecipeToHistory(
@@ -51,11 +51,10 @@ class RecipeController {
           JSON.stringify(result)
         );
 
-        console.log('historysaddAsync', history);
+        console.log('sadd: history', history);
       }
 
       return res.status(200).json(result);
-      // return next();
     } catch (error) {
       console.log(error);
       return res.status(500).json({ msg: 'Server error' });
