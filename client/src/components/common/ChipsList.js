@@ -11,57 +11,70 @@ import {
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    padding: theme.spacing(0.5),
-  },
   chip: {
-    color: 'black',
-    margin: theme.spacing(0.5),
-  },
-  label: {
-    textTransform: 'capitalize',
-  },
-  healthy: {
-    color: 'white',
+    marginRight: theme.spacing(1),
+    padding: theme.spacing(1, 0),
     backgroundColor: theme.palette.success.main,
-    padding: theme.spacing(1, 0),
-  },
-  unhealthy: {
-    color: 'white',
-    backgroundColor: theme.palette.grey[800],
-    padding: theme.spacing(1, 0),
   },
   icon: {
     color: 'white',
   },
 }));
 
-const ChipsList = ({ veryHealthy }) => {
+const ChipsList = ({
+  size,
+  veryHealthy,
+  glutenFree,
+  vegetarian,
+  vegan,
+  dairyFree,
+}) => {
   const classes = useStyles();
 
-  let chip;
-
-  veryHealthy
-    ? (chip = (
+  return (
+    <Fragment>
+      {veryHealthy && (
         <Chip
-          size="small"
+          size={size}
           icon={<SentimentSatisfiedAlt className={classes.icon} />}
-          label={<Typography variant="body2">Healthy</Typography>}
-          className={classes.healthy}
+          label={<Typography variant='body2'>Healthy</Typography>}
+          className={classes.chip}
         />
-      ))
-    : (chip = (
+      )}
+      {glutenFree && (
         <Chip
-          size="small"
-          icon={<SentimentVeryDissatisfied className={classes.icon} />}
-          label={<Typography variant="body2">Unhealthy</Typography>}
-          className={classes.unhealthy}
+          size={size}
+          icon={<SentimentSatisfiedAlt className={classes.icon} />}
+          label={<Typography variant='body2'>Gluten Free</Typography>}
+          className={classes.chip}
         />
-      ));
-  return <Fragment>{chip}</Fragment>;
+      )}
+      {vegetarian && (
+        <Chip
+          size={size}
+          icon={<SentimentSatisfiedAlt className={classes.icon} />}
+          label={<Typography variant='body2'>Vegetarian</Typography>}
+          className={classes.chip}
+        />
+      )}
+      {vegan && (
+        <Chip
+          size={size}
+          icon={<SentimentSatisfiedAlt className={classes.icon} />}
+          label={<Typography variant='body2'>Vegan</Typography>}
+          className={classes.chip}
+        />
+      )}
+      {dairyFree && (
+        <Chip
+          size={size}
+          icon={<SentimentSatisfiedAlt className={classes.icon} />}
+          label={<Typography variant='body2'>Diary Free</Typography>}
+          className={classes.chip}
+        />
+      )}
+    </Fragment>
+  );
 };
 ChipsList.propTypes = {
   veryHealthy: PropTypes.bool,

@@ -78,8 +78,8 @@ const RecipeCard = (props) => {
   const [value, setValue] = React.useState(2);
 
   const handleOnClick = () => {
-    getRecipeById(_id);
-    history.push(`/recipe/${_id}`);
+    // getRecipeById(_id);
+    history.push(`/recipe/${_id}`, { _id: _id });
   };
 
   return (
@@ -95,8 +95,8 @@ const RecipeCard = (props) => {
       </CardActionArea>
 
       <CardContent className={classes.cardContentTitle}>
-        <Box width="100%">
-          <Typography display="block" noWrap>
+        <Box width='100%'>
+          <Typography display='block' noWrap>
             {title}
           </Typography>
         </Box>
@@ -105,16 +105,16 @@ const RecipeCard = (props) => {
         <Box className={classes.rowSpaceBetween}>
           <Box className={classes.rowFlexStart}>
             <Box className={classes.item}>
-              <AccessAlarm fontSize="small" className={classes.icon} />
-              <Typography variant="body2">{readyInMinutes} mins</Typography>
+              <AccessAlarm fontSize='small' className={classes.icon} />
+              <Typography variant='body2'>{readyInMinutes} mins</Typography>
             </Box>
             <Box className={classes.item}>
               <People className={classes.icon} />
-              <Typography variant="body2">{servings}</Typography>
+              <Typography variant='body2'>{servings}</Typography>
             </Box>
           </Box>
           <Box>
-            <ChipsList veryHealthy={veryHealthy} />
+            <ChipsList size='small' veryHealthy={veryHealthy} />
           </Box>
         </Box>
       </CardContent>
@@ -123,7 +123,7 @@ const RecipeCard = (props) => {
         <Box className={classes.cardAction}>
           <Box>
             <Rating
-              name="simple-controlled"
+              name='simple-controlled'
               value={value}
               onChange={(event, newValue) => {
                 setValue(newValue);
@@ -131,10 +131,10 @@ const RecipeCard = (props) => {
             />
           </Box>
           <Box>
-            <IconButton aria-label="share">
+            <IconButton aria-label='share'>
               <Share />
             </IconButton>
-            <IconButton aria-label="add to favorites">
+            <IconButton aria-label='add to favorites'>
               <Favorite />
             </IconButton>
           </Box>

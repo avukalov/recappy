@@ -66,16 +66,21 @@ const styles = makeStyles((theme) => ({
 const HideOnScroll = (props) => {
   const { children } = props;
 
+  const location = useLocation();
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 50,
   });
 
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
+  if (location.pathname === '/search') {
+    return (
+      <Slide appear={false} direction='down' in={!trigger}>
+        {children}
+      </Slide>
+    );
+  } else {
+    return <>{children}</>;
+  }
 };
 
 HideOnScroll.propTypes = {
@@ -94,7 +99,7 @@ const ShowOnScroll = (props) => {
   return (
     <Slide
       appear={false}
-      direction="down"
+      direction='down'
       in={trigger && location.pathname === '/search'}
     >
       {children}
@@ -110,11 +115,11 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
   const classes = styles();
 
   const authLinks = (
-    <Box display="flex" flexDirection="row" alignItems="center">
-      <Link to="/dashboard">
-        <IconButton className={classes.menuButton} aria-label="Dashboard">
+    <Box display='flex' flexDirection='row' alignItems='center'>
+      <Link to='/dashboard'>
+        <IconButton className={classes.menuButton} aria-label='Dashboard'>
           <Dashboard
-            color="action"
+            color='action'
             classes={{
               colorAction: classes.actionIcon,
             }}
@@ -127,13 +132,13 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
 
   const guestLinks = (
     <div className={classes.flexRow}>
-      <Link to="/login" className={classes.link}>
-        <Button color="primary" variant="contained">
+      <Link to='/login' className={classes.link}>
+        <Button color='primary' variant='contained'>
           Login
         </Button>
       </Link>
-      <Link to="/register" className={classes.link}>
-        <Button color="secondary" variant="contained">
+      <Link to='/register' className={classes.link}>
+        <Button color='secondary' variant='contained'>
           Register
         </Button>
       </Link>
@@ -145,10 +150,10 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
       <HideOnScroll>
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <Link to="/" className={classes.link}>
+            <Link to='/' className={classes.link}>
               <Typography
-                variant="h4"
-                color="inherit"
+                variant='h4'
+                color='inherit'
                 gutterBottom
                 className={classes.title}
               >
