@@ -41,7 +41,6 @@ export const getRecipeById = (id) => async (dispatch) => {
   try {
     const { data } = await api.get(`/recipe/search/${id}`);
 
-    console.log(data);
     dispatch({ type: UPDATE_CURRENT_RECIPE, payload: data });
   } catch (err) {
     dispatch({ type: NO_SEARCH_RESULTS });

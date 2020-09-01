@@ -16,7 +16,6 @@ import {
   DISH_TYPES,
   DIETS,
   OCCASIONS,
-  HEALTHY,
   RESET_SEARCH_QUERY,
 } from '../../actions/types';
 
@@ -29,9 +28,6 @@ import {
   TextField,
   Button,
   InputAdornment,
-  FormGroup,
-  FormControlLabel,
-  Switch,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { Add, Remove } from '@material-ui/icons';
@@ -48,7 +44,6 @@ const initialState = {
   dishTypes: [],
   diets: [],
   occasions: [],
-  veryHealthy: false,
   // pricePerServing: { min: 0, max: 1000 },
   // readyInMinutes: { min: 0, max: 1000 },
 };
@@ -118,21 +113,16 @@ const Filterbar = (props) => {
     setQuery(SUBMIT);
   };
 
-  const handleCheckbox = (event) => {
-    setCheckbox({ ...checkbox, [event.target.name]: event.target.checked });
-    handleOnChange(event.target.name, event.target.checked);
-  };
-
   return (
     <div className={classes.root}>
-      <Container maxWidth="lg">
+      <Container maxWidth='lg'>
         <Grid container spacing={4}>
           <Grid
             container
             item
             spacing={2}
-            direction="row"
-            justify="space-around"
+            direction='row'
+            justify='space-around'
           >
             <Grid item xs={5}>
               <Autocomplete
@@ -156,13 +146,13 @@ const Filterbar = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    color="secondary"
-                    variant="outlined"
-                    label="Included Ingredients"
+                    color='secondary'
+                    variant='outlined'
+                    label='Included Ingredients'
                     InputProps={{
                       ...params.InputProps,
                       startAdornment: (
-                        <InputAdornment position="start">
+                        <InputAdornment position='start'>
                           <Add />
                         </InputAdornment>
                       ),
@@ -193,13 +183,13 @@ const Filterbar = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    color="secondary"
-                    variant="outlined"
-                    label="Excluded Ingredients"
+                    color='secondary'
+                    variant='outlined'
+                    label='Excluded Ingredients'
                     InputProps={{
                       ...params.InputProps,
                       startAdornment: (
-                        <InputAdornment position="start">
+                        <InputAdornment position='start'>
                           <Remove />
                         </InputAdornment>
                       ),
@@ -210,7 +200,7 @@ const Filterbar = (props) => {
             </Grid>
           </Grid>
 
-          <Grid container item direction="row" spacing={2}>
+          <Grid container item direction='row' spacing={2}>
             <Grid item xs>
               <Autocomplete
                 multiple
@@ -226,16 +216,16 @@ const Filterbar = (props) => {
                   handleOnChange(CUISINES, value);
                 }}
                 renderOption={(option) => (
-                  <Typography variant="body1" noWrap>
+                  <Typography variant='body1' noWrap>
                     {option}
                   </Typography>
                 )}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    color="primary"
-                    variant="outlined"
-                    label="Cuisines"
+                    color='primary'
+                    variant='outlined'
+                    label='Cuisines'
                     InputProps={{
                       ...params.InputProps,
                     }}
@@ -263,9 +253,9 @@ const Filterbar = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    color="secondary"
-                    variant="outlined"
-                    label="Dish Types"
+                    color='secondary'
+                    variant='outlined'
+                    label='Dish Types'
                     InputProps={{ ...params.InputProps }}
                   />
                 )}
@@ -291,9 +281,9 @@ const Filterbar = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    color="secondary"
-                    variant="outlined"
-                    label="Diets"
+                    color='secondary'
+                    variant='outlined'
+                    label='Diets'
                     InputProps={{ ...params.InputProps }}
                   />
                 )}
@@ -319,9 +309,9 @@ const Filterbar = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    color="secondary"
-                    variant="outlined"
-                    label="Occasions"
+                    color='secondary'
+                    variant='outlined'
+                    label='Occasions'
                     InputProps={{ ...params.InputProps }}
                   />
                 )}
@@ -329,26 +319,11 @@ const Filterbar = (props) => {
             </Grid>
           </Grid>
 
-          <Grid container item direction="row" justify="space-between">
-            <Grid item>
-              <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      ref={healthy}
-                      checked={checkbox[HEALTHY]}
-                      onChange={handleCheckbox}
-                      name={HEALTHY}
-                    />
-                  }
-                  label="Healthy"
-                />
-              </FormGroup>
-            </Grid>
+          <Grid container item direction='row' justify='space-between'>
             <Grid item>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 onClick={onSubmit}
                 disabled={_.isEqual(query, initialState)}
                 style={{ marginRight: 10 }}
@@ -357,8 +332,8 @@ const Filterbar = (props) => {
               </Button>
 
               <Button
-                variant="contained"
-                color="secondary"
+                variant='contained'
+                color='secondary'
                 onClick={handleReset}
                 disabled={_.isEqual(query, initialState)}
               >

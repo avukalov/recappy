@@ -6,12 +6,8 @@ class RedisService {
   }
 
   static async setRecipeToCache(key, value) {
-    let set = await client.setAsync(key, value);
-
-    let expire;
-    if (set === 1) {
-      expire = await client.expireAsync(key, 360);
-    }
+    const set = await client.setAsync(key, value);
+    const expire = await client.expireAsync(key, 360);
 
     return { set, expire };
   }
