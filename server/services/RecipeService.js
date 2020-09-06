@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Recipe = mongoose.model('Recipe');
+const File = mongoose.model("File");
+
+const objectId = mongoose.Types.ObjectId;
 
 const AggregationService = require('./helpers/AggregationService');
 const { hlen } = require('../config/redis');
@@ -217,12 +220,27 @@ class RecipeService {
   }
 
   // Save recipe in database
+
   static async saveRecipe(recipe_values) {
     let recipe = new Recipe(recipe_values)
-
     await recipe.save();
 
     return recipe;
+  }
+
+  static async findFileById(id) {
+    let _id = objectId(id);
+    return await File.findOne({ _id }).exec();
+  }
+
+//   static async findFilesByOwnerId(id) {
+//     let _id = objectId(id); // check this
+//     return await File.find({ "metadata.owner": _id}).exec();
+//   }
+
+  // Get user recipes
+  static async getUserRecipes(id) {
+    return await Recipe.find({ "user._id" : id }).exec();
   }
 }
 

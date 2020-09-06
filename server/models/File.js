@@ -9,9 +9,7 @@ const fileSchema = new mongoose.Schema({
     filename: { type: String, required: true },
     md5: { type: String, required: true },
     contentType: { type: String, required: true },
-    metadata: {
-        owner: { type: objectId, ref: "Recipe", required: true }
-    }
+    metadata: { type: String, required: false }
 }, { strict: false });
 
 const chunkSchema = new mongoose.Schema({

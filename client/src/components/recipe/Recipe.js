@@ -123,7 +123,7 @@ const Recipe = (props) => {
             </Grid>
 
             <Grid item container justify='flex-start'>
-              <Grid item container sm={2} justify='flex-end'>
+              <Grid item container sm={4} justify='flex-end'>
                 <ul>
                   {recipe.extendedIngredients.map((ingredient, index) => (
                     <li key={index} className={classes.listLeft}>

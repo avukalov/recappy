@@ -85,7 +85,8 @@ const RecipeSchema = new mongoose.Schema(
     ingredients: [String],
     ingredientsOriginalName: [String],
     
-    userID: { type: String, default: '' }
+    user: { _id: String, firstName: String, lastName: String, email: String },
+    favoriteBy : [String]
   },
   {
     collection: 'recipes',

@@ -157,7 +157,7 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
                 gutterBottom
                 className={classes.title}
               >
-                Reccapy
+                Recappy
               </Typography>
             </Link>
 
