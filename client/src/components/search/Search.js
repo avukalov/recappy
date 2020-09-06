@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import clsx from 'clsx';
-import _ from 'lodash';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Fab,
-  Button,
-  Drawer,
-  Typography,
-  IconButton,
-  duration,
-} from '@material-ui/core';
+import { Fab, Button, Drawer, Typography, IconButton } from '@material-ui/core';
 import { Tune, KeyboardArrowUp, Close } from '@material-ui/icons';
 
 import Content from './Content';
@@ -86,9 +78,9 @@ const Search = (props) => {
   return (
     <div className={classes.root}>
       <main className={classes.contentMain}>
-        <div id="back-to-top-anchor" />
+        <div id='back-to-top-anchor' />
 
-        <Drawer variant="persistent" anchor="top" open={open}>
+        <Drawer variant='persistent' anchor='top' open={open}>
           {filterBar}
         </Drawer>
 
@@ -104,7 +96,7 @@ const Search = (props) => {
       </main>
 
       <ScrollHandler {...props} scrollTop open={open}>
-        <Fab color="secondary">
+        <Fab color='secondary'>
           <KeyboardArrowUp />
         </Fab>
       </ScrollHandler>
@@ -117,13 +109,13 @@ const Search = (props) => {
           handleFilterToggle={handleFilterToggle}
         >
           <Button
-            color="primary"
-            variant="contained"
+            color='primary'
+            variant='contained'
             startIcon={<Tune />}
             onClick={handleFilterToggle}
             className={classes.floatingFilterButton}
           >
-            <Typography variant="button">Filters</Typography>
+            <Typography variant='button'>Filters</Typography>
           </Button>
         </ScrollHandler>
       )}

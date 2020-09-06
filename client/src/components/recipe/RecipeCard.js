@@ -2,8 +2,6 @@ import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import { getRecipeById } from '../../actions/search/search';
-
 import PropTypes from 'prop-types';
 
 // Material UI Components
@@ -71,14 +69,12 @@ const RecipeCard = (props) => {
 
   const {
     recipe: { _id, title, image, readyInMinutes, servings, veryHealthy },
-    getRecipeById,
   } = props;
 
   const history = useHistory();
   const [value, setValue] = React.useState(2);
 
   const handleOnClick = () => {
-    // getRecipeById(_id);
     history.push(`/recipe/${_id}`, { _id: _id });
   };
 
@@ -150,4 +146,4 @@ RecipeCard.propTypes = {
 
 const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, { getRecipeById })(memo(RecipeCard));
+export default connect(mapStateToProps, {})(memo(RecipeCard));

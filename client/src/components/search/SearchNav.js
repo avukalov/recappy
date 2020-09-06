@@ -39,9 +39,8 @@ const SearchNav = (props) => {
   const [formData, setFormData] = useState('');
 
   useEffect(() => {
-    if (text === formData) return;
     setFormData(text);
-  }, [text]);
+  }, [text, formData]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -73,27 +72,27 @@ const SearchNav = (props) => {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth='md'>
       <Paper elevation={5} className={classes.paper}>
         <form onSubmit={onSubmit} className={classes.form}>
           <TextField
             fullWidth
-            color="secondary"
+            color='secondary'
             value={formData}
-            variant="outlined"
+            variant='outlined'
             onChange={onChange}
             className={classes.input}
-            placeholder="e.g. Chicken in American way"
+            placeholder='e.g. Chicken in American way'
             InputProps={{
               endAdornment: (
                 <>
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton onClick={onClear}>
                       <Close />
                     </IconButton>
                   </InputAdornment>
-                  <InputAdornment position="end">
-                    <IconButton color="primary" onClick={onSubmit}>
+                  <InputAdornment position='end'>
+                    <IconButton color='primary' onClick={onSubmit}>
                       <Search />
                     </IconButton>
                   </InputAdornment>

@@ -3,10 +3,7 @@ import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Chip, Typography } from '@material-ui/core';
-import {
-  SentimentSatisfiedAlt,
-  SentimentVeryDissatisfied,
-} from '@material-ui/icons';
+import { SentimentSatisfiedAlt } from '@material-ui/icons';
 
 import PropTypes from 'prop-types';
 
