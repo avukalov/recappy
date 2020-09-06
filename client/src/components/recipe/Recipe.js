@@ -137,7 +137,6 @@ const Recipe = (props) => {
               />
             </Grid>
 
-<<<<<<< HEAD
             <Grid item container justify='flex-start'>
               <Grid item container sm={4} justify='flex-end'>
                 <ul>
@@ -152,22 +151,6 @@ const Recipe = (props) => {
                     </li>
                   ))}
                 </ul>
-=======
-            <Grid item container justify='center'>
-              <Grid item sm={10}>
-                <Grid item sm={12}>
-                  <Typography variant='h4' align='center'>
-                    Summary
-                  </Typography>
-                  <Divider className={classes.dividerHorizontal} />
-                </Grid>
-                <Typography align='center'>
-                  <div
-                    className={classes.summary}
-                    dangerouslySetInnerHTML={{ __html: recipe.summary }}
-                  />
-                </Typography>
->>>>>>> 36baceb63244f6ca58be7546d3febd3992fc3f18
               </Grid>
             </Grid>
 
