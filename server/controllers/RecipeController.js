@@ -78,18 +78,44 @@ class RecipeController {
     }
   }
 
+  static async carousel(req, res) {
+    const { query } = req;
+
+    console.log('controller', query);
+
+    try {
+      const [results] = await RecipeService.getRecipesFromCarouselQuery(query);
+
+      if (!results) {
+        return res.status(204).json({ msg: 'No results' });
+      }
+
+      const { recipes, totalItems, pages } = results;
+
+      return res.status(200).json({
+        recipes: recipes,
+        pager: {
+          totalItems: totalItems,
+          pages: pages,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(error);
+    }
+  }
+
   static async createRecipe(req, res) {
     //let file = req.body.image;
     //const recipe_values = req.body;
-    console.log(req.files.file)
-    console.log(req.body)
+    console.log(req.files.file);
+    console.log(req.body);
     // let contentType = file.type;
     // let filename = file.name;
 
     // promijeniti req.payload._id u id recepta
     // let owner = objectId(req.payload._id);
     // let metadata = { owner };
-
 
     // try {
     //   const recipe = await RecipeService.saveRecipe(recipe_values);
@@ -99,7 +125,7 @@ class RecipeController {
     //   return res.status(500).send('Server error');
     // }
   }
-  // https://stackoverflow.com/questions/22219400/display-image-in-gridfs  
+  // https://stackoverflow.com/questions/22219400/display-image-in-gridfs
 }
 
 module.exports = RecipeController;

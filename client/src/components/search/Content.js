@@ -43,6 +43,8 @@ const Content = (props) => {
     if (submit) {
       getSearchQueryResults(query, pager);
     }
+
+    window.scrollTo(0, 0);
     // if (_.isEqual(query, prevQuery) && _.isEqual(pager, prevPager)) return;
   }, [submit, getSearchQueryResults]);
   // }, [query, pager, prevPager, prevQuery, getSearchQueryResults]);
@@ -58,7 +60,7 @@ const Content = (props) => {
         className={classes.root}
       >
         {!loading ? (
-          recipes.length !== 0 ? (
+          recipes && recipes.length !== 0 ? (
             recipes.map((recipe) => (
               <Zoom in={true} key={recipe._id}>
                 <Grid key={recipe._id} item xs={12} sm={6} md={4} lg={3}>
@@ -78,7 +80,9 @@ const Content = (props) => {
         )}
       </Grid>
 
-      {!loading && pager.pages !== 1 && <OptionsToolbar pagination />}
+      {!loading && recipes && recipes.length !== 0 && pager.pages !== 1 && (
+        <OptionsToolbar pagination />
+      )}
     </div>
   );
 };

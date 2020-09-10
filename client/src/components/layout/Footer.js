@@ -6,9 +6,9 @@ import { Container, Typography } from '@material-ui/core';
 
 function Copyright() {
   return (
-    <Typography variant="body1" color="textSecondary">
+    <Typography variant='body1' color='textSecondary'>
       {'Copyright © '}
-      <Link to="/" color="inherit">
+      <Link to='/' color='inherit'>
         Recappy
       </Link>{' '}
       {new Date().getFullYear()}
@@ -20,8 +20,14 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    minHeight: '100vh',
+    minHeight: '100%',
     direction: 'column',
+    background: 'transparent',
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    marginBottom: '-64px',
   },
 }));
 

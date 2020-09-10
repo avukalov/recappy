@@ -10,6 +10,7 @@ import setAuthToken from './utils/setAuthToken';
 
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
+// import Footer from './components/layout/Footer';
 
 import Routes from './components/routing/Routes';
 
@@ -20,20 +21,21 @@ const App = () => {
     setAuthToken(localStorage.getItem('token'));
     store.dispatch(loadUser());
   }, []);
-  const toolbar = <div style={{ height: 64 }} />;
+  const toolbar = <div style={{ height: 64, background: 'transparent' }} />;
   return (
     <Provider store={store}>
       <Router>
         <Fragment>
           <Navbar />
-          <div id="main-content">
+          <div id='main-content'>
             {toolbar}
             <Switch>
-              <Route exact path="/" component={Landing} />
+              <Route exact path='/' component={Landing} />
               <Route component={Routes} />
             </Switch>
             {toolbar}
           </div>
+          {/* <Footer /> */}
         </Fragment>
       </Router>
     </Provider>

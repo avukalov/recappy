@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { getRecipeById } from '../../actions/search/search';
@@ -61,10 +60,10 @@ const Recipe = (props) => {
 
   const { recipe, getRecipeById } = props;
 
-  const location = useLocation();
-
   useEffect(() => {
-    getRecipeById(location.state._id);
+    const id = props.match.params.id;
+
+    getRecipeById(id);
     window.scrollTo(0, 0);
   }, []);
 
@@ -145,12 +144,11 @@ const Recipe = (props) => {
                   </Typography>
                   <Divider className={classes.dividerHorizontal} />
                 </Grid>
-                <Typography align='center'>
-                  <div
-                    className={classes.summary}
-                    dangerouslySetInnerHTML={{ __html: recipe.summary }}
-                  />
-                </Typography>
+                <Typography
+                  align='center'
+                  className={classes.summary}
+                  dangerouslySetInnerHTML={{ __html: recipe.summary }}
+                />
               </Grid>
             </Grid>
 

@@ -41,7 +41,6 @@ const styles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   pushLeft: {
-    minWidth: 200,
     marginLeft: theme.spacing(2),
     [theme.breakpoints.up('md')]: {
       width: 'auto',
@@ -114,8 +113,16 @@ ShowOnScroll.propTypes = {
 const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
   const classes = styles();
 
+  const location = useLocation();
+  const { pathname } = location;
+
   const authLinks = (
-    <Box display='flex' flexDirection='row' alignItems='center'>
+    <Box
+      display='flex'
+      flexDirection='row'
+      justify='flex-end'
+      alignItems='center'
+    >
       <Link to='/dashboard'>
         <IconButton className={classes.menuButton} aria-label='Dashboard'>
           <Dashboard
@@ -132,12 +139,18 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
 
   const guestLinks = (
     <div className={classes.flexRow}>
-      <Link to='/login' className={classes.link}>
+      <Link
+        to={{ pathname: '/login', state: { prevPath: location.pathname } }}
+        className={classes.link}
+      >
         <Button color='primary' variant='contained'>
           Login
         </Button>
       </Link>
-      <Link to='/register' className={classes.link}>
+      <Link
+        to={{ pathname: '/register', state: { prevPath: location.pathname } }}
+        className={classes.link}
+      >
         <Button color='secondary' variant='contained'>
           Register
         </Button>
@@ -157,11 +170,11 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
                 gutterBottom
                 className={classes.title}
               >
-                Reccapy
+                Recappy
               </Typography>
             </Link>
 
-            <Searchbar />
+            {!(pathname === '/') && <Searchbar />}
 
             {!loading && (
               <div className={classes.pushLeft}>
