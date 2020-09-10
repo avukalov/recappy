@@ -1,26 +1,19 @@
 import React, { useState, useCallback } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import SettingsIcon from '@material-ui/icons/Settings';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ViewListIcon from '@material-ui/icons/ViewList';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import {
   Drawer,
-  List,
-  Divider,
   IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
 } from '@material-ui/core';
 
 import NewRecipe from './NewRecipe/NewRecipe';
-import MyRecipes from './MyRecipes/MyRecipes';
+import MyRecipes from './MyRecipes';
 import Sidebar from './Sidebar';
 
 import clsx from 'clsx';
+
+import store from '../../store';
 
 const drawerWidth = 240;
 
@@ -68,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const profileList = ['New recipe', 'My recipes', 'Favourites'];
+const profileList = ['New recipe', 'My recipes', 'Favorites'];
 const accountList = ['Settings']
 
 const Dashboard = () => {
@@ -90,12 +83,16 @@ const Dashboard = () => {
     [currentComp]
   );
 
+  const handleComponentFromChild = (comp) => {
+    setComp(comp);
+  }
+
   const handleComponents = () => {
     switch(currentComp){
       case 'New recipe':
         return <NewRecipe />;
       case 'My recipes':
-        return <MyRecipes />;
+        return <MyRecipes changeComponent={handleComponentFromChild} user={store.getState().auth.user}/>;
       // default:
     }
   }

@@ -16,8 +16,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
-import { CameraAlt } from '@material-ui/icons';
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -48,14 +46,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SmallAvatar = withStyles((theme) => ({
-  root: {
-    backgroundColor: 'white',
-    width: 24,
-    height: 24,
-    border: `2px solid ${theme.palette.background.paper}`,
-  },
-}))(Avatar);
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -156,6 +146,7 @@ const CardMenu = ({ user, logout }) => {
                     alignItems='center'
                     justify='center'
                   >
+<<<<<<< HEAD
                     <Badge
                       overlap='circle'
                       anchorOrigin={{
@@ -176,6 +167,13 @@ const CardMenu = ({ user, logout }) => {
                         className={classes.avatar}
                       />
                     </Badge>
+=======
+                    <Avatar
+                      alt="gravatar"
+                      src={user.gravatarUrl}
+                      className={classes.avatar}
+                    />
+>>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
                   </Grid>
                   <Grid item xs={12} container direction='column'>
                     <Typography

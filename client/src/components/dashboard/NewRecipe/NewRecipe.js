@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import api from '../../../utils/api';
 
+import { useHistory } from 'react-router';
+
 import { Container, Grid, Typography, TextField, MenuItem, Button, ButtonGroup, IconButton,
          Radio, RadioGroup, FormControlLabel, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,7 +11,9 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import logo from '../../../shared/images/recipe_logo.jpg';
+//import logo from '../../../shared/images/recipe_logo.jpg';
+
+import store from '../../../store';
 
 // import { SearchContext } from "../App";
 
@@ -41,15 +45,13 @@ const measures = [
   ];
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-    },
     button: {
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(1),
     },
     actionsContainer: {
-        marginBottom: theme.spacing(2),
+        marginBottom: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
     resetContainer: {
         padding: theme.spacing(3),
@@ -62,12 +64,9 @@ const useStyles = makeStyles(theme => ({
         float: 'right',
         margin: theme.spacing(3, 0, 2),
     },
-    container: {
-        textAlign: 'left'
-    },
     image: {
-        width: '45%',
-        height: 200,
+        width: 240,
+        height: 210,
         minWidth: 180,
         minHeight: 150,
         border: '1px solid black',
@@ -115,15 +114,25 @@ const useStyles = makeStyles(theme => ({
     },
     addIngredient: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
     },
-    basics_align: {
+    basics_text_align: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        [theme.breakpoints.down('sm')]: {
+            justifyContent: 'flex-start',
+          },
+        [theme.breakpoints.up('md')]: {
+          justifyContent: 'flex-end',
+        },
+        
     },
     deleteChipIcon: {
         label: 'dishType'
+    },
+    title: {
+        marginBottom: theme.spacing(2),
+        width: '80%'
     }
 }))
 
@@ -150,13 +159,15 @@ function getStepContent(step, list_of_content) {
 export default function NewRecipe() {
     const classes = useStyles();
 
+    const history = useHistory();
+
     // recipe
 
     let initialState = {
         title: '',
         servings: 1,
         readyInMinutes: '',
-        healthy: 'false',
+        veryHealthy: 'false',
         image: null,
         extendedIngredients: [
             { name: '', amount: '', unit: '' }
@@ -222,7 +233,7 @@ export default function NewRecipe() {
         }
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         let newRecipe = recipe;
@@ -239,30 +250,32 @@ export default function NewRecipe() {
         }
 
         newRecipe['ingredients'] = ingredients;
-       
 
-        // handling image
+        let { _id, firstName, lastName, email } = store.getState().auth.user;
+        newRecipe['user'] = {_id, firstName, lastName, email };
 
-        const recipe_with_image = new FormData() 
-        recipe_with_image.append('file', newRecipe.image)
+        // handling recipe and image
 
-        delete newRecipe.image;
-        recipe_with_image.append('recipe', newRecipe)
+        const recipe_image = new FormData() 
+        recipe_image.append('file', newRecipe.image);
 
-        console.log(recipe_with_image)
         try {
-            api.post('/recipe/create', recipe_with_image, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }})
-               .then(res => console.log("recipe added!"));
+            api.post('/recipe/image', recipe_image)
+            .then(res => {
+                console.log(res);
+                let image_url = `http://localhost:3001/api/recipe/image/${res.data._id}`;
+                newRecipe.image = image_url;
+
+                api.post('/recipe/create', newRecipe)
+                    .then(res => console.log("recipe added!"));
+            })  
         } catch(err){
             console.log(err);
         }
 
-        // api.post('api/file', newRecipe.image)
-        //     .then(res => console.log("image saved"));
+        history.push('/dashboard');
     }
+
 
     const AddInputField = list => {
         const values = {...recipe};
@@ -311,10 +324,11 @@ export default function NewRecipe() {
         reader.onload = e => {
             current.src = e.target.result;
         };
-        console.log(file);
-        recipe_values.image = file;
-        setRecipe(recipe_values);
         reader.readAsDataURL(file);
+
+        recipe_values.image = file;
+        console.log(file)
+        setRecipe(recipe_values);
         }
     };
 
@@ -370,12 +384,12 @@ export default function NewRecipe() {
     // stepper content
 
     let Basics = <Grid container spacing={2}>
-                        <Grid item xs={7} sm={7} md={7} xl={7}>
+                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                             <Grid container direction="row" spacing={2}>
-                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_align}>
+                                <Grid item xs={12} sm={12} md={2} lg={2} xl={2} className={classes.basics_text_align}>
                                     <Typography>Title</Typography>
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={9} xl={9}>
+                                <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
                                     <TextField
                                         id="recipe_name"
                                         name="title"
@@ -387,14 +401,13 @@ export default function NewRecipe() {
                                         multiline
                                         placeholder="e.g. Pasta with chicken and mushrooms"
                                         variant="outlined"
-                                        fullWidth={true}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
                                     />
                                 </Grid>
                                
-                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_align}>
+                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
                                     <Typography>Prep time</Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={9} xl={9}>
@@ -403,20 +416,19 @@ export default function NewRecipe() {
                                         name="readyInMinutes"
                                         label="Minutes"
                                         required
-                                        value={recipe.readyInMinutes}
+                                        value={recipe.readyInMinutes ? Math.abs(recipe.readyInMinutes) : ''}
                                         placeholder="e.g. 45"
                                         onChange={handleRecipe}
                                         size="small"
                                         variant="outlined"
-                                        fullWidth={true}
                                         type="number"
-                                        InputProps={{ inputProps: { min: 0} }}
+                                        InputProps={{ min: 0, pattern: "[1-9][0-9]*" }} // pattern not working
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_align}>
+                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
                                     <Typography>Servings</Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={9} xl={9}>
@@ -426,18 +438,18 @@ export default function NewRecipe() {
                                         <Button id="addOne" color="secondary" onClick={handleRecipe}>+</Button>
                                     </ButtonGroup>
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_align}>
+                                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
                                     <Typography>Healthy</Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={9} xl={9}>
-                                    <RadioGroup row value={recipe.healthy} onChange={handleRecipe}>
-                                        <FormControlLabel name="healthy" value="true" control={<Radio size="small"/>} label="True" />
-                                        <FormControlLabel name="healthy" value="false" control={<Radio size="small"  />} label="False" />
+                                    <RadioGroup row value={recipe.veryHealthy} onChange={handleRecipe}>
+                                        <FormControlLabel name="veryHealthy" value="true" control={<Radio size="small"/>} label="True" />
+                                        <FormControlLabel name="veryHealthy" value="false" control={<Radio size="small"  />} label="False" />
                                     </RadioGroup>
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item xs={5} sm={5} md={5} xl={5}>
+                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                             <div className={classes.image}>
                                 <Typography variant="h5" className={classes.changeImage}>Click to change image</Typography>
                                 <input
@@ -463,21 +475,15 @@ export default function NewRecipe() {
                         </Grid>
                     </Grid>;
     
-    let Ingredients = <Grid container spacing={2} className={classes.details}>
+    let Ingredients = <Grid container spacing={3} className={classes.details}>
                             <Grid item>
-                                <Typography variant="body2">There must be at least one ingredient.</Typography>
+                                <Typography variant="body2">Note: There must be at least one ingredient.</Typography>
                             </Grid>
-                            <Grid item xs={12} className={classes.addIngredient}>
-                                <IconButton onClick={() => AddInputField(recipe.extendedIngredients)}>
-                                    <AddCircleIcon />
-                                </IconButton>
-                                <Typography>Click here to add ingredient</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={10}>
                                 {recipe.extendedIngredients.map((field, id) => {
                                     return (
-                                        <Grid container key={`${field}-${id}`} spacing={3}>
-                                        <Grid item xs={2} sm={2}>
+                                        <Grid container key={`${field}-${id}`} spacing={1}>
+                                        <Grid item xs={11} sm={11} md={2} lg={2} xl={2}>
                                             <TextField
                                                 id={id.toString()}
                                                 name="amount"
@@ -488,15 +494,15 @@ export default function NewRecipe() {
                                                 variant="outlined"
                                                 size="small"
                                                 type="number"
+                                                fullWidth={true}
                                                 InputProps={{ inputProps: { min: 0} }}
                                                 onChange={handleRecipe}
-                                                fullWidth={true}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={2} sm={2}>
+                                        <Grid item xs={11} sm={11} md={2} lg={2} xl={2}>
                                             <TextField
                                                 id={id.toString()}
                                                 select
@@ -520,7 +526,7 @@ export default function NewRecipe() {
                                                 ))}
                                             </TextField>
                                         </Grid>
-                                        <Grid item xs={7} sm={7}>
+                                        <Grid item xs={11} sm={11} md={5} lg={5} xl={5}>
                                         <TextField
                                             id={id.toString()}
                                             size="small"
@@ -529,34 +535,34 @@ export default function NewRecipe() {
                                             value={recipe.extendedIngredients[id].name}
                                             placeholder="e.g. pasta"
                                             required
+                                            fullWidth={true}
                                             onChange={handleRecipe}
                                             variant="outlined"
-                                            fullWidth={true}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
                                             >
                                         </TextField>
                                         </Grid>
-                                        <Grid item xs={1} sm={1}>
+                                        <Grid item xs={11} sm={11} md={1} lg={1} xl={1}>
                                             <IconButton onClick={() => RemoveInputField(id, recipe.extendedIngredients)}>
                                                 <HighlightOffIcon />
                                             </IconButton>
                                         </Grid>
                                 </Grid>
                                 )})}
+                                <Grid item xs={12} className={classes.addIngredient}>
+                                    <IconButton onClick={() => AddInputField(recipe.extendedIngredients)}>
+                                        <AddCircleIcon />
+                                    </IconButton>
+                                    <Typography>Add ingredient</Typography>
+                                </Grid>
                             </Grid>
                         </Grid>;
         
-    let Instructions = <Grid container spacing={2}>
+    let Instructions = <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <Typography variant="body2">Please write detailed instructions.</Typography>
-                            </Grid>
-                            <Grid item xs={12} className={classes.addIngredient}>
-                                <IconButton onClick={() => AddInputField(recipe.instructions)}>
-                                    <AddCircleIcon />
-                                </IconButton>
-                                <Typography>Click here to add instruction</Typography>
+                                <Typography variant="body2">Note: Please write detailed instructions.</Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 {recipe.instructions.map((field, id) => {
@@ -587,13 +593,19 @@ export default function NewRecipe() {
                                         </Grid>
                                 )})}
                             </Grid>
+                            <Grid item xs={12} className={classes.addIngredient}>
+                                <IconButton onClick={() => AddInputField(recipe.instructions)}>
+                                    <AddCircleIcon />
+                                </IconButton>
+                                <Typography>Add instruction</Typography>
+                            </Grid>
                         </Grid>;
     
     let Additional = <Grid container direction="column" spacing={2}>
                         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <Typography>Press enter after entering value.</Typography>
+                            <Typography>Note: Press enter after entering value.</Typography>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={6} xl={6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                             <Autocomplete
                                 multiple
                                 freeSolo
@@ -615,7 +627,7 @@ export default function NewRecipe() {
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={12} md={6} xl={6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                             <Autocomplete
                                 multiple
                                 freeSolo
@@ -637,7 +649,7 @@ export default function NewRecipe() {
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={12} md={6} xl={6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                             <Autocomplete
                                 multiple
                                 freeSolo
@@ -659,7 +671,7 @@ export default function NewRecipe() {
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={12} md={6} xl={6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                             <Autocomplete
                                 multiple
                                 freeSolo
@@ -685,12 +697,14 @@ export default function NewRecipe() {
                     </Grid>;
                 
     return (
-        <Container className={classes.container}>
-                <Typography variant="h4">Create new recipe</Typography>
-                <Typography variant="body2">
-                    If you don't fill out all the required fields, you will not be able to create your recipe. 
-                    Required fields are marked with *.</Typography>
-                    <hr />
+        <Container className={classes.root}>
+                <Typography className={classes.title} variant="h4">New recipe</Typography>
+                <Typography className={classes.title} variant="body2">
+                    Here you can create new recipe by filling out the given form.
+                    If some of the required fields remain empty, you will not be able to create recipe.
+                    Required fields are marked with *.
+                </Typography>
+                    <hr style={{width: '80%'}} />
                     <Grid container direction="column" spacing={3}>
                         <form onSubmit={handleSubmit} className={classes.form}>
                                 <Stepper activeStep={activeStep} orientation="vertical">

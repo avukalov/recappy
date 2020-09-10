@@ -1,6 +1,19 @@
 const RecipeService = require('../services/RecipeService');
 const RedisService = require('../services/RedisService');
 
+const mongoose = require('mongoose');
+const objectId = mongoose.Types.ObjectId;
+
+
+const Readable = require("stream").Readable;
+
+let bucket;
+mongoose.connection.on("connected", () => {
+    bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db);
+});
+
+
+
 class RecipeController {
   static async getRecipesFromQuery(req, res) {
     const { query } = req;
@@ -106,6 +119,7 @@ class RecipeController {
   }
 
   static async createRecipe(req, res) {
+<<<<<<< HEAD
     //let file = req.body.image;
     //const recipe_values = req.body;
     console.log(req.files.file);
@@ -126,6 +140,101 @@ class RecipeController {
     // }
   }
   // https://stackoverflow.com/questions/22219400/display-image-in-gridfs
+=======
+
+    let recipe_values = req.body;
+
+    try {
+        const recipe = await RecipeService.saveRecipe(recipe_values);
+        return res.status(200).json(recipe);
+    } catch(error) {
+        console.log(error);
+        return res.status(500).send('Server error');
+    }
+  }
+
+  static async saveImage(req, res) {
+
+    let file = req.files.file;
+    let contentType = file.mimetype;
+    let filename = file.name;
+    let data = file.data;
+    let metadata = "recipe image";
+
+    const readableStream = new Readable();
+    readableStream.push(data);
+    readableStream.push(null);
+
+    let uploadStream = bucket.openUploadStream(filename, { contentType, metadata });
+    readableStream.pipe(uploadStream);
+
+    let message;
+        uploadStream.on("error", () => {
+            message = "Error when uploading";
+            res.status(500).json({ message });
+        });
+
+    uploadStream.on("finish", async () => {
+        try {
+            let fileInfo = await RecipeService.findFileById(uploadStream.id);
+            res.status(201).json(fileInfo);
+        } catch(err) {
+            res.status(500).json(err);
+        }
+    });
+  }
+
+//   static async getAllFiles(req, res) {
+//     try {
+//         files = await RecipeService.findFilesByOwnerId(req.body.id);
+//     } catch (err) {
+//         return res.status(500).json(err);
+//     }
+//     let message = "Sending files";
+//     return res.status(200).send({ files, message });        
+//   }
+
+  static async getFile(req, res) {
+    let id = req.params.id;
+    let file, message
+
+    try {
+        file = await RecipeService.findFileById(id);
+    } catch(err) {
+        return res.status(500).json(err);
+    }
+
+    if(!file) {
+        message = "Not found";
+       return res.status(404).json({ message });
+    }
+  
+    let downloadStream = bucket.openDownloadStream(objectId(id), {encoding: 'utf8'});
+    res.writeHead(200, { "Content-Type": file.contentType });
+    downloadStream.pipe(res);
+  }
+
+  // user recipes
+
+  static async userRecipes(req, res) {
+    let id = req.params.id;
+    let recipes
+    
+    try {
+      recipes = await RecipeService.getUserRecipes(id);
+    } catch(error) {
+      return res.status(500).json(error);
+    }
+
+    if(!recipes) {
+      let message = "No recipes";
+      return res.status(404).json({ message });
+    } else {
+      res.status(201).json(recipes);
+    }
+  }
+
+>>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
 }
 
 module.exports = RecipeController;

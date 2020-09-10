@@ -136,6 +136,7 @@ const Recipe = (props) => {
               />
             </Grid>
 
+<<<<<<< HEAD
             <Grid item container justify='center'>
               <Grid item sm={10}>
                 <Grid item sm={12}>
@@ -149,6 +150,22 @@ const Recipe = (props) => {
                   className={classes.summary}
                   dangerouslySetInnerHTML={{ __html: recipe.summary }}
                 />
+=======
+            <Grid item container justify='flex-start'>
+              <Grid item container sm={4} justify='flex-end'>
+                <ul>
+                  {recipe.extendedIngredients.map((ingredient, index) => (
+                    <li key={index} className={classes.listLeft}>
+                      <Typography
+                        variant='body1'
+                        style={{ textTransform: 'capitalize' }}
+                      >
+                        {ingredient.name}
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+>>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
               </Grid>
             </Grid>
 
