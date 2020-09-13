@@ -259,16 +259,7 @@ class RecipeService {
   // Save recipe in database
 
   static async saveRecipe(recipe_values) {
-<<<<<<< HEAD
     let recipe = new Recipe(recipe_values)
-=======
-<<<<<<< HEAD
-    let recipe = new Recipe(recipe_values);
-
-=======
-    let recipe = new Recipe(recipe_values)
->>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
->>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
     await recipe.save();
 
     return recipe;

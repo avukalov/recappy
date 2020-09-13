@@ -146,40 +146,16 @@ const CardMenu = ({ user, logout }) => {
                     alignItems='center'
                     justify='center'
                   >
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-                    <Badge
-                      overlap='circle'
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                      }}
-                      badgeContent={
-                        <SmallAvatar>
-                          <Button color='inherit'>
-                            <CameraAlt fontSize='small' color='primary' />
-                          </Button>
-                        </SmallAvatar>
-                      }
-                    >
                       <Avatar
                         alt='gravatar'
                         src={user.gravatarUrl}
                         className={classes.avatar}
                       />
-                    </Badge>
-=======
->>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
                     <Avatar
                       alt="gravatar"
                       src={user.gravatarUrl}
                       className={classes.avatar}
                     />
-<<<<<<< HEAD
-=======
->>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
->>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
                   </Grid>
                   <Grid item xs={12} container direction='column'>
                     <Typography

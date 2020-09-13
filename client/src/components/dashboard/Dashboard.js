@@ -10,10 +10,7 @@ import {
 
 import NewRecipe from './NewRecipe/NewRecipe';
 import MyRecipes from './MyRecipes';
-<<<<<<< HEAD
 import Favorites from './Favorites';
-=======
->>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
 import Sidebar from './Sidebar';
 
 import clsx from 'clsx';
@@ -100,13 +97,9 @@ const Dashboard = (props) => {
       case 'New recipe':
         return <NewRecipe />;
       case 'My recipes':
-<<<<<<< HEAD
         return user && <MyRecipes changeComponent={handleComponentFromChild} />;
       case 'Favorites':
         return  <Favorites />;
-=======
-        return <MyRecipes changeComponent={handleComponentFromChild} user={store.getState().auth.user}/>;
->>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
       // default:
     }
   }

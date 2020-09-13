@@ -53,7 +53,6 @@ export const RESET_PAGER = 'RESET_PAGER';
 
 // export const PAGES = 'PAGES';
 
-<<<<<<< HEAD
 // Recipe types
 export const TITLE = 'TITLE';
 export const SERVINGS = 'SERVINGS';
@@ -83,12 +82,3 @@ export const DELETE_RECIPE_FAIL = 'DELETE_RECIPE_FAIL';
 
 export const USER_RECIPES = 'USER_RECIPES';
 export const USER_FAVORITES = 'USER_FAVORITES';
-=======
-// Carousel types
-export const FETCH_CAROUSEL = 'FETCH_CAROUSEL';
-export const UPDATE_CAROUSEL_QUERY = 'UPDATE_CAROUSEL_QUERY';
-export const UPDATE_CAROUSEL_ITEMS = 'UPDATE_CAROUSEL_ITEMS';
-export const UPDATE_CAROUSEL_PAGER = 'UPDATE_CAROUSEL_PAGER';
-export const UPDATE_CAROUSEL_CURRENT_PAGE = 'UPDATE_CAROUSEL_CURRENT_PAGE';
-export const NO_CAROUSEL_ITEMS = 'NO_CAROUSEL_ITEMS';
->>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
