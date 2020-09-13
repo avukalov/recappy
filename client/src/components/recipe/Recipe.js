@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { getRecipeById } from '../../actions/search/search';
@@ -61,10 +60,10 @@ const Recipe = (props) => {
 
   const { recipe, getRecipeById } = props;
 
-  const location = useLocation();
-
   useEffect(() => {
-    getRecipeById(location.state._id);
+    const id = props.match.params.id;
+
+    getRecipeById(id);
     window.scrollTo(0, 0);
   }, []);
 
@@ -137,6 +136,24 @@ const Recipe = (props) => {
               />
             </Grid>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            <Grid item container justify='center'>
+              <Grid item sm={10}>
+                <Grid item sm={12}>
+                  <Typography variant='h4' align='center'>
+                    Summary
+                  </Typography>
+                  <Divider className={classes.dividerHorizontal} />
+                </Grid>
+                <Typography
+                  align='center'
+                  className={classes.summary}
+                  dangerouslySetInnerHTML={{ __html: recipe.summary }}
+                />
+=======
+>>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
             <Grid item container justify='flex-start'>
               <Grid item container sm={4} justify='flex-end'>
                 <ul>
@@ -151,6 +168,10 @@ const Recipe = (props) => {
                     </li>
                   ))}
                 </ul>
+<<<<<<< HEAD
+=======
+>>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
+>>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
               </Grid>
             </Grid>
 

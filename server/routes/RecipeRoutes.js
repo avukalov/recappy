@@ -4,6 +4,9 @@ const router = express.Router();
 const CacheMiddleware = require('../middleware/CacheMiddleware');
 const RecipeController = require('../controllers/RecipeController');
 
+// @route  api/recipe/carousel
+router.route('/carousel').get(RecipeController.carousel);
+
 // @route  api/recipe/search
 router.route('/search').get(RecipeController.getRecipesFromQuery);
 

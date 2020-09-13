@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = ({ login, isAuthenticated, loading }) => {
   const classes = useStyles();
 
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -52,13 +53,13 @@ const Login = ({ login, isAuthenticated, loading }) => {
   };
 
   if (isAuthenticated && !loading) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to={location.state.prevPath} />;
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           Login
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
@@ -66,13 +67,13 @@ const Login = ({ login, isAuthenticated, loading }) => {
             <TextField
               required
               fullWidth
-              id="email"
-              name="email"
-              margin="normal"
-              label="Email Address"
-              color="secondary"
-              variant="outlined"
-              autoComplete="email"
+              id='email'
+              name='email'
+              margin='normal'
+              label='Email Address'
+              color='secondary'
+              variant='outlined'
+              autoComplete='email'
               value={email}
               onChange={onChange}
             />
@@ -81,14 +82,14 @@ const Login = ({ login, isAuthenticated, loading }) => {
             <TextField
               required
               fullWidth
-              id="password"
-              name="password"
-              margin="normal"
-              label="Password"
-              type="password"
-              color="secondary"
-              variant="outlined"
-              autoComplete="current-password"
+              id='password'
+              name='password'
+              margin='normal'
+              label='Password'
+              type='password'
+              color='secondary'
+              variant='outlined'
+              autoComplete='current-password'
               value={password}
               onChange={onChange}
             />
@@ -97,35 +98,35 @@ const Login = ({ login, isAuthenticated, loading }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="remember"
-                  color="secondary"
+                  name='remember'
+                  color='secondary'
                   value={remember}
                   onChange={onChange}
                 />
               }
-              label="Remember me"
+              label='Remember me'
             />
           </Zoom>
           <Zoom in={true}>
             <Button
               fullWidth
-              type="submit"
-              color="secondary"
-              variant="contained"
+              type='submit'
+              color='secondary'
+              variant='contained'
               className={classes.submit}
             >
               Login
             </Button>
           </Zoom>
           <Zoom in={true}>
-            <Grid container justify="flex-end">
+            <Grid container justify='flex-end'>
               <Grid item xs>
-                <Link to="/password-reset" variant="body2">
+                <Link to='/password-reset' variant='body2'>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/register" variant="body2">
+                <Link to='/register' variant='body2'>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

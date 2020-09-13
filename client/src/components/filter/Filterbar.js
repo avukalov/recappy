@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import _ from 'lodash';
 
 import { connect } from 'react-redux';
-import { setQuery } from '../../actions/search/query';
+import { setQuery, setPager } from '../../actions/search/query';
 import { getFiltersFromResults } from '../../actions/search/search';
 
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import {
   DIETS,
   OCCASIONS,
   RESET_SEARCH_QUERY,
+  RESET_PAGER,
 } from '../../actions/types';
 
 // Material UI Components
@@ -77,6 +78,7 @@ const Filterbar = (props) => {
     query,
     filters: { filters },
     setQuery,
+    setPager,
     getFiltersFromResults,
   } = props;
 
@@ -99,9 +101,11 @@ const Filterbar = (props) => {
 
   const handleReset = () => {
     setQuery(RESET_SEARCH_QUERY);
+    setPager(RESET_PAGER);
   };
 
   const onSubmit = () => {
+    setPager(RESET_PAGER);
     setQuery(SUBMIT);
   };
 
@@ -353,5 +357,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   setQuery,
+  setPager,
   getFiltersFromResults,
 })(Filterbar);

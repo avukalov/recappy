@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     alignSelf: 'center',
-    margin: 'auto',
     width: theme.spacing(10),
     height: theme.spacing(10),
   },
@@ -114,13 +113,13 @@ const CardMenu = ({ user, logout }) => {
         className={classes.actionIcon}
       >
         <StyledBadge
-          overlap="circle"
+          overlap='circle'
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
           }}
         >
-          <Avatar alt="gravatar" src={user.gravatarUrl} />
+          <Avatar alt='gravatar' src={user.gravatarUrl} />
         </StyledBadge>
       </IconButton>
       <Popper
@@ -139,32 +138,61 @@ const CardMenu = ({ user, logout }) => {
           >
             <Paper elevation={4} className={classes.paper}>
               <ClickAwayListener onClickAway={handleClose}>
-                <Grid container direction="column" spacing={2}>
+                <Grid container direction='column' spacing={2}>
                   <Grid
                     item
                     xs={12}
                     container
-                    alignItems="center"
-                    justify="center"
+                    alignItems='center'
+                    justify='center'
                   >
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                    <Badge
+                      overlap='circle'
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      badgeContent={
+                        <SmallAvatar>
+                          <Button color='inherit'>
+                            <CameraAlt fontSize='small' color='primary' />
+                          </Button>
+                        </SmallAvatar>
+                      }
+                    >
+                      <Avatar
+                        alt='gravatar'
+                        src={user.gravatarUrl}
+                        className={classes.avatar}
+                      />
+                    </Badge>
+=======
+>>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
                     <Avatar
                       alt="gravatar"
                       src={user.gravatarUrl}
                       className={classes.avatar}
                     />
+<<<<<<< HEAD
+=======
+>>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
+>>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
                   </Grid>
-                  <Grid item xs={12} container direction="column">
+                  <Grid item xs={12} container direction='column'>
                     <Typography
-                      variant="h6"
-                      component="h2"
+                      variant='h6'
+                      component='h2'
                       className={classes.userData}
                     >
                       {user.firstName} {user.lastName}
                     </Typography>
                     <Typography
                       gutterBottom
-                      variant="body2"
-                      component="h2"
+                      variant='body2'
+                      component='h2'
                       className={classes.userData}
                     >
                       {user.email}
@@ -172,29 +200,29 @@ const CardMenu = ({ user, logout }) => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+                    <Link to='/dashboard' style={{ textDecoration: 'none' }}>
                       <Button
                         onClick={handleClose}
-                        color="inherit"
-                        variant="outlined"
+                        color='inherit'
+                        variant='outlined'
                         className={classes.manageButton}
                       >
                         Manage your Recappy Account
                       </Button>
                     </Link>
                   </Grid>
-                  <Divider components="hr" />
+                  <Divider components='hr' />
                   <Grid
                     item
                     xs={12}
                     container
-                    alignItems="center"
-                    justify="center"
+                    alignItems='center'
+                    justify='center'
                   >
-                    <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Link to='/' style={{ textDecoration: 'none' }}>
                       <Button
-                        color="default"
-                        variant="outlined"
+                        color='default'
+                        variant='outlined'
                         onClick={logout}
                       >
                         Logout

@@ -5,7 +5,7 @@ const File = mongoose.model("File");
 const objectId = mongoose.Types.ObjectId;
 
 const AggregationService = require('./helpers/AggregationService');
-const { hlen } = require('../config/redis');
+// const { hlen } = require('../config/redis');
 
 class RecipeService {
   // Get recipes from database by search query
@@ -52,6 +52,43 @@ class RecipeService {
           totalItems: 1,
           pages: {
             $ceil: { $divide: ['$totalItems', parseInt(itemsPerPage)] },
+          },
+        },
+      },
+    ]);
+  }
+
+  static async getRecipesFromCarouselQuery(query) {
+    const { skipItems, itemsPerPage } = query;
+
+    console.log('service', query);
+    const match = AggregationService.createAggregateMatch(query);
+
+    console.log(match);
+    return await Recipe.aggregate([
+      { $match: match },
+      { $sort: { spoonacularScore: -1 } },
+      {
+        $group: {
+          _id: null,
+          recipes: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              image: '$image',
+              readyInMinutes: '$readyInMinutes',
+              pricePerServing: '$pricePerServing',
+              servings: '$servings',
+              veryHealthy: '$veryHealthy',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          recipes: {
+            $slice: ['$recipes', parseInt(skipItems), parseInt(itemsPerPage)],
           },
         },
       },
@@ -222,7 +259,16 @@ class RecipeService {
   // Save recipe in database
 
   static async saveRecipe(recipe_values) {
+<<<<<<< HEAD
     let recipe = new Recipe(recipe_values)
+=======
+<<<<<<< HEAD
+    let recipe = new Recipe(recipe_values);
+
+=======
+    let recipe = new Recipe(recipe_values)
+>>>>>>> df8e4a6f4c9ba7afea5bc011b2f31b54a8c8283c
+>>>>>>> 88e673ef39fc7717a6eb35976bc293a8049577f9
     await recipe.save();
 
     return recipe;
