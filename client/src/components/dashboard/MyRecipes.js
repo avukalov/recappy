@@ -1,45 +1,41 @@
 import React, { useEffect, useState } from 'react';
-
-import api from '../../utils/api';
+import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Zoom, Typography, Button } from '@material-ui/core';
 
 import RecipeCard from '../recipe/RecipeCard';
-//import OptionsToolbar from '../filter/OptionsToolbar';
+
+import { getUserRecipes } from '../../actions/userRecipes';
 
 const useStyles = makeStyles((theme) => ({
   loading: {
     width: '100%',
     textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(7)
   },
 }));
 
 const MyRecipes = (props) => {
   const classes = useStyles();
 
-  const { _id } = props.user;
-
-  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const { 
+    recipes,
+    user,
+    getUserRecipes
+  } = props;
 
   useEffect(() => {
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    try {
-      api.get(`/recipe/userRecipes/${_id}`, {headers: { "Content-Type": "application/json" }})
-      .then(res => {
-          setRecipes(res.data)
-      })
-  } catch(err){
-      console.log(err);
-  }
-  }, [_id])
-
+    getUserRecipes(user._id);
+  }, [user._id]);
 
   return (
     <div>
@@ -62,9 +58,9 @@ const MyRecipes = (props) => {
             ))
           ) : (
             <div className={classes.loading}>
-              <Typography variant="h5">You haven't created any recipes yet.</Typography>
-              <Typography variant="h5">Let's change that!</Typography>
-              <Button variant="contained" color="secondary" onClick={() => props.changeComponent('New recipe')}>Create recipe</Button>
+              <Typography style={{padding: 7}} variant="h5">You haven't created any recipes yet.</Typography>
+              <Typography style={{padding: 7}} variant="h5">Let's change that!</Typography>
+              <Button style={{padding: 7}} variant="contained" color="secondary" onClick={() => props.changeComponent('New recipe')}>Create recipe</Button>
             </div>
           )
         ) : (
@@ -79,4 +75,9 @@ const MyRecipes = (props) => {
   );
 };
 
-export default MyRecipes;
+const mapStateToProps = (state) => ({
+  recipes: state.userRecipes.recipes,
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps, { getUserRecipes })(MyRecipes);

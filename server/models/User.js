@@ -29,6 +29,7 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  favorites: {type: Object, default: {}},
 });
 
 UserSchema.methods.setPassword = async function (password) {

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
@@ -9,6 +10,7 @@ import {
 
 import NewRecipe from './NewRecipe/NewRecipe';
 import MyRecipes from './MyRecipes';
+import Favorites from './Favorites';
 import Sidebar from './Sidebar';
 
 import clsx from 'clsx';
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 const profileList = ['New recipe', 'My recipes', 'Favorites'];
 const accountList = ['Settings']
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -73,7 +75,10 @@ const Dashboard = () => {
   };
 
   // added
-
+  const {
+    user
+  } = props;
+  
   const [currentComp, setComp] = useState('My recipes');
 
   const handleIcon = useCallback(
@@ -92,7 +97,9 @@ const Dashboard = () => {
       case 'New recipe':
         return <NewRecipe />;
       case 'My recipes':
-        return <MyRecipes changeComponent={handleComponentFromChild} user={store.getState().auth.user}/>;
+        return user && <MyRecipes changeComponent={handleComponentFromChild} />;
+      case 'Favorites':
+        return  <Favorites />;
       // default:
     }
   }
@@ -125,4 +132,10 @@ const Dashboard = () => {
     </div>
   );
 };
-export default Dashboard;
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps, {  })(Dashboard);
+

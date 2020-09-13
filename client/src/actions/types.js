@@ -52,3 +52,33 @@ export const UPDATE_ORDER_BY = 'UPDATE_ORDER_BY';
 export const RESET_PAGER = 'RESET_PAGER';
 
 // export const PAGES = 'PAGES';
+
+// Recipe types
+export const TITLE = 'TITLE';
+export const SERVINGS = 'SERVINGS';
+export const READY_IN_MINUTES = 'READY_IN_MINUTES';
+export const VERY_HEALTHY = 'VERY_HEALTHY';
+export const IMAGE = 'IMAGE';
+export const IMAGE_URL = 'IMAGE_URL';
+export const INGREDIENT_AMOUNT = 'INGREDIENT_AMOUNT';
+export const INGREDIENT_UNIT = 'INGREDIENT_UNIT';
+export const INGREDIENT_NAME = 'INGREDIENT_NAME';
+export const EXTENDED_INGREDIENTS = 'EXTENDED_INGREDIENTS';
+export const INGREDIENTS = 'INGREDIENTS';
+export const ADD_INGREDIENTS = 'ADD_INGREDIENT';
+export const REMOVE_INGREDIENTS = 'REMOVE_INGREDIENT';
+export const INSTRUCTIONS = 'INSTRUCTIONS';
+export const ADD_REMOVE_INSTRUCTIONS = 'ADD_REMOVE_INSTRUCTIONS';
+// dishTypes, cuisines, occasions, diets already defined
+
+export const RESET_RECIPE = 'RESET_RECIPE';
+
+export const CREATE_RECIPE_SUCCESS = 'CREATE_RECIPE_SUCCES';
+export const CREATE_RECIPE_FAIL = 'CREATE_RECIPE_FAIL';
+export const UPDATE_RECIPE_SUCCESS = 'UPDATE_RECIPE_SUCCESS';
+export const UPDATE_RECIPE_FAIL = 'UPDATE_RECIPE_FAIL';
+export const DELETE_RECIPE_SUCCESS = 'DELETE_RECIPE_SUCCESS';
+export const DELETE_RECIPE_FAIL = 'DELETE_RECIPE_FAIL';
+
+export const USER_RECIPES = 'USER_RECIPES';
+export const USER_FAVORITES = 'USER_FAVORITES';

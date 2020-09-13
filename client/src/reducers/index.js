@@ -6,6 +6,8 @@ import query from './search/query';
 import pager from './search/pager';
 import search from './search/search';
 import filters from './search/filters';
+import recipes from './recipes';
+import userRecipes from './userRecipes';
 
 export default combineReducers({
   alert,
@@ -14,4 +16,6 @@ export default combineReducers({
   pager,
   search,
   filters,
+  recipes,
+  userRecipes
 });

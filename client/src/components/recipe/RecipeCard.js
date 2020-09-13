@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { useState, memo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { connect } from 'react-redux';
@@ -19,6 +19,9 @@ import {
 } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { Favorite, Share, AccessAlarm, People } from '@material-ui/icons';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import { updateUserFavorites } from '../../actions/userRecipes';
 
 import ChipsList from '../common/ChipsList';
 
@@ -35,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     direction: 'row',
     justifyContent: 'space-between',
+  },
+  rowFlexEnd: {
+    display: 'flex',
+    direction: 'row',
+    justifyContent: 'flex-end'
   },
   cardContentTitle: {
     padding: theme.spacing(2, 2, 1),
@@ -69,17 +77,50 @@ const RecipeCard = (props) => {
 
   const {
     recipe: { _id, title, image, readyInMinutes, servings, veryHealthy },
+    favorites,
+    user,
+    updateUserFavorites
   } = props;
 
   const history = useHistory();
-  const [value, setValue] = React.useState(2);
+  const [value, setValue] = useState(2);
 
   const handleOnClick = () => {
     history.push(`/recipe/${_id}`, { _id: _id });
   };
 
+
+  // added - favorites
+
+  const handleAuthorized = () => {
+    let newFavorite;
+    if ( favorites[_id] ) {
+      const { favorite, recipe } = favorites[_id];
+      favorites[_id] = { "favorite" : !favorite, recipe }
+    }
+    else {
+      newFavorite = { "favorite": true, recipe: { _id, title, image, readyInMinutes, servings, veryHealthy }};
+      favorites[_id] = newFavorite;
+    }
+
+    updateUserFavorites(user._id, favorites);
+  }
+
+  const handleUnauthorized = () => {
+    console.log('You need to log in to add this recipe to favorites')
+  }
+
+
   return (
     <Card className={classes.root}>
+      {/* <Box className={classes.rowFlexEnd}>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Box> */}
       <CardActionArea onClick={handleOnClick}>
         <CardMedia
           className={classes.media}
@@ -130,7 +171,10 @@ const RecipeCard = (props) => {
             <IconButton aria-label='share'>
               <Share />
             </IconButton>
-            <IconButton aria-label='add to favorites'>
+            <IconButton  onClick={user ? (() => handleAuthorized()) : (() => handleUnauthorized())}
+                         aria-label='add to favorites'
+                         color={favorites[_id] ? (favorites[_id].favorite ? 'secondary' : 'default') : 'default'}
+                >
               <Favorite />
             </IconButton>
           </Box>
@@ -144,6 +188,9 @@ RecipeCard.propTypes = {
   recipe: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  favorites: state.userRecipes.favorites,
+  user: state.auth.user
+});
 
-export default connect(mapStateToProps, {})(memo(RecipeCard));
+export default connect(mapStateToProps, { updateUserFavorites })(memo(RecipeCard));

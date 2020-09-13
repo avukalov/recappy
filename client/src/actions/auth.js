@@ -12,6 +12,8 @@ import {
   LOGOUT,
 } from './types';
 
+import { getUserFavorites } from '../actions/userRecipes';
+
 import jwtDecode from 'jwt-decode';
 
 // Load User
@@ -23,6 +25,7 @@ export const loadUser = () => async (dispatch) => {
       type: USER_LOADED,
       payload: data,
     });
+    dispatch(getUserFavorites(data._id));
   } catch (err) {
     dispatch({
       type: AUTH_ERROR,

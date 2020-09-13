@@ -1,4 +1,5 @@
 const UserService = require('../services/UserService');
+const RecipeService = require('../services/RecipeService');
 
 class UserController {
   static async getUserByToken(req, res) {
@@ -61,6 +62,32 @@ class UserController {
       return res.status(500).send('Server error');
     }
   }
+
+  // update favorites
+  static async favorites(req, res) {
+    let recipes = req.body.favorites;
+    let user_id = req.body.userID;
+
+    try {
+      const user = await UserService.changeFavorite(recipes, user_id);
+      return res.json(user.favorites).status(200);
+    } catch(err) {
+      console.log(err);
+      return res.status(500).send('Server error');
+    }
+  }
+
+  // get favorites
+  static async getFavorites(req, res) {
+    try {
+      const user = await UserService.getUserByToken(req.params.id);
+      return res.json(user.favorites).status(200);
+    } catch(err) {
+      console.log(err);
+      return res.status(500).send('Server error');
+    }
+  }
+
 }
 
 module.exports = UserController;
