@@ -32,6 +32,8 @@ const useStyles = makeStyles(theme => ({
         justifyItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
+        objectFit: 'cover',
+        overflow: 'hidden',
         '&:hover': {
         background: 'rgb(0, 0, 0)',
         transition: '.4s ease',
@@ -100,16 +102,17 @@ const Basics = (props) => {
         e.preventDefault();
         const [file] = e.target.files;
         if (file) {
-        handleOnChange(IMAGE_URL, URL.createObjectURL(file))
-        const reader = new FileReader();
-        const { current } = uploadedImage;
-        current.file = file;
-        reader.onload = e => {
-            current.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-        handleOnChange(IMAGE, file);
+        handleOnChange(IMAGE, URL.createObjectURL(file))
         }
+        // const reader = new FileReader();
+        // const { current } = uploadedImage;
+        // current.file = file;
+        // reader.onload = e => {
+        //     current.src = e.target.result;
+        // };
+        // reader.readAsDataURL(file);
+        // handleOnChange(IMAGE, file);
+        // }
     };
 
     return (

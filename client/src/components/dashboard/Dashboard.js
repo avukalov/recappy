@@ -14,8 +14,8 @@ import Favorites from './Favorites';
 import Sidebar from './Sidebar';
 
 import clsx from 'clsx';
-
-import store from '../../store';
+import { RESET_RECIPE } from '../../actions/types';
+import { setRecipe } from '../../actions/recipes';
 
 const drawerWidth = 240;
 
@@ -76,7 +76,8 @@ const Dashboard = (props) => {
 
   // added
   const {
-    user
+    user,
+    setRecipe
   } = props;
   
   const [currentComp, setComp] = useState('My recipes');
@@ -84,6 +85,7 @@ const Dashboard = (props) => {
   const handleIcon = useCallback(
     currentComp => {
       setComp(currentComp);
+      setRecipe(RESET_RECIPE)
     },
     [currentComp]
   );
@@ -137,5 +139,5 @@ const mapStateToProps = (state) => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, {  })(Dashboard);
+export default connect(mapStateToProps, { setRecipe })(Dashboard);
 

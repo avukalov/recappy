@@ -211,6 +211,20 @@ class RecipeController {
     }
   }
 
+  static async updateRecipe(req, res) {
+    let recipe = req.body;
+    let updatedRecipe
+
+    console.log(recipe)
+    try {
+      updatedRecipe = await RecipeService.updateRecipe(recipe);
+      console.log(updatedRecipe);
+      return res.json(updatedRecipe);
+    } catch(err) {
+      return res.status(500).json(err);
+    }
+  }
+
 }
 
 module.exports = RecipeController;

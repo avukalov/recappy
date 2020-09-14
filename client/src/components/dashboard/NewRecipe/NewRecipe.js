@@ -11,9 +11,9 @@ import Instructions from './Instructions';
 import Additional from './Additional';
 
 import {
-    RESET_RECIPE
+    RESET_RECIPE,
 } from '../../../actions/types';
-import { createRecipe, setRecipe } from '../../../actions/recipes';
+import { createRecipe, setRecipe, updateRecipe } from '../../../actions/recipes';
 
 
 const useStyles = makeStyles(theme => ({
@@ -64,7 +64,9 @@ const ReduxNewRecipe = (props) => {
         recipe,
         setRecipe,
         createRecipe,
-        user : { _id, firstName, lastName, email }
+        updateRecipe,
+        user : { _id, firstName, lastName, email },
+        recipe_action
     } = props;
 
     const handleSubmit = async (e) => {
@@ -72,12 +74,16 @@ const ReduxNewRecipe = (props) => {
 
         recipe.user = { _id, firstName, lastName, email };
 
-        const recipe_image = new FormData() 
-        recipe_image.append('file', recipe.image);
+        // const recipe_image = new FormData() 
+        // recipe_image.append('file', recipe.image);
+        // let recipe_id
 
-        createRecipe(recipe_image, recipe);
-        setRecipe(RESET_RECIPE);
-        history.push('/dashboard');
+        if (recipe_action === 'Create'){
+            await createRecipe(recipe);
+        } else {
+            await updateRecipe(recipe);
+        }
+        history.push(`/recipe/${recipe._id}`);
     }
 
 
@@ -137,61 +143,61 @@ const ReduxNewRecipe = (props) => {
                 
     return (
         <Container className={classes.root}>
-                <Typography className={classes.title} variant="h4">New recipe</Typography>
-                <Typography className={classes.title} variant="body2">
-                    Here you can create new recipe by filling out the given form.
-                    If some of the required fields remain empty, you will not be able to create recipe.
-                    Required fields are marked with *.
-                </Typography>
-                    <hr style={{width: '80%'}} />
-                    <Grid container direction="column" spacing={3}>
-                        <form onSubmit={handleSubmit} className={classes.form}>
-                                <Stepper activeStep={activeStep} orientation="vertical">
-                                {steps.map((label, index) => (
-                                    <Step key={label}>
-                                    <StepLabel>{label}</StepLabel>
-                                    <StepContent>
-                                        <Typography component='span'>{getStepContent(index, [basics, ingredients, instructions, additional] )}</Typography>
-                                        <div className={classes.actionsContainer}>
-                                            <div>
-                                                <Button
-                                                    color="secondary"
-                                                    variant="contained"
-                                                    disabled={activeStep === 0}
-                                                    onClick={handleBack}
-                                                    className={classes.button}
-                                                >
-                                                    Back
-                                                </Button>
-                                                <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={handleNext}
-                                                className={classes.button}
-                                                disabled={validateForm(index)}
-                                                >
-                                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </StepContent>
-                                    </Step>
-                                ))}
-                                </Stepper>
-                                {activeStep === steps.length && (
-                                <Paper square elevation={0} className={classes.resetContainer}>
-                                    <div>
-                                        <Typography>All steps are completed. Now you can create your recipe.</Typography>
-                                        <Button color="secondary" variant="contained" disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                                            Back
-                                        </Button>
-                                        <Button className={classes.button} variant="contained" color="primary" type="submit">Create</Button>
-                                        <Button className={classes.button} variant="contained" color="secondary" onClick={handleReset}>Cancel</Button>
-                                    </div>
-                                </Paper>
-                                )}
-                        </form>
-                    </Grid>
+            {/* <Typography className={classes.title} variant="h4">New recipe</Typography> */}
+            <Typography className={classes.title} variant="body2">
+                Here you can create or update recipe by filling out the given form.
+                If some of the required fields remain empty, you will not be able to do so.
+                Required fields are marked with *.
+            </Typography>
+            <hr style={{width: '80%'}} />
+            <Grid container direction="column" spacing={3}>
+                <form onSubmit={handleSubmit} className={classes.form}>
+                    <Stepper activeStep={activeStep} orientation="vertical">
+                    {steps.map((label, index) => (
+                        <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                        <StepContent>
+                            <Typography component='span'>{getStepContent(index, [basics, ingredients, instructions, additional] )}</Typography>
+                            <div className={classes.actionsContainer}>
+                                <div>
+                                    <Button
+                                        color="secondary"
+                                        variant="contained"
+                                        disabled={activeStep === 0}
+                                        onClick={handleBack}
+                                        className={classes.button}
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleNext}
+                                    className={classes.button}
+                                    disabled={validateForm(index)}
+                                    >
+                                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                    </Button>
+                                </div>
+                            </div>
+                        </StepContent>
+                        </Step>
+                    ))}
+                    </Stepper>
+                    {activeStep === steps.length && (
+                    <Paper square elevation={0} className={classes.resetContainer}>
+                        <div>
+                            <Typography>All steps are completed. Now you can create your recipe.</Typography>
+                            <Button color="secondary" variant="contained" disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                                Back
+                            </Button>
+                            <Button className={classes.button} variant="contained" color="primary" type="submit">{recipe_action}</Button>
+                            <Button className={classes.button} variant="contained" color="secondary" onClick={handleReset}>Cancel</Button>
+                        </div>
+                    </Paper>
+                    )}
+                </form>
+            </Grid>
         </Container>
 
     );
@@ -200,6 +206,7 @@ const ReduxNewRecipe = (props) => {
 const mapStateToProps = (state) => ({
   recipe: state.recipes.recipe,
   user: state.auth.user,
+  recipe_action: state.recipes.action
 });
 
-export default connect(mapStateToProps, { createRecipe, setRecipe })(ReduxNewRecipe);
+export default connect(mapStateToProps, { createRecipe, setRecipe, updateRecipe })(ReduxNewRecipe);

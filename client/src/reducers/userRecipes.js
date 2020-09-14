@@ -1,6 +1,8 @@
 import {
     USER_RECIPES,
     USER_FAVORITES,
+    DELETE_RECIPE_SUCCESS,
+    DELETE_RECIPE_FAIL,
 } from '../actions/types';
 
 
@@ -23,6 +25,11 @@ export default function (state = initialState, action) {
           ...state,
           favorites: payload
         };
+      case DELETE_RECIPE_SUCCESS:
+        return {
+          ...state,
+          recipes: payload
+        }
       default:
         return state;
     }

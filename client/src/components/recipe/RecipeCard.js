@@ -19,8 +19,7 @@ import {
 } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { Favorite, Share, AccessAlarm, People } from '@material-ui/icons';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+
 import { updateUserFavorites } from '../../actions/userRecipes';
 
 import ChipsList from '../common/ChipsList';
@@ -38,11 +37,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     direction: 'row',
     justifyContent: 'space-between',
-  },
-  rowFlexEnd: {
-    display: 'flex',
-    direction: 'row',
-    justifyContent: 'flex-end'
   },
   cardContentTitle: {
     padding: theme.spacing(2, 2, 1),
@@ -113,14 +107,6 @@ const RecipeCard = (props) => {
 
   return (
     <Card className={classes.root}>
-      {/* <Box className={classes.rowFlexEnd}>
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Box> */}
       <CardActionArea onClick={handleOnClick}>
         <CardMedia
           className={classes.media}

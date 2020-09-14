@@ -1,6 +1,7 @@
 import {
     USER_RECIPES,
-    USER_FAVORITES
+    USER_FAVORITES,
+    DELETE_RECIPE_SUCCESS,
 } from './types';
 import api from '../utils/api';
 
@@ -19,7 +20,7 @@ export const getUserFavorites = (userID) => async(dispatch) => {
     try {
         await api.get(`/user/favorites/${userID}`)
         .then(res => {
-            dispatch({ type: USER_FAVORITES, payload: res.data })
+            dispatch({ type: USER_FAVORITES, payload: res.data });
         })
     } catch(err){
         console.log(err);
@@ -35,3 +36,7 @@ export const updateUserFavorites = (userID, favorites) => async(dispatch) => {
         console.log(err);
     }
 }
+
+// export const deleteRecipe = (recipeID) => async (dispatch) => {
+
+// }

@@ -279,6 +279,11 @@ class RecipeService {
   static async getUserRecipes(id) {
     return await Recipe.find({ "user._id" : id }).exec();
   }
+
+  static async updateRecipe(recipe) {
+    return await Recipe.findOneAndUpdate(
+      { "_id" : objectId(recipe._id) }, recipe, {new : true}).exec()
+  }
 }
 
 module.exports = RecipeService;

@@ -225,7 +225,7 @@ const Recipe = (props) => {
                 <Divider className={classes.dividerHorizontal} />
               </Grid>
               <Grid item sm={10}>
-                {recipe.analyzedInstructions[0].steps.map((step, index) => (
+                {/* {recipe.analyzedInstructions[0].steps.map((step, index) => (
                   <Grid item key={index} className={classes.step}>
                     <Typography
                       variant='h6'
@@ -239,7 +239,7 @@ const Recipe = (props) => {
                       {step.step}
                     </Typography>
                   </Grid>
-                ))}
+                ))} */}
               </Grid>
             </Grid>
           </Grid>

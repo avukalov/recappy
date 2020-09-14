@@ -2,11 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Zoom, Typography, Button } from '@material-ui/core';
+import { Grid, Zoom, Typography, Button, Box, Table, TableBody, TableContainer, TableRow, TableCell,
+        Paper, TableHead, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 import RecipeCard from '../recipe/RecipeCard';
 
 import { getUserRecipes } from '../../actions/userRecipes';
+import { setRecipe } from '../../actions/recipes';
+import { 
+  UPDATE_RECIPE,
+  RECIPE_ACTION, 
+} from '../../actions/types';
 
 const useStyles = makeStyles((theme) => ({
   loading: {
@@ -15,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: theme.spacing(7)
+  },
+  rowFlexEnd: {
+    display: 'flex',
+    direction: 'row',
+    justifyContent: 'flex-end'
   },
 }));
 
@@ -26,7 +39,8 @@ const MyRecipes = (props) => {
   const { 
     recipes,
     user,
-    getUserRecipes
+    getUserRecipes,
+    setRecipe
   } = props;
 
   useEffect(() => {
@@ -36,6 +50,12 @@ const MyRecipes = (props) => {
   useEffect(() => {
     getUserRecipes(user._id);
   }, [user._id]);
+
+  const handleEdit = (recipe) => {
+    setRecipe(RECIPE_ACTION, 'Update');
+    setRecipe(UPDATE_RECIPE, recipe);
+    props.changeComponent('New recipe')
+  }
 
   return (
     <div>
@@ -52,7 +72,32 @@ const MyRecipes = (props) => {
             recipes.map((recipe) => (
               <Zoom in={true} key={recipe._id}>
                 <Grid key={recipe._id} item xs={12} sm={6} md={4} lg={3}>
-                  <RecipeCard recipe={recipe} />
+                  <TableContainer component={Paper}>
+                    <Table size="small" >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>
+                            <Box className={classes.rowFlexEnd}>
+                              <IconButton onClick={() => handleEdit(recipe)}>
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton>
+                                <DeleteIcon />
+                              </IconButton>
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell padding="none">
+                            <RecipeCard recipe={recipe} />
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  
                 </Grid>
               </Zoom>
             ))
@@ -80,4 +125,6 @@ const mapStateToProps = (state) => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { getUserRecipes })(MyRecipes);
+export default connect(mapStateToProps, 
+  { getUserRecipes,
+    setRecipe })(MyRecipes);

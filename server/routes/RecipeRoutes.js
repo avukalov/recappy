@@ -32,4 +32,7 @@ router.route('/image/:id').get(RecipeController.getFile);
 // @route  api/recipe/userRecipes
 router.route('/userRecipes/:id').get(RecipeController.userRecipes);
 
+// @route api/recipe/update
+router.route('/update').put(RecipeController.updateRecipe);
+
 module.exports = router;

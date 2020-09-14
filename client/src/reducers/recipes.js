@@ -1,10 +1,8 @@
 import {
     CREATE_RECIPE_SUCCESS,
     CREATE_RECIPE_FAIL,
-    UPDATE_RECIPE_SUCCESS,
+    UPDATE_RECIPE,
     UPDATE_RECIPE_FAIL,
-    DELETE_RECIPE_SUCCESS,
-    DELETE_RECIPE_FAIL,
     RESET_RECIPE,
     TITLE,
     SERVINGS,
@@ -23,11 +21,13 @@ import {
     DISH_TYPES,
     DIETS,
     ADD_REMOVE_INSTRUCTIONS,
+    RECIPE_ACTION,
 } from '../actions/types';
 
 import logo from '../shared/images/recipe-default.png';
 
 const initialState = {
+    action: 'Create',
     recipeImageURL: logo,
     recipe: {
         title: '',
@@ -55,7 +55,6 @@ const initialState = {
 
 export default function (state = initialState, action) {
     const { type, payload } = action;
-    
   
     switch (type) {
       case CREATE_RECIPE_SUCCESS:
@@ -65,14 +64,26 @@ export default function (state = initialState, action) {
         };
       case CREATE_RECIPE_FAIL:
           return initialState;
-      // case UPDATE_RECIPE_SUCCESS:
-      //   return {
-      //     recipe: payload
-      //   };
-      // case DELETE_RECIPE_SUCCESS:
-      //   return {
-      //     recipe: initialState.recipe
-      //   }
+      case UPDATE_RECIPE:
+        return {
+          ...state,
+          recipeImageURL: payload.image,
+          recipe: {
+            ...payload,
+            veryHealthy: payload.veryHealthy.toString(),
+          }
+        };
+      case UPDATE_RECIPE_FAIL:
+        return initialState;
+
+
+      case RECIPE_ACTION:
+        return {
+          ...state,
+          action: payload
+        }  
+
+
       case TITLE:
         return {
           ...state,
