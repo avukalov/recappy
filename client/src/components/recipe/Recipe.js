@@ -150,7 +150,7 @@ const Recipe = (props) => {
                 />
               </Grid>
             </Grid>
-            <Grid item container justify='flex-start'>
+            {/* <Grid item container justify='flex-start'>
               <Grid item container sm={4} justify='flex-end'>
                 <ul>
                   {recipe.extendedIngredients.map((ingredient, index) => (
@@ -165,7 +165,7 @@ const Recipe = (props) => {
                   ))}
                 </ul>
               </Grid>
-            </Grid>
+            </Grid> */}
 
             <Grid item container sm={6} justify='center'>
               <Grid item sm={12}>
@@ -179,7 +179,7 @@ const Recipe = (props) => {
                 item
                 container
                 justify='center'
-                style={{ paddingRight: 150 }}
+                //style={{ paddingRight: 150 }}
               >
                 <Grid item>
                   <ul>

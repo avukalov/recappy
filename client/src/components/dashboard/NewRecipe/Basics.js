@@ -32,8 +32,6 @@ const useStyles = makeStyles(theme => ({
         justifyItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        objectFit: 'cover',
-        overflow: 'hidden',
         '&:hover': {
         background: 'rgb(0, 0, 0)',
         transition: '.4s ease',
@@ -54,6 +52,8 @@ const useStyles = makeStyles(theme => ({
     imageDiv: {
         height: "100%",
         width: "100%",
+        objectFit: 'cover',
+        overflow: 'hidden',
         zIndex: 1,
         '&:hover': {
             transition: '.4s ease',
@@ -89,10 +89,6 @@ const Basics = (props) => {
         recipe_image_url
      } = props;
 
-    const handleOnChange = (type, value) => {
-        setRecipe(type, value);
-      };
-
     // image
     const uploadedImage = useRef(null);
     const imageUploader = useRef(null);
@@ -102,17 +98,17 @@ const Basics = (props) => {
         e.preventDefault();
         const [file] = e.target.files;
         if (file) {
-        handleOnChange(IMAGE, URL.createObjectURL(file))
+            const reader = new FileReader();
+            const { current } = uploadedImage;
+            current.file = file;
+            reader.onload = e => {
+                current.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            setRecipe(IMAGE_URL, URL.createObjectURL(file));
+            setRecipe(IMAGE, file);
         }
-        // const reader = new FileReader();
-        // const { current } = uploadedImage;
-        // current.file = file;
-        // reader.onload = e => {
-        //     current.src = e.target.result;
-        // };
-        // reader.readAsDataURL(file);
-        // handleOnChange(IMAGE, file);
-        // }
     };
 
     return (
@@ -130,7 +126,7 @@ const Basics = (props) => {
                         label="Recipe name"
                         value={recipe.title}
                         required
-                        onChange={(e) => handleOnChange(TITLE, e.target.value)}
+                        onChange={(e) => setRecipe(TITLE, e.target.value)}
                         multiline
                         placeholder="e.g. Pasta with chicken and mushrooms"
                         variant="outlined"
@@ -151,7 +147,7 @@ const Basics = (props) => {
                         required
                         value={recipe.readyInMinutes}
                         placeholder="e.g. 45"
-                        onChange={(e) => handleOnChange(READY_IN_MINUTES, e.target.value)}
+                        onChange={(e) => setRecipe(READY_IN_MINUTES, e.target.value)}
                         size="small"
                         variant="outlined"
                         type="number"
@@ -169,18 +165,18 @@ const Basics = (props) => {
                         <Button id="subOne"
                                 color="secondary"
                                 disabled={recipe.servings === 1 ? true : false}
-                                onClick={() => handleOnChange(SERVINGS, -1)}>-</Button>
+                                onClick={() => setRecipe(SERVINGS, -1)}>-</Button>
                         <Button color="secondary">{recipe.servings}</Button>
                         <Button id="addOne"
                                 color="secondary"
-                                onClick={() => handleOnChange(SERVINGS, 1)}>+</Button>
+                                onClick={() => setRecipe(SERVINGS, 1)}>+</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
                     <Typography>Healthy</Typography>
                 </Grid>
                 <Grid item xs={12} sm={12} md={9} xl={9}>
-                    <RadioGroup row value={recipe.veryHealthy} onChange={(e) => handleOnChange(VERY_HEALTHY, e.target.value)}>
+                    <RadioGroup row value={recipe.veryHealthy} onChange={(e) => setRecipe(VERY_HEALTHY, e.target.value)}>
                         <FormControlLabel name="veryHealthy" value="true" control={<Radio size="small"/>} label="True" />
                         <FormControlLabel name="veryHealthy" value="false" control={<Radio size="small"  />} label="False" />
                     </RadioGroup>
@@ -202,7 +198,7 @@ const Basics = (props) => {
                 <div className={classes.imageDiv}
                     onClick={() => imageUploader.current.click()}>
                     <img
-                        src={recipe_image_url}
+                        src={recipe_image_url ? recipe_image_url : require('../../../shared/images/recipe-default.png')}
                         alt="recipe_logo"
                         ref={uploadedImage}
                         style={{width: "100%", height: "100%"}}

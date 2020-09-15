@@ -1,5 +1,4 @@
 const UserService = require('../services/UserService');
-const RecipeService = require('../services/RecipeService');
 
 class UserController {
   static async getUserByToken(req, res) {

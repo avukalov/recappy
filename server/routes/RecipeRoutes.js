@@ -23,16 +23,16 @@ router.route('/filters').get(RecipeController.getFiltersByQuery);
 // @route  api/recipe/create
 router.route('/create').post(RecipeController.createRecipe);
 
-// @route  api/recipe/image
-router.route('/image').post(RecipeController.saveImage);
-
 // @route  api/recipe/image/:id
 router.route('/image/:id').get(RecipeController.getFile);
 
 // @route  api/recipe/userRecipes
 router.route('/userRecipes/:id').get(RecipeController.userRecipes);
 
-// @route api/recipe/update
+// @route  api/recipe/update
 router.route('/update').put(RecipeController.updateRecipe);
+
+// @route  api/recipe/delete
+router.route('/delete').delete(RecipeController.removeFiles);
 
 module.exports = router;

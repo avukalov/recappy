@@ -270,19 +270,34 @@ class RecipeService {
     return await File.findOne({ _id }).exec();
   }
 
-//   static async findFilesByOwnerId(id) {
-//     let _id = objectId(id); // check this
-//     return await File.find({ "metadata.owner": _id}).exec();
-//   }
+  // static async findFilesByOwnerId(id) {
+  //   return await File.find({ "metadata.owner": id}).exec();
+  // }
 
-  // Get user recipes
+  static async removeRecipeFiles(id) {
+    return await File.deleteMany({ "metadata.owner": objectId(id) }).exec();
+  }
+
+  static async updateImage(fileID, recipeID) {
+    return await File.update({ "_id" : objectId(fileID)},
+    {
+      $set: {
+        "metadata.owner" : objectId(recipeID)
+      }
+    }).exec()
+  }
+
   static async getUserRecipes(id) {
     return await Recipe.find({ "user._id" : id }).exec();
   }
 
   static async updateRecipe(recipe) {
     return await Recipe.findOneAndUpdate(
-      { "_id" : objectId(recipe._id) }, recipe, {new : true}).exec()
+      { "_id" : objectId(recipe._id) }, recipe, { new : true }).exec()
+  }
+
+  static async deleteRecipe(recipeID) {
+    return await Recipe.deleteOne({ "_id" : recipeID }).exec();
   }
 }
 

@@ -26,7 +26,7 @@ const Additional = (props) => {
     return (
         <Grid container direction="column" spacing={2}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Typography>Note: Press enter after entering value.</Typography>
+                <Typography>Note: Press enter after entering each value.</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                 <Autocomplete
@@ -43,10 +43,11 @@ const Additional = (props) => {
                             variant="outlined"
                             label="Cuisines"
                             placeholder="e.g. Italian"
+                            // helperText="press enter after entering value"
                             fullWidth={true}
-                            InputLabelProps={{
-                                shrink: true,
-                        }}
+                        //     InputLabelProps={{
+                        //         shrink: true,
+                        // }}
                         />
                     )}
                 />
@@ -66,10 +67,11 @@ const Additional = (props) => {
                             placeholder="e.g. Lunch"
                             variant="outlined"
                             label="Dish Types"
+                            // helperText="press enter after entering value"
                             fullWidth={true}
-                            InputLabelProps={{
-                                shrink: true,
-                        }}
+                        //     InputLabelProps={{
+                        //         shrink: true,
+                        // }}
                         />
                     )}
                 />
@@ -89,10 +91,11 @@ const Additional = (props) => {
                             variant="outlined"
                             placeholder="e.g. Gluten free"
                             label="Diets"
+                            // helperText="press enter after entering value"
                             fullWidth={true}
-                            InputLabelProps={{
-                                shrink: true,
-                        }}
+                        //     InputLabelProps={{
+                        //         shrink: true,
+                        // }}
                         />
                     )}
                 />
@@ -112,11 +115,12 @@ const Additional = (props) => {
                             {...params}
                             variant="outlined"
                             label="Occasions"
+                            // helperText="press enter after entering value"
                             placeholder="e.g. Summer"
                             fullWidth={true}
-                            InputLabelProps={{
-                                shrink: true,
-                        }}
+                        //     InputLabelProps={{
+                        //         shrink: true,
+                        // }}
                         />
                     )}
                 />

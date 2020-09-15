@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
 
-import { Container, Grid, Typography, Button, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core';
+import { Container, Grid, Typography, Button, Stepper, Step, StepLabel, StepContent, Paper, Zoom } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Basics from './Basics';
@@ -56,9 +55,8 @@ function getStepContent(step, list_of_content) {
     return(list_of_content[step]);
 }
 
-const ReduxNewRecipe = (props) => {
+const NewRecipe = (props) => {
     const classes = useStyles();
-    const history = useHistory();
 
     const {
         recipe,
@@ -74,16 +72,19 @@ const ReduxNewRecipe = (props) => {
 
         recipe.user = { _id, firstName, lastName, email };
 
-        // const recipe_image = new FormData() 
-        // recipe_image.append('file', recipe.image);
-        // let recipe_id
+        const full_recipe = new FormData() 
+        full_recipe.append('file', recipe.image);
+        full_recipe.append('recipe_values', JSON.stringify(recipe));
 
         if (recipe_action === 'Create'){
-            await createRecipe(recipe);
+            await createRecipe(full_recipe);
         } else {
-            await updateRecipe(recipe);
+            await updateRecipe(full_recipe);
         }
-        history.push(`/recipe/${recipe._id}`);
+        
+        props.changeComponent('My recipes');
+        handleReset();
+
     }
 
 
@@ -142,6 +143,7 @@ const ReduxNewRecipe = (props) => {
     const additional = <Additional />
                 
     return (
+        <Zoom in={true}>
         <Container className={classes.root}>
             {/* <Typography className={classes.title} variant="h4">New recipe</Typography> */}
             <Typography className={classes.title} variant="body2">
@@ -198,7 +200,9 @@ const ReduxNewRecipe = (props) => {
                     )}
                 </form>
             </Grid>
+
         </Container>
+        </Zoom>
 
     );
 }
@@ -209,4 +213,4 @@ const mapStateToProps = (state) => ({
   recipe_action: state.recipes.action
 });
 
-export default connect(mapStateToProps, { createRecipe, setRecipe, updateRecipe })(ReduxNewRecipe);
+export default connect(mapStateToProps, { createRecipe, setRecipe, updateRecipe })(NewRecipe);

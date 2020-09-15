@@ -35,7 +35,8 @@ class UserService {
       { $set: {
                 favorites: recipes
               }
-      })
+      },
+      {new: true})
     }
 
 }

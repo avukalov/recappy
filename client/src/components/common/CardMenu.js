@@ -146,11 +146,6 @@ const CardMenu = ({ user, logout }) => {
                     alignItems='center'
                     justify='center'
                   >
-                      <Avatar
-                        alt='gravatar'
-                        src={user.gravatarUrl}
-                        className={classes.avatar}
-                      />
                     <Avatar
                       alt="gravatar"
                       src={user.gravatarUrl}

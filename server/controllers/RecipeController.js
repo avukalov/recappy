@@ -4,7 +4,6 @@ const RedisService = require('../services/RedisService');
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
 
-
 const Readable = require("stream").Readable;
 
 let bucket;
@@ -119,46 +118,53 @@ class RecipeController {
   }
 
   static async createRecipe(req, res) {
-    let recipe_values = req.body;
-
-    try {
-        const recipe = await RecipeService.saveRecipe(recipe_values);
-        return res.status(200).json(recipe);
-    } catch(error) {
-        console.log(error);
-        return res.status(500).send('Server error');
-    }
-  }
-
-  static async saveImage(req, res) {
-
+    var recipe_values = JSON.parse(req.body.recipe_values);
     let file = req.files.file;
-    let contentType = file.mimetype;
-    let filename = file.name;
-    let data = file.data;
-    let metadata = "recipe image";
+  
+    var image_url;
 
-    const readableStream = new Readable();
-    readableStream.push(data);
-    readableStream.push(null);
+    if (file) {
+      let contentType = file.mimetype;
+      let filename = file.name;
+      let data = file.data;
+      let metadata = { owner: recipe_values._id };
 
-    let uploadStream = bucket.openUploadStream(filename, { contentType, metadata });
-    readableStream.pipe(uploadStream);
+      const readableStream = new Readable();
+      readableStream.push(data);
+      readableStream.push(null);
 
-    let message;
-        uploadStream.on("error", () => {
-            message = "Error when uploading";
-            res.status(500).json({ message });
-        });
+      let uploadStream = bucket.openUploadStream(filename, { contentType, metadata });
+      readableStream.pipe(uploadStream);
 
-    uploadStream.on("finish", async () => {
+      let message;
+      uploadStream.on("error", () => {
+          message = "Error when uploading";
+          res.status(500).json({ message });
+      });
+
+      uploadStream.on("finish", async () => {
         try {
             let fileInfo = await RecipeService.findFileById(uploadStream.id);
-            res.status(201).json(fileInfo);
+            image_url = `http://localhost:3001/api/recipe/image/${fileInfo._id}`;
+            recipe_values.image = image_url;
+            const recipe = await RecipeService.saveRecipe(recipe_values);
+            const changed = await RecipeService.updateImage(fileInfo._id, recipe._id);
+            console.log(changed)
+            res.status(200).send(recipe);
         } catch(err) {
-            res.status(500).json(err);
+            console.log(err);
+            res.status(500).send('Server error');
         }
-    });
+    })
+    } else {
+      try {
+        const recipe = await RecipeService.saveRecipe(recipe_values);
+        res.status(200).send(recipe);
+    } catch(err) {
+        console.log(err);
+        res.status(500).send('Server error');
+    }
+    }
   }
 
 //   static async getAllFiles(req, res) {
@@ -191,8 +197,6 @@ class RecipeController {
     downloadStream.pipe(res);
   }
 
-  // user recipes
-
   static async userRecipes(req, res) {
     let id = req.params.id;
     let recipes
@@ -207,24 +211,76 @@ class RecipeController {
       let message = "No recipes";
       return res.status(404).json({ message });
     } else {
-      res.status(201).json(recipes);
+      return res.status(201).json(recipes);
     }
   }
 
   static async updateRecipe(req, res) {
-    let recipe = req.body;
-    let updatedRecipe
+    var recipe_values = JSON.parse(req.body.recipe_values);
+    let file = req.files.file;
 
-    console.log(recipe)
-    try {
-      updatedRecipe = await RecipeService.updateRecipe(recipe);
-      console.log(updatedRecipe);
-      return res.json(updatedRecipe);
+    var image_url;
+
+    if (file) {
+      let contentType = file.mimetype;
+      let filename = file.name;
+      let data = file.data;
+      let metadata = { active : true, owner: recipe_values._id};
+  
+      const readableStream = new Readable();
+      readableStream.push(data);
+      readableStream.push(null);
+
+      let uploadStream = bucket.openUploadStream(filename, { contentType, metadata });
+      readableStream.pipe(uploadStream);
+
+      let message;
+      uploadStream.on("error", () => {
+          message = "Error when uploading";
+          res.status(500).json({ message });
+      });
+
+      uploadStream.on("finish", async () => {
+        try {
+            let fileInfo = await RecipeService.findFileById(uploadStream.id);
+            image_url = `http://localhost:3001/api/recipe/image/${fileInfo._id}`;
+            recipe_values.image = image_url;
+            const recipe = await RecipeService.updateRecipe(recipe_values);
+            const changed = await RecipeService.updateImage(fileInfo._id, recipe._id);
+            res.status(200).send(recipe);
+        } catch(err) {
+            console.log(err);
+            res.status(500).send('Server error');
+        }
+    })
+    } else {
+      try {
+        const recipe = await RecipeService.updateRecipe(recipe_values);
+        res.status(200).send(recipe);
     } catch(err) {
-      return res.status(500).json(err);
-    }
+        console.log(err);
+        res.status(500).send('Server error');
+    }}
   }
 
+  static async removeFiles(req, res) {
+    let recipe_id = req.body.recipeID;
+    let user_id = req.body.userID;
+
+    try {
+      await RecipeService.removeRecipeFiles(recipe_id);
+    } catch(err) {
+      console.log(err);
+    }
+
+    try {
+      await RecipeService.deleteRecipe(recipe_id);
+      const newUserRecipes = await RecipeService.getUserRecipes(user_id);
+      return res.json(newUserRecipes).status(200);
+    } catch(err) {
+        return res.status(500).json('Server error');
+    }
+  }
 }
 
 module.exports = RecipeController;

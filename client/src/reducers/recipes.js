@@ -1,8 +1,6 @@
 import {
-    CREATE_RECIPE_SUCCESS,
-    CREATE_RECIPE_FAIL,
+    CREATE_RECIPE,
     UPDATE_RECIPE,
-    UPDATE_RECIPE_FAIL,
     RESET_RECIPE,
     TITLE,
     SERVINGS,
@@ -24,17 +22,15 @@ import {
     RECIPE_ACTION,
 } from '../actions/types';
 
-import logo from '../shared/images/recipe-default.png';
-
 const initialState = {
     action: 'Create',
-    recipeImageURL: logo,
+    recipeImageURL: '',
     recipe: {
         title: '',
         servings: 1,
         readyInMinutes: 0,
         veryHealthy: "false",
-        image: null,
+        image: '',
         extendedIngredients: [
             { name: '', amount: '', unit: '' }
         ],
@@ -57,13 +53,11 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
   
     switch (type) {
-      case CREATE_RECIPE_SUCCESS:
+      case CREATE_RECIPE:
         return {
           ...state,
           recipe: initialState.recipe
         };
-      case CREATE_RECIPE_FAIL:
-          return initialState;
       case UPDATE_RECIPE:
         return {
           ...state,
@@ -73,8 +67,6 @@ export default function (state = initialState, action) {
             veryHealthy: payload.veryHealthy.toString(),
           }
         };
-      case UPDATE_RECIPE_FAIL:
-        return initialState;
 
 
       case RECIPE_ACTION:

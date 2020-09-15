@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 
 import NewRecipe from './NewRecipe/NewRecipe';
-import MyRecipes from './MyRecipes';
+import UserRecipes from './UserRecipes';
 import Favorites from './Favorites';
 import Sidebar from './Sidebar';
 
@@ -68,7 +68,7 @@ const accountList = ['Settings']
 
 const Dashboard = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -97,9 +97,9 @@ const Dashboard = (props) => {
   const handleComponents = () => {
     switch(currentComp){
       case 'New recipe':
-        return <NewRecipe />;
+        return <NewRecipe changeComponent={handleComponentFromChild}/>;
       case 'My recipes':
-        return user && <MyRecipes changeComponent={handleComponentFromChild} />;
+        return user && <UserRecipes changeComponent={handleComponentFromChild} />;
       case 'Favorites':
         return  <Favorites />;
       // default:
