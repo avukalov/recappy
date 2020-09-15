@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import {
-  Drawer,
-  IconButton,
-} from '@material-ui/core';
+import { Drawer, IconButton } from '@material-ui/core';
 
 import NewRecipe from './NewRecipe/NewRecipe';
 import UserRecipes from './UserRecipes';
@@ -64,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const profileList = ['New recipe', 'My recipes', 'Favorites'];
-const accountList = ['Settings']
+const accountList = ['Settings'];
 
 const Dashboard = (props) => {
   const classes = useStyles();
@@ -75,41 +72,40 @@ const Dashboard = (props) => {
   };
 
   // added
-  const {
-    user,
-    setRecipe
-  } = props;
-  
+  const { user, setRecipe } = props;
+
   const [currentComp, setComp] = useState('My recipes');
 
   const handleIcon = useCallback(
-    currentComp => {
+    (currentComp) => {
       setComp(currentComp);
-      setRecipe(RESET_RECIPE)
+      setRecipe(RESET_RECIPE);
     },
     [currentComp]
   );
 
   const handleComponentFromChild = (comp) => {
     setComp(comp);
-  }
+  };
 
   const handleComponents = () => {
-    switch(currentComp){
+    switch (currentComp) {
       case 'New recipe':
-        return <NewRecipe changeComponent={handleComponentFromChild}/>;
+        return <NewRecipe changeComponent={handleComponentFromChild} />;
       case 'My recipes':
-        return user && <UserRecipes changeComponent={handleComponentFromChild} />;
+        return (
+          user && <UserRecipes changeComponent={handleComponentFromChild} />
+        );
       case 'Favorites':
-        return  <Favorites />;
+        return <Favorites />;
       // default:
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
       <Drawer
-        variant="permanent"
+        variant='permanent'
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
@@ -126,18 +122,20 @@ const Dashboard = (props) => {
             {open ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </div>
-        <Sidebar handleIcon={handleIcon} accountList={accountList} profileList={profileList}/>
+        <Sidebar
+          handleIcon={handleIcon}
+          accountList={accountList}
+          profileList={profileList}
+          currentComp={currentComp}
+        />
       </Drawer>
-      <main className={classes.content}>
-        {handleComponents()}
-      </main>
+      <main className={classes.content}>{handleComponents()}</main>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { setRecipe })(Dashboard);
-

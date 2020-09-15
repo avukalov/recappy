@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
 
 import { connect } from 'react-redux';
 import { setQuery, setPager } from '../../actions/search/query';
@@ -121,7 +121,7 @@ const Filterbar = (props) => {
                 getOptionSelected={(option) =>
                   query.includedIngredients.includes(option)
                 }
-                options={[]}
+                options={filters.ingredients ? filters.ingredients : []}
                 ListboxComponent={ListboxComponent}
                 ListboxProps={{ className: classes.listbox }}
                 ChipProps={{ size: 'small', className: classes.chip }}
@@ -137,14 +137,6 @@ const Filterbar = (props) => {
                     color='secondary'
                     variant='outlined'
                     label='Included Ingredients'
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <Add />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 )}
               />
@@ -158,7 +150,7 @@ const Filterbar = (props) => {
                 getOptionSelected={(option) =>
                   query.excludedIngredients.includes(option)
                 }
-                options={[]}
+                options={filters.ingredients ? filters.ingredients : []}
                 ListboxComponent={ListboxComponent}
                 ListboxProps={{ className: classes.listbox }}
                 ChipProps={{ size: 'small', className: classes.chip }}
@@ -174,14 +166,6 @@ const Filterbar = (props) => {
                     color='secondary'
                     variant='outlined'
                     label='Excluded Ingredients'
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <Remove />
-                        </InputAdornment>
-                      ),
-                    }}
                   />
                 )}
               />
