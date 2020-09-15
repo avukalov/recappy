@@ -31,6 +31,6 @@ app.use('/api', routes);
 //   res.sendFile(path.join(__dirname, '..//client/build/index.html'));
 // });
 
-const PORT = 3001;
+const PORT = 3002;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
