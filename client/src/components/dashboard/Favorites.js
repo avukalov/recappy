@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: '100px'
   },
 }));
 
@@ -19,7 +20,7 @@ const Favorites = (props) => {
   const classes = useStyles();
 
   const {
-    recipes
+    recipes : { favorites, emptyFavorites }
   } = props;
 
   const [loading, setLoading] = useState(true);
@@ -40,8 +41,8 @@ const Favorites = (props) => {
         className={classes.root}
       >
         {!loading ? (
-          Object.keys(recipes).length !== 0 ? (
-            Object.values(recipes).map((recipe) => (
+          !emptyFavorites ? (
+            Object.values(favorites).map((recipe) => (
               (recipe.favorite === true ?
               <Zoom in={true} key={recipe.recipe._id}>
                 <Grid key={recipe.recipe._id} item xs={12} sm={6} md={4} lg={3}>
@@ -51,7 +52,7 @@ const Favorites = (props) => {
               : null ) ))
           ) : (
             <div className={classes.loading}>
-              <Typography variant="h5">You don't have favorite recipes.</Typography>
+              <Typography variant="h5">You don't have favorite recipes :( </Typography>
             </div>
           )
         ) : (
@@ -67,7 +68,7 @@ const Favorites = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  recipes: state.userRecipes.favorites
+  recipes: state.userRecipes
 });
 
 export default connect(mapStateToProps, { })(Favorites);

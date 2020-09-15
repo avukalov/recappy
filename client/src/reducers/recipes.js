@@ -123,7 +123,7 @@ export default function (state = initialState, action) {
           }
       case INGREDIENTS:
         let ingredients = [...state.recipe.ingredients];
-        ingredients[payload.id] = payload.value;
+        ingredients[payload.index] = payload.value;
         return {
           ...state,
           recipe: {
@@ -141,7 +141,7 @@ export default function (state = initialState, action) {
           };
       case INGREDIENT_AMOUNT:
           let extendedIngredientsAmount = [...state.recipe.extendedIngredients];
-          extendedIngredientsAmount[payload.id].amount = payload.value ? parseInt(payload.value) : '';
+          extendedIngredientsAmount[payload.index].amount = payload.value ? parseInt(payload.value) : '';
           return {
             ...state,
             recipe: {
@@ -151,7 +151,7 @@ export default function (state = initialState, action) {
         };
       case INGREDIENT_UNIT:
           let extendedIngredientsUnit = [...state.recipe.extendedIngredients];
-          extendedIngredientsUnit[payload.id].unit = payload.value;
+          extendedIngredientsUnit[payload.index].unit = payload.value;
           return {
             ...state,
             recipe: {
@@ -161,7 +161,7 @@ export default function (state = initialState, action) {
         };
       case INGREDIENT_NAME:
           let extendedIngredientsName = [...state.recipe.extendedIngredients];
-          extendedIngredientsName[payload.id].name = payload.value;
+          extendedIngredientsName[payload.index].name = payload.value;
           return {
             ...state,
             recipe: {
@@ -171,7 +171,7 @@ export default function (state = initialState, action) {
         };
       case INSTRUCTIONS:
           let instructions = [...state.recipe.instructions];
-          instructions[payload.id] = payload.value;
+          instructions[payload.index] = payload.value;
           return {
             ...state,
             recipe: {
@@ -220,7 +220,15 @@ export default function (state = initialState, action) {
           }
         };
       case RESET_RECIPE:
-        return initialState;
+        return {
+          action: 'Create',
+          recipeImageURL: '',
+          recipe: {
+            ...initialState.recipe,
+            extendedIngredients: [{ name: '', amount: '', unit: '' }],
+            instructions: [''],
+          }
+        };
     
       default:
         return state;

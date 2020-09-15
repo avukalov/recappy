@@ -22,10 +22,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
     },
     image: {
-        width: 240,
-        height: 210,
-        minWidth: 180,
-        minHeight: 150,
+        width: 270,
+        height: 240,
+        minWidth: 190,
+        minHeight: 170,
         border: '1px solid black',
         display: 'flex',
         alignItems: 'center',
@@ -97,7 +97,7 @@ const Basics = (props) => {
     const handleImageUpload = e => {
         e.preventDefault();
         const [file] = e.target.files;
-        if (file) {
+        if (file && file.size < 2*1024*1024) {
             const reader = new FileReader();
             const { current } = uploadedImage;
             current.file = file;
@@ -105,20 +105,21 @@ const Basics = (props) => {
                 current.src = e.target.result;
             };
             reader.readAsDataURL(file);
-
             setRecipe(IMAGE_URL, URL.createObjectURL(file));
             setRecipe(IMAGE, file);
+        } else {
+            console.log("image too big")
         }
     };
 
     return (
         <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
             <Grid container direction="row" spacing={2}>
-                <Grid item xs={12} sm={12} md={2} lg={2} xl={2} className={classes.basics_text_align}>
+                <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.basics_text_align}>
                     <Typography>Title</Typography>
                 </Grid>
-                <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+                <Grid item xs={10} sm={10} md={8} lg={8} xl={8}>
                     <TextField
                         id="recipe_name"
                         name="title"
@@ -126,20 +127,20 @@ const Basics = (props) => {
                         label="Recipe name"
                         value={recipe.title}
                         required
+                        fullWidth
                         onChange={(e) => setRecipe(TITLE, e.target.value)}
-                        multiline
                         placeholder="e.g. Pasta with chicken and mushrooms"
                         variant="outlined"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                        // InputLabelProps={{
+                        //     shrink: true,
+                        // }}
                     />
                 </Grid>
                
-                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
+                <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.basics_text_align}>
                     <Typography>Prep time</Typography>
                 </Grid>
-                <Grid item xs={12} sm={12} md={9} xl={9}>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                     <TextField 
                         id="minutes"
                         name="readyInMinutes"
@@ -151,16 +152,16 @@ const Basics = (props) => {
                         size="small"
                         variant="outlined"
                         type="number"
-                        InputProps={{ min: 0, pattern: "[1-9][0-9]*" }} // pattern not working
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                        inputProps={{ min: 0, pattern: "\d*"}}
+                        // InputLabelProps={{
+                        //     shrink: true,
+                        // }}
                     />
                 </Grid>
-                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
+                <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.basics_text_align}>
                     <Typography>Servings</Typography>
                 </Grid>
-                <Grid item xs={12} sm={12} md={9} xl={9}>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                     <ButtonGroup size="small" aria-label="small outlined button group">
                         <Button id="subOne"
                                 color="secondary"
@@ -172,10 +173,10 @@ const Basics = (props) => {
                                 onClick={() => setRecipe(SERVINGS, 1)}>+</Button>
                     </ButtonGroup>
                 </Grid>
-                <Grid item xs={12} sm={12} md={2} xl={2} className={classes.basics_text_align}>
+                <Grid item xs={12} sm={12} md={3} lg={3} xl={3} className={classes.basics_text_align}>
                     <Typography>Healthy</Typography>
                 </Grid>
-                <Grid item xs={12} sm={12} md={9} xl={9}>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                     <RadioGroup row value={recipe.veryHealthy} onChange={(e) => setRecipe(VERY_HEALTHY, e.target.value)}>
                         <FormControlLabel name="veryHealthy" value="true" control={<Radio size="small"/>} label="True" />
                         <FormControlLabel name="veryHealthy" value="false" control={<Radio size="small"  />} label="False" />
@@ -183,7 +184,7 @@ const Basics = (props) => {
                 </Grid>
             </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
             <div className={classes.image}>
                 <Typography variant="h5" className={classes.changeImage}>Click to change image</Typography>
                 <input

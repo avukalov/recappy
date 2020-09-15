@@ -26,9 +26,9 @@ const Additional = (props) => {
     return (
         <Grid container direction="column" spacing={2}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Typography>Note: Press enter after entering each value.</Typography>
+                <Typography variant="body2">Note: Press enter after entering each value.</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
                 <Autocomplete
                     multiple
                     freeSolo
@@ -52,7 +52,7 @@ const Additional = (props) => {
                     )}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
                 <Autocomplete
                     multiple
                     freeSolo
@@ -76,7 +76,7 @@ const Additional = (props) => {
                     )}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
                 <Autocomplete
                     multiple
                     freeSolo
@@ -100,7 +100,7 @@ const Additional = (props) => {
                     )}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
                 <Autocomplete
                     multiple
                     freeSolo

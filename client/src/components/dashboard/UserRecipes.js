@@ -48,10 +48,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(7)
   },
   rowFlexEnd: {
+    padding: 7,
     display: 'flex',
     direction: 'row',
     justifyContent: 'flex-end'
   },
+    button: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        transition: 'all 0.25s ease-in-out 0s',
+        '&:hover': {
+            transform: 'scale(1.12)'
+      }
+    }
 }));
 
 const UserRecipes = (props) => {
@@ -64,18 +73,18 @@ const UserRecipes = (props) => {
       { title: 'Image', field: 'image', render: rowData => 
         <img src={rowData.image ? rowData.image : require('../../shared/images/recipe-default.png')} 
         style={{width: 120, height: 110}}/>,
-        },
-      { title: 'Title', field: 'title', cellStyle: { width: 120, maxWidth: 120 }, headerStyle: { width: 120, maxWidth: 120 } },
-      { title: 'Servings', field: 'servings', type: 'numeric', cellStyle: { width: 40, maxWidth: 40 }, headerStyle: { width: 40, maxWidth: 40 } },
-      { title: 'Preparation time', field: 'readyInMinutes', type: 'numeric', cellStyle: { width: 80, maxWidth: 80 }, headerStyle: { width: 80, maxWidth: 80 } },
-      { title: 'Healthy', field: 'veryHealthy', type: 'boolean', cellStyle: { width: 60, maxWidth: 60 }, headerStyle: { width: 60, maxWidth: 60 } },
+        cellStyle: { minWidth: 100,textAlign: "center" }, headerStyle: { minWidth: 100}},
+      { title: 'Title', field: 'title', cellStyle: { minWidth: 100, textAlign: "center" }, headerStyle: { minWidth: 100} },
+      { title: 'Servings', field: 'servings', type: 'numeric', cellStyle: { minWidth: 100, textAlign: "center" }, headerStyle: { minWidth: 100} },
+      { title: 'Preparation time', field: 'readyInMinutes', type: 'numeric', cellStyle: { minWidth: 100, textAlign: "center" }, headerStyle: { minWidth: 100} },
+      { title: 'Healthy', field: 'veryHealthy', type: 'boolean', cellStyle: { minWidth: 100, textAlign: "center" }, headerStyle: { minWidth: 100} },
     ]
 
   const tableIcons = {
       Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
       Check: forwardRef((props, ref) => <Check {...props} style={{color: "4caf50"}} ref={ref} />),
-      Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-      Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+      Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} color="error" />),
+      Delete: forwardRef((props, ref) => <DeleteIcon {...props} ref={ref} />),
       DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
       Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
       Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
@@ -100,12 +109,14 @@ const UserRecipes = (props) => {
   } = props;
 
   useEffect(() => {
+    getUserRecipes(_id);
+  }, [_id]);
+
+  useEffect(() => {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    getUserRecipes(_id);
-  }, [_id]);
+
 
   const handleEdit = (recipe) => {
     setRecipe(RECIPE_ACTION, 'Update');
@@ -119,18 +130,20 @@ const UserRecipes = (props) => {
         container
         spacing={2}
         direction="row"
-        justify="flex-start"
-        alignItems="flex-start"
+        justify="center"
+        alignItems="center"
         className={classes.root}
       >
         {!loading ? (
            recipes.length !== 0 ? (
               <Zoom in={true} >
+                <Grid item xs={12}>
                 <MaterialTable
                   icons={tableIcons}
-                  title="My recipes"
+                  // title="My recipes"
                   columns={columns}
                   data={recipes}
+                  
                   editable={{
                     // onRowAdd: (newData) =>
                     //   new Promise((resolve) => {
@@ -144,7 +157,14 @@ const UserRecipes = (props) => {
                     //     }, 600);
                     //   }),
                     // onRowUpdate: () => handleEdit(),
-                    // onRowDelete: () => console.log('delete')
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve) => {
+                          setTimeout(() => {
+                            resolve();
+                            deleteRecipe(_id, oldData._id);
+                            return recipes;
+                        });
+                      }, 600)
                   }}
                   actions={[
                     {
@@ -157,22 +177,30 @@ const UserRecipes = (props) => {
                       tooltip: 'Edit recipe',
                       onClick: (event, rowData) => handleEdit(rowData)
                     },
-                    rowData => ({
-                      icon: DeleteIcon,
-                      tooltip: 'Delete recipe',
-                      onClick: (event, rowData) => {//window.confirm("You want to delete " + rowData.title); 
-                      deleteRecipe(_id, rowData._id)},
-                    }),
+                    // rowData => ({
+                    //   icon: DeleteIcon,
+                    //   tooltip: 'Delete recipe',
+                    //   onClick: (event, rowData) => {//window.confirm("You want to delete " + rowData.title); 
+                    //   deleteRecipe(_id, rowData._id)},
+                    // }),
                   ]}
                   options={{
+                    emptyRowsWhenPaging: false,
                     actionsColumnIndex: -1,
                     search: true,
-                    rowStyle: { fontSize: 20},
-                    headerStyle: {textAlign:'center', fontSize: 22}
+                    rowStyle: { fontSize: 18},
+                    headerStyle: {textAlign:'center', fontSize: 20},
+                    tableLayout: 'auto',
+                    //maxBodyHeight: '70vh',
+                    showTitle: false,
+                    pageSize: 4,
+                    pageSizeOptions: []
                       
                   }}
+                  localization={{ body: { editRow: { deleteText: 'Are you sure you want to delete this recipe?' } } }}
                 />
-                </Zoom>
+                </Grid>
+              </Zoom>
               )
                // <Grid key={recipe._id} item xs={12} sm={6} md={4} lg={3}>
                   // <TableContainer component={Paper}>
@@ -207,7 +235,12 @@ const UserRecipes = (props) => {
               <div className={classes.loading}>
                 <Typography style={{padding: 7}} variant="h5">You haven't created any recipes yet.</Typography>
                 <Typography style={{padding: 7}} variant="h5">Let's change that!</Typography>
-                <Button style={{padding: 7}} variant="contained" color="secondary" onClick={() => props.changeComponent('New recipe')}>Create recipe</Button>
+                <Button className={classes.button}
+                        variant="contained" 
+                        color="secondary" 
+                        onClick={() => props.changeComponent('New recipe')}>
+                          Create recipe
+                  </Button>
               </div>
             </Zoom>
           )

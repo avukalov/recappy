@@ -2,12 +2,14 @@ import {
     USER_RECIPES,
     USER_FAVORITES,
     DELETE_RECIPE,
+    IS_EMPTY_FAVORITES,
 } from '../actions/types';
 
 
 const initialState = {
   recipes: [],
-  favorites: {}
+  favorites: {},
+  emptyFavorites: true
 };
 
 export default function (state = initialState, action) {
@@ -29,8 +31,15 @@ export default function (state = initialState, action) {
           ...state,
           recipes: payload
         }
+      case IS_EMPTY_FAVORITES:
+        return {
+          ...state,
+          emptyFavorites: payload
+        }
       default:
         return state;
     }
-  }
+}
+
+
   

@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Grid, Typography, TextField, IconButton } from '@material-ui/core';
+import { Grid, Typography, TextField, IconButton, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import { setRecipe } from '../../../actions/recipes';
@@ -14,7 +14,6 @@ import {
 
 
 const useStyles = makeStyles(theme => ({
-    
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
@@ -57,28 +56,28 @@ const Instructions = (props) => {
                 <Typography variant="body2">Note: Please write detailed instructions.</Typography>
             </Grid>
             <Grid item xs={12}>
-                {recipe.instructions.map((field, id) => {
+                {recipe.instructions.map((field, index) => {
                     return (
-                        <Grid container key={`instruction-${id}`} spacing={3}>
-                        <Grid item xs={11} sm={11} md={11} xl={11}>
+                        <Grid container key={`instruction-${index}`} spacing={3}>
+                        <Grid item xs={9} sm={9} md={9} xl={9}>
                             <TextField
-                                id={id.toString()}
+                                id={index.toString()}
                                 name="instructions"
-                                label={"Step " + (id+1).toString()}
-                                value={recipe.instructions[id]}
+                                label={"Step " + (index+1).toString()}
+                                value={recipe.instructions[index]}
                                 required
-                                placeholder={id === 0 ? "e.g. Cook pasta in water." : ''}
-                                onChange={(e) => handleOnChange(INSTRUCTIONS, {id, value: e.target.value})}
+                                placeholder={index === 0 ? "e.g. Cook pasta in water." : ''}
+                                onChange={(e) => handleOnChange(INSTRUCTIONS, {index, value: e.target.value})}
                                 variant="outlined"
                                 multiline
                                 fullWidth={true}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
+                                    // InputLabelProps={{
+                                    //     shrink: true,
+                                    // }}
                             />
                         </Grid>
                         <Grid item xs={1} sm={1} md={1} xl={1}>
-                            <IconButton onClick={() => RemoveInputField(id, ADD_REMOVE_INSTRUCTIONS)}>
+                            <IconButton onClick={() => RemoveInputField(index, ADD_REMOVE_INSTRUCTIONS)}>
                                 <HighlightOffIcon />
                             </IconButton>
                         </Grid>
@@ -86,10 +85,14 @@ const Instructions = (props) => {
                 )})}
             </Grid>
             <Grid item xs={12} className={classes.addIngredient}>
-                <IconButton onClick={() => AddInputField(ADD_REMOVE_INSTRUCTIONS)}>
-                    <AddCircleIcon />
-                </IconButton>
-                <Typography>Add instruction</Typography>
+                <Button
+                    variant="text"
+                    //color="secondary"
+                    startIcon={<AddCircleOutlineIcon />}
+                    onClick={() => AddInputField(ADD_REMOVE_INSTRUCTIONS)}
+                >
+                    Add instruction
+                </Button>
             </Grid>
         </Grid>
     )

@@ -19,6 +19,10 @@ const useStyles = makeStyles(theme => ({
     button: {
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(1),
+        transition: 'all 0.25s ease-in-out 0s',
+        '&:hover': {
+            transform: 'scale(1.12)'
+        }
     },
     actionsContainer: {
         marginBottom: theme.spacing(1),
@@ -82,9 +86,8 @@ const NewRecipe = (props) => {
             await updateRecipe(full_recipe);
         }
         
-        props.changeComponent('My recipes');
         handleReset();
-
+        props.changeComponent('My recipes');
     }
 
 
@@ -147,8 +150,7 @@ const NewRecipe = (props) => {
         <Container className={classes.root}>
             {/* <Typography className={classes.title} variant="h4">New recipe</Typography> */}
             <Typography className={classes.title} variant="body2">
-                Here you can create or update recipe by filling out the given form.
-                If some of the required fields remain empty, you will not be able to do so.
+                To create or update recipe, you must fill out all the required fields.
                 Required fields are marked with *.
             </Typography>
             <hr style={{width: '80%'}} />
@@ -189,7 +191,7 @@ const NewRecipe = (props) => {
                     {activeStep === steps.length && (
                     <Paper square elevation={0} className={classes.resetContainer}>
                         <div>
-                            <Typography>All steps are completed. Now you can create your recipe.</Typography>
+                            <Typography>You completed all the steps!</Typography>
                             <Button color="secondary" variant="contained" disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                                 Back
                             </Button>
@@ -198,6 +200,7 @@ const NewRecipe = (props) => {
                         </div>
                     </Paper>
                     )}
+                    {activeStep === steps.length ? null : <Button className={classes.button} variant="contained" color="secondary" onClick={handleReset}>Cancel</Button>}
                 </form>
             </Grid>
 
