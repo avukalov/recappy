@@ -10,6 +10,7 @@ import { Container, Grid, Typography, Divider, Box } from '@material-ui/core';
 import { AccessAlarm, People, AccountBalanceWallet } from '@material-ui/icons';
 
 import ChipsList from '../common/ChipsList';
+import Instructions from './Instructions';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -49,9 +50,6 @@ const useStyles = makeStyles((theme) => ({
   },
   summary: {
     fontSize: 20,
-  },
-  step: {
-    margin: theme.spacing(4, 0),
   },
 }));
 
@@ -108,22 +106,24 @@ const Recipe = (props) => {
                   {recipe.readyInMinutes} mins
                 </Typography>
               </Box>
-              <Box
-                display='flex'
-                justifyContent='flex-start'
-                className={classes.boxDetails}
-              >
-                <AccountBalanceWallet
-                  fontSize='large'
-                  className={classes.icon}
-                />
-                <Typography variant='h6'>
-                  {Math.round(
-                    ((recipe.pricePerServing * recipe.servings) / 100) * 100
-                  ) / 100}{' '}
-                  $
-                </Typography>
-              </Box>
+              {recipe.pricePerServing && (
+                <Box
+                  display='flex'
+                  justifyContent='flex-start'
+                  className={classes.boxDetails}
+                >
+                  <AccountBalanceWallet
+                    fontSize='large'
+                    className={classes.icon}
+                  />
+                  <Typography variant='h6'>
+                    {Math.round(
+                      ((recipe.pricePerServing * recipe.servings) / 100) * 100
+                    ) / 100}{' '}
+                    $
+                  </Typography>
+                </Box>
+              )}
             </Grid>
 
             <Grid item>
@@ -135,37 +135,23 @@ const Recipe = (props) => {
                 dairyFree={recipe.dairyFree}
               />
             </Grid>
-            <Grid item container justify='center'>
-              <Grid item sm={10}>
-                <Grid item sm={12}>
-                  <Typography variant='h4' align='center'>
-                    Summary
-                  </Typography>
-                  <Divider className={classes.dividerHorizontal} />
+            {recipe.summary && (
+              <Grid item container justify='center'>
+                <Grid item sm={10}>
+                  <Grid item sm={12}>
+                    <Typography variant='h4' align='center'>
+                      Summary
+                    </Typography>
+                    <Divider className={classes.dividerHorizontal} />
+                  </Grid>
+                  <Typography
+                    align='center'
+                    className={classes.summary}
+                    dangerouslySetInnerHTML={{ __html: recipe.summary }}
+                  />
                 </Grid>
-                <Typography
-                  align='center'
-                  className={classes.summary}
-                  dangerouslySetInnerHTML={{ __html: recipe.summary }}
-                />
               </Grid>
-            </Grid>
-            {/* <Grid item container justify='flex-start'>
-              <Grid item container sm={4} justify='flex-end'>
-                <ul>
-                  {recipe.extendedIngredients.map((ingredient, index) => (
-                    <li key={index} className={classes.listLeft}>
-                      <Typography
-                        variant='body1'
-                        style={{ textTransform: 'capitalize' }}
-                      >
-                        {ingredient.name}
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
-              </Grid>
-            </Grid> */}
+            )}
 
             <Grid item container sm={6} justify='center'>
               <Grid item sm={12}>
@@ -175,13 +161,8 @@ const Recipe = (props) => {
                 <Divider className={classes.dividerHorizontal} />
               </Grid>
 
-              <Grid
-                item
-                container
-                justify='center'
-                //style={{ paddingRight: 150 }}
-              >
-                <Grid item>
+              <Grid item container justify='center'>
+                <Grid item sm={5}>
                   <ul>
                     {recipe.extendedIngredients.map((ingredient, index) => (
                       <li key={index} className={classes.listLeft}>
@@ -200,7 +181,7 @@ const Recipe = (props) => {
                   orientation='vertical'
                   className={classes.dividerVertival}
                 />
-                <Grid item>
+                <Grid item sm={5}>
                   <ul>
                     {recipe.extendedIngredients.map((ingredient, index) => (
                       <li key={index} className={classes.listRight}>
@@ -225,21 +206,16 @@ const Recipe = (props) => {
                 <Divider className={classes.dividerHorizontal} />
               </Grid>
               <Grid item sm={10}>
-                {/* {recipe.analyzedInstructions[0].steps.map((step, index) => (
-                  <Grid item key={index} className={classes.step}>
-                    <Typography
-                      variant='h6'
-                      align='center'
-                      color='primary'
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      {index + 1}. Step
-                    </Typography>
-                    <Typography variant='h6' align='center'>
-                      {step.step}
-                    </Typography>
-                  </Grid>
-                ))} */}
+                <Instructions
+                  analyzedInstructions={
+                    recipe.analyzedInstructions
+                      ? recipe.analyzedInstructions
+                      : undefined
+                  }
+                  instructions={
+                    recipe.instructions ? recipe.instructions : undefined
+                  }
+                />
               </Grid>
             </Grid>
           </Grid>

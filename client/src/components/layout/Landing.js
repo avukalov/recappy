@@ -76,11 +76,11 @@ const Landing = () => {
               <SearchNav landing className={classes.searchBox} />
             </Box>
             <Box className={classes.quoteBox}>
-              <Typography variant='h4' align='center' className={classes.quote}>
+              <Typography variant='h5' align='center' className={classes.quote}>
                 "One cannot think well, love well, sleep well, if one has not
                 dined well"
               </Typography>
-              <Typography variant='h5' align='center' className={classes.quote}>
+              <Typography variant='h6' align='center' className={classes.quote}>
                 ~ Virginia Woolf ~
               </Typography>
             </Box>

@@ -45,8 +45,6 @@ const initialState = {
   dishTypes: [],
   diets: [],
   occasions: [],
-  // pricePerServing: { min: 0, max: 1000 },
-  // readyInMinutes: { min: 0, max: 1000 },
 };
 
 // CSS Styles
@@ -88,12 +86,6 @@ const Filterbar = (props) => {
     if (!_.isUndefined(prevQuery) && _.isEqual(query, prevQuery)) return;
     getFiltersFromResults(query);
   }, [query, prevQuery, getFiltersFromResults]);
-
-  useEffect(() => {
-    return () => {
-      handleOnChange(RESET_SEARCH_QUERY);
-    };
-  }, []);
 
   const handleOnChange = (type, value) => {
     setQuery(type, value);

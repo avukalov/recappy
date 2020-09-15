@@ -11,8 +11,6 @@ import { Grid, Zoom } from '@material-ui/core';
 import RecipeCard from '../recipe/RecipeCard';
 import OptionsToolbar from '../filter/OptionsToolbar';
 
-// import usePrev from '../../hooks/usePrev';
-
 const useStyles = makeStyles((theme) => ({
   loading: {
     width: '100%',
@@ -32,9 +30,6 @@ const Content = (props) => {
     getSearchQueryResults,
   } = props;
 
-  // const prevPager = usePrev(pager);
-  // const prevQuery = usePrev(query);
-
   useEffect(() => {
     if (init) {
       getSearchQueryResults(query, pager);
@@ -43,11 +38,8 @@ const Content = (props) => {
     if (submit) {
       getSearchQueryResults(query, pager);
     }
-
     window.scrollTo(0, 0);
-    // if (_.isEqual(query, prevQuery) && _.isEqual(pager, prevPager)) return;
   }, [submit, getSearchQueryResults]);
-  // }, [query, pager, prevPager, prevQuery, getSearchQueryResults]);
 
   return (
     <div>
