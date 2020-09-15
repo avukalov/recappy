@@ -82,3 +82,6 @@ export const DELETE_RECIPE = 'DELETE_RECIPE';
 export const USER_RECIPES = 'USER_RECIPES';
 export const USER_FAVORITES = 'USER_FAVORITES';
 export const IS_EMPTY_FAVORITES = 'IS_EMPTY_FAVORITES';
+
+// Dashboard
+export const CURRENT_COMPONENT = 'CURRENT_COMPONENT';

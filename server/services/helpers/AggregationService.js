@@ -7,7 +7,6 @@ class AggregationService {
       dishTypes,
       diets,
       occasions,
-      veryHealthy,
     } = query;
 
     let andAggregate = { $and: [] };
@@ -18,16 +17,11 @@ class AggregationService {
       !cuisines &&
       !dishTypes &&
       !diets &&
-      !occasions &&
-      veryHealthy === 'false'
+      !occasions
     ) {
       return {};
     }
-    if (veryHealthy === 'true') {
-      andAggregate.$and.push({
-        veryHealthy: true,
-      });
-    }
+
     if (occasions) {
       andAggregate.$and.push({
         occasions: { $all: occasions.map((occasion) => occasion) },

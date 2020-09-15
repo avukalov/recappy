@@ -33,9 +33,11 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 import { getUserRecipes } from '../../actions/userRecipes';
 import { setRecipe, deleteRecipe } from '../../actions/recipes';
+import { setDashboardComponent } from '../../actions/dashboard';
 import { 
   UPDATE_RECIPE,
-  RECIPE_ACTION, 
+  RECIPE_ACTION,
+  CURRENT_COMPONENT,
 } from '../../actions/types';
 
 
@@ -105,7 +107,8 @@ const UserRecipes = (props) => {
     user : { _id },
     getUserRecipes,
     setRecipe,
-    deleteRecipe
+    deleteRecipe,
+    setDashboardComponent,
   } = props;
 
   useEffect(() => {
@@ -121,7 +124,7 @@ const UserRecipes = (props) => {
   const handleEdit = (recipe) => {
     setRecipe(RECIPE_ACTION, 'Update');
     setRecipe(UPDATE_RECIPE, recipe);
-    props.changeComponent('New recipe')
+    setDashboardComponent(CURRENT_COMPONENT, 'New recipe');
   }
 
   return (
@@ -163,8 +166,8 @@ const UserRecipes = (props) => {
                             resolve();
                             deleteRecipe(_id, oldData._id);
                             return recipes;
-                        });
-                      }, 600)
+                        }, 700);
+                      })
                   }}
                   actions={[
                     {
@@ -238,7 +241,7 @@ const UserRecipes = (props) => {
                 <Button className={classes.button}
                         variant="contained" 
                         color="secondary" 
-                        onClick={() => props.changeComponent('New recipe')}>
+                        onClick={() => setDashboardComponent(CURRENT_COMPONENT, 'New recipe')}>
                           Create recipe
                   </Button>
               </div>
@@ -264,4 +267,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, 
   { getUserRecipes,
     setRecipe,
-    deleteRecipe })(UserRecipes);
+    deleteRecipe,
+    setDashboardComponent })(UserRecipes);

@@ -1,0 +1,44 @@
+{
+  "title": "Recappy",
+  "description": "Web application for search, store and managing recipes",
+  "authors": "Iva Prbisalić / Antonio Vukalović",
+  "main-components": {
+    "search": {
+      "accessibility-level": "Guest",
+      "description": "Search component",
+      "features": {
+        "text-search": "Text search implemented with MongoDb full text search engine",
+        "filters": {
+          "description": "Provides various types of filters",
+          "filter-by": [
+            "Ingredients",
+            "Dish types",
+            "Diets",
+            "Cuisines",
+            "Occasions"
+          ]
+        },
+        "conditionality-filtering": {
+          "description": "Provides filtering by conditionality",
+          "c-filters": ["Included ingredients", "Excluded ingredients"]
+        }
+      }
+    },
+    "dashboard": {
+      "accessibility-level": "User",
+      "desctiption": "Provides interface for recipes management",
+      "features": {
+        "recipes-list": "One can see all its recipes",
+        "create": "One can create new recipe",
+        "update": "One can update existing recipe",
+        "delete": "One can delete existing recipe",
+        "favorites": "One can add/remove recipe to/from favorites",
+        "history": ""
+      }
+    }
+  },
+  "accessibility-levels": {
+    "guest": "Guest is one who is not user",
+    "user": "User is one who is registered"
+  }
+}

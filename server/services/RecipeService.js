@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Recipe = mongoose.model('Recipe');
-const File = mongoose.model("File");
+const File = mongoose.model('File');
 
 const objectId = mongoose.Types.ObjectId;
 
@@ -115,7 +115,7 @@ class RecipeService {
       {
         $group: {
           _id: null,
-          // ingredients: { $addToSet: '$extendedIngredients.name' },
+          ingredients: { $addToSet: '$extendedIngredients.name' },
           dishTypes: { $addToSet: '$dishTypes' },
           diets: { $addToSet: '$diets' },
           occasions: { $addToSet: '$occasions' },
@@ -126,13 +126,13 @@ class RecipeService {
         $project: {
           _id: 0,
           filters: {
-            // ingredients: {
-            //   $reduce: {
-            //     input: '$ingredients',
-            //     initialValue: [],
-            //     in: { $setUnion: ['$$value', '$$this'] },
-            //   },
-            // },
+            ingredients: {
+              $reduce: {
+                input: '$ingredients',
+                initialValue: [],
+                in: { $setUnion: ['$$value', '$$this'] },
+              },
+            },
             dishTypes: {
               $reduce: {
                 input: '$dishTypes',
@@ -259,7 +259,7 @@ class RecipeService {
   // Save recipe in database
 
   static async saveRecipe(recipe_values) {
-    let recipe = new Recipe(recipe_values)
+    let recipe = new Recipe(recipe_values);
     await recipe.save();
 
     return recipe;
@@ -275,29 +275,34 @@ class RecipeService {
   // }
 
   static async removeRecipeFiles(id) {
-    return await File.deleteMany({ "metadata.owner": objectId(id) }).exec();
+    return await File.deleteMany({ 'metadata.owner': objectId(id) }).exec();
   }
 
   static async updateImage(fileID, recipeID) {
-    return await File.update({ "_id" : objectId(fileID)},
-    {
-      $set: {
-        "metadata.owner" : objectId(recipeID)
+    return await File.update(
+      { _id: objectId(fileID) },
+      {
+        $set: {
+          'metadata.owner': objectId(recipeID),
+        },
       }
-    }).exec()
+    ).exec();
   }
 
   static async getUserRecipes(id) {
-    return await Recipe.find({ "user._id" : id }).exec();
+    return await Recipe.find({ 'user._id': id }).exec();
   }
 
   static async updateRecipe(recipe) {
     return await Recipe.findOneAndUpdate(
-      { "_id" : objectId(recipe._id) }, recipe, { new : true }).exec()
+      { _id: objectId(recipe._id) },
+      recipe,
+      { new: true }
+    ).exec();
   }
 
   static async deleteRecipe(recipeID) {
-    return await Recipe.deleteOne({ "_id" : recipeID }).exec();
+    return await Recipe.deleteOne({ _id: recipeID }).exec();
   }
 }
 

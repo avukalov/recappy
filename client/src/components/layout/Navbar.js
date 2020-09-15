@@ -173,6 +173,11 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
                 Recappy
               </Typography>
             </Link>
+            <Link to='/search' className={classes.link}>
+              <Button color='inherit' variant='text'>
+                Search
+              </Button>
+            </Link>
 
             {!(pathname === '/') && <Searchbar />}
 

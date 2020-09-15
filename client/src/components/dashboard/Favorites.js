@@ -6,6 +6,12 @@ import { Grid, Zoom, Typography } from '@material-ui/core';
 
 import RecipeCard from '../recipe/RecipeCard';
 
+import {
+  IS_EMPTY_FAVORITES,
+} from '../../actions/types';
+
+import { handleFavorites } from '../../actions/userRecipes';
+
 const useStyles = makeStyles((theme) => ({
   loading: {
     width: '100%',
@@ -20,14 +26,25 @@ const Favorites = (props) => {
   const classes = useStyles();
 
   const {
-    recipes : { favorites, emptyFavorites }
+    recipes : { favorites, emptyFavorites },
+    handleFavorites
   } = props;
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(false);
-  }, []);
+  }, [])
+
+  useEffect(() => {
+    let is_empty = true
+    for (let key in favorites) {
+        if (favorites[key].favorite === true ){
+            is_empty = false
+        }
+      }
+      handleFavorites(IS_EMPTY_FAVORITES, is_empty ? true : false )
+  },[favorites]);
 
 
   return (
@@ -71,4 +88,4 @@ const mapStateToProps = (state) => ({
   recipes: state.userRecipes
 });
 
-export default connect(mapStateToProps, { })(Favorites);
+export default connect(mapStateToProps, { handleFavorites })(Favorites);

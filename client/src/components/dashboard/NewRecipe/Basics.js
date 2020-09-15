@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 
 import { Grid, Typography, TextField, Button, ButtonGroup,
@@ -97,20 +97,22 @@ const Basics = (props) => {
     const handleImageUpload = e => {
         e.preventDefault();
         const [file] = e.target.files;
-        if (file && file.size < 2*1024*1024) {
-            const reader = new FileReader();
-            const { current } = uploadedImage;
-            current.file = file;
-            reader.onload = e => {
-                current.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            setRecipe(IMAGE_URL, URL.createObjectURL(file));
-            setRecipe(IMAGE, file);
-        } else {
-            console.log("image too big")
-        }
-    };
+        if (file) {
+            if (file.size < 2*1024*1024) {
+                const reader = new FileReader();
+                const { current } = uploadedImage;
+                current.file = file;
+                reader.onload = e => {
+                    current.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                setRecipe(IMAGE_URL, URL.createObjectURL(file));
+                setRecipe(IMAGE, file);
+                
+            } else {
+                window.alert('Image too big');
+            }
+    }};
 
     return (
         <Grid container spacing={2}>

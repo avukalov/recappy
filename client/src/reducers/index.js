@@ -8,6 +8,7 @@ import search from './search/search';
 import filters from './search/filters';
 import recipes from './recipes';
 import userRecipes from './userRecipes';
+import dashboard from './dashboard';
 
 export default combineReducers({
   alert,
@@ -17,5 +18,6 @@ export default combineReducers({
   search,
   filters,
   recipes,
-  userRecipes
+  userRecipes,
+  dashboard
 });

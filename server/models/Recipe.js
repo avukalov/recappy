@@ -84,8 +84,8 @@ const RecipeSchema = new mongoose.Schema(
     ],
     ingredients: [String],
     ingredientsOriginalName: [String],
-    
-    user: { _id: String, firstName: String, lastName: String, email: String }
+
+    user: { _id: String, firstName: String, lastName: String, email: String },
   },
   {
     collection: 'recipes',
@@ -101,6 +101,7 @@ RecipeSchema.index(
     dishTypes: 'text',
     diets: 'text',
     occasions: 'text',
+    'user.email': 'text',
   },
   {
     name: 'Full text search',

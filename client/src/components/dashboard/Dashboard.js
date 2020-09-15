@@ -1,19 +1,19 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import {
-  Drawer,
-  IconButton,
-} from '@material-ui/core';
+import { Drawer, IconButton } from '@material-ui/core';
 
 import NewRecipe from './NewRecipe/NewRecipe';
 import UserRecipes from './UserRecipes';
 import Favorites from './Favorites';
 import Sidebar from './Sidebar';
+import Settings from './Settings';
 
 import clsx from 'clsx';
+import { CURRENT_COMPONENT } from '../../actions/types';
+import { setDashboardComponent } from '../../actions/dashboard';
 
 const drawerWidth = 240;
 
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const profileList = ['New recipe', 'My recipes', 'Favorites'];
-const accountList = ['Settings']
+const accountList = ['Settings'];
 
 const Dashboard = (props) => {
   const classes = useStyles();
@@ -73,40 +73,41 @@ const Dashboard = (props) => {
   };
 
   // added
-  const {
+
+  useEffect(() => {
+    return () => {
+      setDashboardComponent(CURRENT_COMPONENT, 'My recipes')
+    }
+  }, [])
+
+  const { 
     user,
-    setRecipe
+    dashboard: { current_component },
+    setDashboardComponent
   } = props;
-  
-  const [currentComp, setComp] = useState('My recipes');
 
-  const handleIcon = useCallback(
-    currentComp => {
-      setComp(currentComp);
-    },
-    [currentComp]
-  );
-
-  const handleComponentFromChild = (comp) => {
-    setComp(comp);
-  }
 
   const handleComponents = () => {
-    switch(currentComp){
+    switch (current_component) {
       case 'New recipe':
-        return <NewRecipe changeComponent={handleComponentFromChild}/>;
+        return <NewRecipe />;
       case 'My recipes':
-        return user && <UserRecipes changeComponent={handleComponentFromChild} />;
+        return (
+          user && <UserRecipes />
+        );
       case 'Favorites':
-        return  <Favorites />;
-      // default:
+        return <Favorites />;
+      case 'Settings':
+        return <Settings />;
+      default:
+        return ( user && <UserRecipes />);
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
       <Drawer
-        variant="permanent"
+        variant='permanent'
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
@@ -123,18 +124,22 @@ const Dashboard = (props) => {
             {open ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </div>
-        <Sidebar handleIcon={handleIcon} accountList={accountList} profileList={profileList}/>
+        <Sidebar
+          handleIcon={(currComp) => setDashboardComponent(CURRENT_COMPONENT, currComp)}
+          accountList={accountList}
+          profileList={profileList}
+          currentComp={current_component}
+        />
       </Drawer>
-      <main className={classes.content}>
-        {handleComponents()}
-      </main>
+      <main className={classes.content}>{handleComponents()}</main>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user
+  user: state.auth.user,
+  dashboard: state.dashboard
 });
 
-export default connect(mapStateToProps, { })(Dashboard);
+export default connect(mapStateToProps, { setDashboardComponent})(Dashboard);
 

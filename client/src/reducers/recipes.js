@@ -28,7 +28,7 @@ const initialState = {
     recipe: {
         title: '',
         servings: 1,
-        readyInMinutes: 0,
+        readyInMinutes: '',
         veryHealthy: "false",
         image: '',
         extendedIngredients: [

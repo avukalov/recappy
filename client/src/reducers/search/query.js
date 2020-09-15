@@ -20,7 +20,7 @@ const initialState = {
   dishTypes: [],
   diets: [],
   occasions: [],
-  veryHealthy: false,
+  // veryHealthy: false,
   // pricePerServing: { min: 0, max: 1000 },
   // readyInMinutes: { min: 0, max: 1000 },
 };
@@ -63,11 +63,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         occasions: payload,
-      };
-    case HEALTHY:
-      return {
-        ...state,
-        veryHealthy: payload,
       };
     case RESET_SEARCH_QUERY:
       return (state = initialState);

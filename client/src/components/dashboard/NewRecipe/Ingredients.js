@@ -85,9 +85,11 @@ const Ingredients = (props) => {
     }
     
     const RemoveInputField = (i, type) => {
-        let recipe_values = recipe.extendedIngredients;
-        recipe_values.splice(i, 1);
-        handleOnChange(type, recipe_values)
+        if(i > 0){
+            let recipe_values = recipe.extendedIngredients;
+            recipe_values.splice(i, 1);
+            handleOnChange(type, recipe_values)
+        }
     }
 
     return (

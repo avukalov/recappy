@@ -11,8 +11,10 @@ import Additional from './Additional';
 
 import {
     RESET_RECIPE,
+    CURRENT_COMPONENT,
 } from '../../../actions/types';
 import { createRecipe, setRecipe, updateRecipe } from '../../../actions/recipes';
+import { setDashboardComponent } from '../../../actions/dashboard';
 
 
 const useStyles = makeStyles(theme => ({
@@ -68,7 +70,8 @@ const NewRecipe = (props) => {
         createRecipe,
         updateRecipe,
         user : { _id, firstName, lastName, email },
-        recipe_action
+        recipe_action,
+        setDashboardComponent,
     } = props;
 
     const handleSubmit = async (e) => {
@@ -87,7 +90,7 @@ const NewRecipe = (props) => {
         }
         
         handleReset();
-        props.changeComponent('My recipes');
+        setDashboardComponent(CURRENT_COMPONENT, 'My recipes');
     }
 
 
@@ -109,34 +112,33 @@ const NewRecipe = (props) => {
       };
 
 
-    // form validation -> in child components
-
+    // form validation
     const validateForm = (i) => {
-    //     switch(i) {
-    //         case 0:
-    //             if (recipe.title === '' ||
-    //                 recipe.readyInMinutes <= 0 ||
-    //                 recipe.readyInMinutes === '')
-    //                     return true;
-    //             else return false;
-    //         case 1:
-    //             if (recipe.extendedIngredients[0].name === '' ||
-    //                 recipe.extendedIngredients[0].amount <= 0 ||
-    //                 recipe.extendedIngredients[0].amount === '' ||
-    //                 recipe.extendedIngredients[0].unit === '')
-    //                     return true;
-    //             else return false;
-    //         case 2:
-    //             if (recipe.instructions[0] === '')
-    //                     return true;
-    //             else return false;
-    //         case 3:
-    //             if (recipe.dishTypes === [])
-    //                     return true;
-    //             else return false;
-    //         default:
-    //             return true;
-    //     }
+        switch(i) {
+            case 0:
+                if (recipe.title === '' ||
+                    recipe.readyInMinutes <= 0 ||
+                    recipe.readyInMinutes === '')
+                        return true;
+                else return false;
+            case 1:
+                if (recipe.extendedIngredients[0].name === '' ||
+                    recipe.extendedIngredients[0].amount <= 0 ||
+                    recipe.extendedIngredients[0].amount === '' ||
+                    recipe.extendedIngredients[0].unit === '')
+                        return true;
+                else return false;
+            case 2:
+                if (recipe.instructions[0] === '')
+                        return true;
+                else return false;
+            case 3:
+                if (recipe.dishTypes === [])
+                        return true;
+                else return false;
+            default:
+                return true;
+        }
     }
 
     // stepper content
@@ -213,7 +215,12 @@ const NewRecipe = (props) => {
 const mapStateToProps = (state) => ({
   recipe: state.recipes.recipe,
   user: state.auth.user,
-  recipe_action: state.recipes.action
+  recipe_action: state.recipes.action,
 });
 
-export default connect(mapStateToProps, { createRecipe, setRecipe, updateRecipe })(NewRecipe);
+export default connect(
+    mapStateToProps, 
+    { createRecipe, 
+        setRecipe, 
+        updateRecipe,
+        setDashboardComponent })(NewRecipe);
