@@ -6,10 +6,10 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { setRecipe } from '../../../actions/recipes';
 import {
-    OCCASIONS,
-    CUISINES,
-    DISH_TYPES,
-    DIETS
+    RECIPE_OCCASIONS,
+    RECIPE_CUISINES,
+    RECIPE_DISH_TYPES,
+    RECIPE_DIETS
 } from '../../../actions/types';
 
 const Additional = (props) => {
@@ -35,7 +35,7 @@ const Additional = (props) => {
                     value={recipe.cuisines}
                     size="small"
                     options={[]}
-                    onChange={(e, value) => handleOnChange(CUISINES, value)}
+                    onChange={(e, value) => handleOnChange(RECIPE_CUISINES, value)}
                     ChipProps={{color: 'secondary', variant: 'outlined'}}
                     renderInput={params => (
                         <TextField
@@ -59,7 +59,7 @@ const Additional = (props) => {
                     value={recipe.dishTypes}
                     size="small"
                     options={[]}
-                    onChange={(e, value) => handleOnChange(DISH_TYPES, value)}
+                    onChange={(e, value) => handleOnChange(RECIPE_DISH_TYPES, value)}
                     ChipProps={{color: 'secondary', variant: 'outlined'}}
                     renderInput={params => (
                         <TextField
@@ -83,7 +83,7 @@ const Additional = (props) => {
                     value={recipe.diets}
                     size="small"
                     options={[]}
-                    onChange={(e, value) => handleOnChange(DIETS, value)}
+                    onChange={(e, value) => handleOnChange(RECIPE_DIETS, value)}
                     ChipProps={{color: 'secondary', variant: 'outlined'}}
                     renderInput={params => (
                         <TextField
@@ -106,7 +106,7 @@ const Additional = (props) => {
                     freeSolo
                     value={recipe.occasions}
                     size="small"
-                    onChange={(e, value) => handleOnChange(OCCASIONS, value)}
+                    onChange={(e, value) => handleOnChange(RECIPE_OCCASIONS, value)}
                     options={[]}
                     placeholder="e.g. Summer"
                     ChipProps={{color: 'secondary', variant: 'outlined'}}

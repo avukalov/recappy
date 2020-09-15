@@ -172,12 +172,12 @@ const UserRecipes = (props) => {
                   actions={[
                     {
                       icon: VisibilitySharpIcon,
-                      tooltip: 'Preview recipe',
+                      tooltip: 'Preview',
                       onClick: (event, rowData) => history.push(`/recipe/${rowData._id}`)
                     },
                     {
                       icon: Edit,
-                      tooltip: 'Edit recipe',
+                      tooltip: 'Edit',
                       onClick: (event, rowData) => handleEdit(rowData)
                     },
                     // rowData => ({

@@ -14,10 +14,10 @@ import {
     EXTENDED_INGREDIENTS,
     INGREDIENTS,
     INSTRUCTIONS,
-    OCCASIONS,
-    CUISINES,
-    DISH_TYPES,
-    DIETS,
+    RECIPE_OCCASIONS,
+    RECIPE_CUISINES,
+    RECIPE_DISH_TYPES,
+    RECIPE_DIETS,
     ADD_REMOVE_INSTRUCTIONS,
     RECIPE_ACTION,
 } from '../actions/types';
@@ -187,7 +187,7 @@ export default function (state = initialState, action) {
                 instructions: payload
             }
           }
-      case OCCASIONS:
+      case RECIPE_OCCASIONS:
         return {
           ...state,
           recipe: {
@@ -195,7 +195,7 @@ export default function (state = initialState, action) {
               occasions: payload
           }
         };
-      case DISH_TYPES:
+      case RECIPE_DISH_TYPES:
           return {
             ...state,
             recipe: {
@@ -203,7 +203,7 @@ export default function (state = initialState, action) {
                 dishTypes: payload
           }
         };
-      case CUISINES:
+      case RECIPE_CUISINES:
           return {
             ...state,
             recipe: {
@@ -211,7 +211,7 @@ export default function (state = initialState, action) {
                 cuisines: payload
           }
         };
-      case DIETS:
+      case RECIPE_DIETS:
         return {
           ...state,
           recipe: {

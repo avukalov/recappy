@@ -69,7 +69,10 @@ export const ADD_INGREDIENTS = 'ADD_INGREDIENT';
 export const REMOVE_INGREDIENTS = 'REMOVE_INGREDIENT';
 export const INSTRUCTIONS = 'INSTRUCTIONS';
 export const ADD_REMOVE_INSTRUCTIONS = 'ADD_REMOVE_INSTRUCTIONS';
-// dishTypes, cuisines, occasions, diets already defined
+export const RECIPE_CUISINES = 'RECIPE_CUISINES';
+export const RECIPE_DISH_TYPES = 'RECIPE_DISH_TYPES';
+export const RECIPE_DIETS = 'RECIPE_DIETS';
+export const RECIPE_OCCASIONS = 'RECIPE_OCCASIONS';
 
 export const RESET_RECIPE = 'RESET_RECIPE';
 
