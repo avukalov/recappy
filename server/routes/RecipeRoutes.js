@@ -11,9 +11,8 @@ router.route('/carousel').get(RecipeController.carousel);
 router.route('/search').get(RecipeController.getRecipesFromQuery);
 
 // @route  api/recipe/search/:id
-router
-  .route('/search/:id')
-  .get(CacheMiddleware.getRecipeFromCache, RecipeController.getRecipeFromDb);
+router.route('/search/:id').get(RecipeController.getRecipeFromDb);
+// .get(CacheMiddleware.getRecipeFromCache, RecipeController.getRecipeFromDb);
 
 // @route  api/recipe/filters
 router.route('/filters').get(RecipeController.getFiltersByQuery);
