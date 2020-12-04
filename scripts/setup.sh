@@ -50,3 +50,19 @@ rs.slaveOk();
 db.getMongo().setReadPref('secondary');
 db.getMongo().setSlaveOk(); 
 EOF
+
+echo "Done."
+
+# echo "Copy recipes.json to localmongo1/tmp/recipes.json"
+# until docker cp recipes.json localmongo1:/tmp/recipes.json; do
+#   printf '.'
+#   sleep 1
+# done
+
+# echo "Executing mongoimport to localmongo1 (PRIMARY) container"
+# until docker exec localmongo1 mongoimport -d recappy -c recipes --file /tmp/recipes.json; do
+#   printf '.'
+#   sleep 1
+# done
+
+

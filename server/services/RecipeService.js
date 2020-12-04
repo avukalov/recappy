@@ -23,9 +23,9 @@ class RecipeService {
             },
           }
         : { $match: match },
-      text !== '' && query.sortBy === 'relevance'
-        ? { $sort: { score: { $meta: 'textScore' } } }
-        : { $sort: sortBy },
+      // text !== '' && query.sortBy === 'relevance'
+      //   ? { $sort: { score: { $meta: 'textScore' } } }
+      //   : { $sort: sortBy },
       {
         $group: {
           _id: null,

@@ -14,6 +14,8 @@ mongoose.connection.on('connected', () => {
 class RecipeController {
   static async getRecipesFromQuery(req, res) {
     const { query } = req;
+    
+    console.log(query);
 
     try {
       const [results] = await RecipeService.getRecipesFromSearchQuery(query);

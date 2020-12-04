@@ -1,17 +1,19 @@
 version: '3'
 
 services:
-  client:
-    container_name: client
-    image: client
-    ports:
-      - '80:80'
+  # client:
+  #   container_name: client
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile.prod
+  #   ports:
+  #     - '80:80'
 
-  server:
-    container_name: server
-    image: server
-    ports:
-      - '3001:3001'
+  # server:
+  #   container_name: server
+  #   build: ./server
+  #   ports:
+  #     - '3001:3001'
 
   redis:
     hostname: redis
@@ -25,6 +27,21 @@ services:
     volumes:
       - ~/workspace/volumes/redis/data:/data
       - ~/workspace/volumes/redis/redis.conf:/usr/local/etc/redis/redis.conf
+
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server"
+    hostname: sqlserver
+    container_name: sqlserver
+    environment:
+        SA_PASSWORD: "PaSSW0rd123"
+        ACCEPT_EULA: "Y"
+        MSSQL_PID: "Express"
+    ports:
+      - 1433:1433
+    expose:
+      - 1433
+    volumes:
+      - "~/workspace/volumes/sqlserver:/var/opt/mssql"
 
   mongo-setup:
     container_name: mongo-setup
