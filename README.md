@@ -1,5 +1,5 @@
 # Recappy
-Završni projekt - Web programiranje - 3.godina preddiplomskog studija matematike i računarstva - Odjel za Matematiku, Osijek
+Završni projekt - Web programiranje - Odjel za Matematiku, Osijek
 
 ## Tehnologije
  - ReactJS
@@ -8,4 +8,5 @@ Završni projekt - Web programiranje - 3.godina preddiplomskog studija matematik
  - Redis
  - Docker
 
-Projekt u timu Iva Pribisalić, Antonio Vukalović
+## Owners: 
+Iva Pribisalić, Antonio Vukalović
